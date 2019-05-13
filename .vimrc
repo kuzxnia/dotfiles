@@ -6,6 +6,9 @@
 "
 "
 "
+" Note: This line MUST come before any <leader> mappings
+let mapleader=","
+
 set nocompatible               " be iMproved
 filetype off                   " required!
 
@@ -200,8 +203,6 @@ Plugin 'edkolev/tmuxline.vim'
 call vundle#end()
 filetype plugin indent on     " required by vundle!
 
-" Note: This line MUST come before any <leader> mappings
-let mapleader=","
 
 syntax on
 colorscheme onedark
