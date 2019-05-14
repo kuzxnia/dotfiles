@@ -5,6 +5,7 @@
 "   \_/ |_|_| |_| |_|_|  \___|
 "
 "
+" Kacper Kuzniarski personal vimrc config
 "
 " Note: This line MUST come before any <leader> mappings
 let mapleader=","
@@ -57,12 +58,25 @@ nmap <Leader>gd :Gdiff<CR>
 " Exit a diff by closing the diff window
 nmap <Leader>gx :wincmd h<CR>:q<CR>
 " ------------------------------------------------------------
+Plugin 'w0rp/ale'
 
-" js
-Plugin 'pangloss/vim-javascript'
-Plugin 'posva/vim-vue'
-" python
-Plugin 'indentpython.vim'
+let g:ale_sign_warning = '◆'
+let g:ale_sign_error = '✗''
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_linters = {'vue': ['eslint', 'vls'], 'python': ['flake8']}
+let g:ale_python_flake8_executable = 'flake8'
+"let g:ale_python_flake8_options = ''
+let g:ale_linters_explicit = 1
+let g:ale_echo_msg_format = '[%linter%] %code%: %s'
+
+highlight link ALEWarningSign String
+highlight link ALEErrorSign Title
+
+nmap ]w :ALENextWrap<CR>
+nmap [w :ALEPreviousWrap<CR>
+
+nmap <Leader>f <Plug>(ale_fix)
 
 " ------------------------------------------------------------
 Plugin 'davidhalter/jedi-vim'
@@ -78,6 +92,9 @@ let g:jedi#rename_command = "<leader>r"
 "
 " paste/nopaste, fileicoginzer
 Plugin 'SuperTab'
+let g:SuperTabLongestEnhanced = 1
+let g:SuperTabLongestHighlight = 1
+
 Plugin 'sophacles/vim-bundle-mako'
 " files and classes tree
 Plugin 'majutsushi/tagbar'  " sudo apt-get install exuberant-ctags
@@ -90,8 +107,12 @@ nnoremap <leader>nf :NERDTreeFind<CR>
 nnoremap <leader>nm :NERDTreeMirror<CR>
 nnoremap <leader>mm :TagbarToggle<CR>
 
-let NERDTreeShowBookmarks=1
-let NERDTreeChDirMode=2         " Change the NERDTree directory to the root node
+let g:NERDTreeShowBookmarks=1
+let g:NERDTreeChDirMode=2         " Change the NERDTree directory to the root node
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeMarkBookmarks = 0
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeStatusLine = -1
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " ------------------------------------------------------------
@@ -183,7 +204,14 @@ function! LightlineLinterOK() abort
   return l:counts.total == 0 ? '✓ ' : ''
 endfunction
 
-autocmd User ALELint call s:MaybeUpdateLightline()
+augroup lightline#ale
+  autocmd!
+  autocmd User ALEJobStarted call s:MaybeUpdateLightline()
+  autocmd User ALELintPost call s:MaybeUpdateLightline()
+  autocmd User ALEFixPost call s:MaybeUpdateLightline()
+augroup END
+
+"autocmd BufWritePost * call s:MaybeUpdateLightline() works after save
 
 " Update and show lightline but only if it's visible (e.g., not in Goyo)
 function! s:MaybeUpdateLightline()
@@ -196,9 +224,9 @@ if !has('gui_running')
     set t_Co=256
 endif
 
-let g:tmuxline_preset = 'lightline'
 " ------------------------------------------------------------
 Plugin 'edkolev/tmuxline.vim'
+let g:tmuxline_preset = 'lightline'
 
 call vundle#end()
 filetype plugin indent on     " required by vundle!
@@ -268,10 +296,6 @@ set number relativenumber
 " Better complete options to speed it up
 set complete=.,w,b,u,U
 
-autocmd FileType python noremap <buffer> <F7> :call Autopep8()<CR>
-let g:autopep8_disable_show_diff=1
-let g:autopep8_on_save = 0
-
 " Enable folding
 set foldmethod=indent
 set foldlevel=99
@@ -300,7 +324,6 @@ imap <F9> <C-O>NORMAL<F9>
 
 noremap <F10> <Esc>:retab<CR>
 inoremap <F10> <C-o>Retab done<CR>
-
 
 " Edit vimrc with ,v
 nmap <silent> <leader>v :e ~/.vimrc<CR>
