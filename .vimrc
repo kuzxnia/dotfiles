@@ -61,7 +61,7 @@ nmap <Leader>gx :wincmd h<CR>:q<CR>
 Plugin 'w0rp/ale'
 
 let g:ale_sign_warning = '◆'
-let g:ale_sign_error = '✗''
+let g:ale_sign_error = '✗'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_linters = {'vue': ['eslint', 'vls'], 'python': ['flake8']}
@@ -316,11 +316,7 @@ inoremap <F5> <C-o>syntax sync fromstart<CR>
 noremap <F6> <Esc>:%s/\s\+$//e<CR>
 inoremap <F6> <C-o>Trailing spaces removed<CR>
 
-nnoremap <F8> <Esc>:set paste<CR>
-imap <F8> <C-O>PASTE<F8>
-
-nnoremap <F9> <Esc>:set nopaste<CR>
-imap <F9> <C-O>NORMAL<F9>
+set pastetoggle=<F8>
 
 noremap <F10> <Esc>:retab<CR>
 inoremap <F10> <C-o>Retab done<CR>
