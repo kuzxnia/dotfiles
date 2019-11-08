@@ -1,6 +1,7 @@
 #!/bin/bash
 
 export PATH=$HOME/bin:$PATH
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 
 alias sAg='sudo apt-get install'
 alias Ai='apt-cache show'
