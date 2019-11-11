@@ -27,6 +27,8 @@ else
   export EDITOR='mvim'
 fi
 
+eval "$(jump shell)"
+
 alias ls='ls --color=tty'
 alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
