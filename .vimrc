@@ -113,6 +113,7 @@ let g:NERDTreeMinimalUI = 1
 let g:NERDTreeMarkBookmarks = 0
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeStatusLine = -1
+let g:NERDTreeIgnore = ['\.pyc$']
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " ------------------------------------------------------------
