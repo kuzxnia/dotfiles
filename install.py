@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-import os
 import sys
+import os
+import shutil
+import argparse
 
 
 def link_files(dotfiles=None):
-    # *dotfiles
     if not dotfiles:
         for dotfile in dotfiles:
             execute('ln -sf ~/.dotfiles/{} ~/{}'.format(dotfile), msg='linking %s' % dotfile)
@@ -20,7 +21,9 @@ def try_to_install(*libs):
         execute('sudo apt-get install {} || pip install {} || sudo pip install {}'.format(lib))
 
 
-def execute(*commands, msg=None):
+def execute(commands, msg=None):
+    if not isinstance(commands, list):
+        commands = [commands]
     print(msg or 'running: %s' % commands)
     for command in commands:
         os.system(command)
@@ -49,14 +52,13 @@ def setup_IDE():
 
 def setup_libs():
     try_to_install(
-        'git',
         'vim',
         'tmux',
-        'git',
         'tree',
         'exuberant-ctags',
         'silversearcher-ag',
         'python-pip',
+        'flake8',
     )
 
 
@@ -66,7 +68,6 @@ def setup_extra_libs():
         'glances',
         'htop',
     ])
-    # jump
     execute(
         [
             "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
@@ -89,22 +90,24 @@ def setup_shell():
         msg='fetching/installing zsh plugins'
     )
 
-def files_to_backup():
-    files_to_dump = ('.bashrc', '.bash_profile', '.vimrc', '.tmux.conf', '.zshrc')
 
-    return [
+def backup():
+    files_to_dump = [
         os.path.join(dirpath, filename)
-        for dirpath, dirnames, filenames in os.walk('.', followlinks=True)
+        for dirpath, dirnames, filenames in os.walk('.')
         for filename in filenames
-        if filename in files_to_dump
+        if filename in ['.bashrc', '.bash_profile', '.vimrc', '.tmux.conf', '.zshrc']
     ]
 
+    for f in files_to_dump:
+        shutil.copy(f, f + '.bak')
+
+
 def pair_programming_setup():
-    # TODO: backup
+    backup()
     execute('sudo apt-get update')
     setup_libs()
     setup_IDE()
-
 
 
 def full_setup():
@@ -113,7 +116,36 @@ def full_setup():
     setup_shell()
 
 
+def restore_files():
+    print('This function is not ready yet')
+    # TODO
+    pass
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Workflow env importer', argument_default='help')
+    parser.add_argument(
+        '--setup',
+        choices=['pair_programming', 'full', 'backup_dotfiles', 'restore_dotfiles'],
+        help='Choose what you want to setup'
+    )
+
+    if len(sys.argv) < 2:
+        parser.print_help()
+        sys.exit(1)
+
+    args = parser.parse_args()
+    
+    arg_function = {
+        'pair_programming': pair_programming_setup,
+        'full': full_setup,
+        'restore_dotfiles': restore_files,
+        'backup_dotfiles': backup,
+    }
+
+    arg_function[args.setup]()
+
+
 if __name__ == '__main__':
-    # also dump existing files, restore after pp
-    # TODO: 2. full setup akka, init working env
+    # TODO: init working env, env wrapper, tox
     main()
