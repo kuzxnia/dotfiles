@@ -10,21 +10,19 @@ import argparse
 def link_files(dotfiles=None):
     if not dotfiles:
         for dotfile in dotfiles:
-            execute('ln -sf ~/.dotfiles/{} ~/{}'.format(dotfile), msg='linking %s' % dotfile)
+            execute(f'ln -sf ~/.dotfiles/{dotfile} ~/{dotfile}', msg=f'linking {dotfile}')
     else:
-        execute('ln -sf ~/.dotfiles/.* ~/', msg='linking all dotfiles from ')
+        execute('ln -sf ~/.dotfiles/.* ~/', msg='linking all dotfiles')
 
 
 def try_to_install(*libs):
     for lib in libs:
-        print('trying to install %s' % lib)
-        execute('sudo apt-get install {} || pip install {} || sudo pip install {}'.format(lib))
+        print(f'trying to install {lib}')
+        execute('sudo apt-get install {0} || pip install {0} || sudo pip install {0}'.format(lib))
 
 
-def execute(commands, msg=None):
-    if not isinstance(commands, list):
-        commands = [commands]
-    print(msg or 'running: %s' % commands)
+def execute(*commands, msg=None):
+    print(msg or f'running: {commands}')
     for command in commands:
         os.system(command)
 
@@ -64,16 +62,14 @@ def setup_libs():
 
 def setup_extra_libs():
     '''not nessesary for pair-programming porpouses'''
-    try_to_install([
+    try_to_install(
         'glances',
         'htop',
-    ])
+    )
     execute(
-        [
-            "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
-            'source $HOME/.cargo/env',
-            'cargo install exa', 
-        ],
+        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
+        'source $HOME/.cargo/env',
+        'cargo install exa',
         msg='installing cargo and exa'
     )
 
@@ -135,7 +131,7 @@ def main():
         sys.exit(1)
 
     args = parser.parse_args()
-    
+
     arg_function = {
         'pair_programming': pair_programming_setup,
         'full': full_setup,
