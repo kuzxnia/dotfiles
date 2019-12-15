@@ -1,11 +1,7 @@
 [core]
-	editor = vim
+	editor= vim
 	excludesfile = ~/.gitignore
-[gist]
-	private = yes
-[branch "master"]
-	remote = origin
-	merge = refs/heads/master
+	pager = delta --dark
 [log]
 	decorate = short
 [push]
@@ -18,35 +14,44 @@
 [pull]
 	default = simple
 [alias]
+    alias   = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | grep -v 'alias'| awk 'BEGIN { FS = \"=>\" }{ printf(\"%-20s=>%s\\n\", $1,$2)}'|sort
+    ec      = config --global -e
+    up      = !git pull --rebase --prune $@ && git submodule update --init --recursive
 
-        ec = config --global -e
-        alias = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1 => \\2/' | grep -v 'alias'| awk 'BEGIN { FS = \"=>\" }{ printf(\"%-20s=>%s\\n\", $1,$2)}'|sort
-        up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+	co      = checkout
+    cob     = checkout -b
+    bb      = branch -v
+    bbs     = branch -avvl
+    bd      = branch -D
+    st      = status -sb
 
-	co = checkout
-        cob = checkout -b
-        bb = branch -v
-        bbs = branch -avvl
-        bd = branch -D
-        st = status -sb
-	cp = cherry-pick
-        cm = commit -m
-        ca = commit --amend
-        cf = commit --fixup # commit name
+    cm      = commit -m
+    ca      = commit --amend
+    fixup   = "!f() { git commit --fixup=$1; git rebase -i --autosquash $1~1; }; f"
+	cp      = cherry-pick
 
-        save = !git add -A && git commit -m 'SAVEPOINT'
-        undo = reset HEAD~1 --mixed
+    recent  = !git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100
+    wip     = !git add -A && git commit -m 'WIP' --no-verify
+    undo    = reset HEAD~1 --mixed
 
-        ra = rebase -i --autosquash
+    ra      = rebase -i --autosquash
 
-	last = log -1
-	l = log --oneline --decorate -10 --pretty=format:'%C(yellow)%h%C(reset)%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-	ll = log --oneline --decorate --pretty=format:'%C(yellow)%h%C(reset)%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	l       = log --oneline --decorate --pretty=format:'%C(yellow)%h%C(reset)%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 
-        dlc = diff --color-words --cached HEAD^
-        dr  = "!f() { git diff "$1"^.."$1"; }; f" # commit number / name
+    dlc     = diff --cached
 
-	up = !git pull --rebase --prune $@ && git submodule update --init --recursive
+    # fzf
+    fco     = !BRANCH=`git recent | fzf --height '40%' --reverse` && git co ${BRANCH}
+    fbd     = !BRANCH=`git recent | fzf --height '40%' --reverse` && git bd ${BRANCH}
+
+    pc      = !BRANCH=`git recent | fzf --height '40%' --reverse` && git co ${BRANCH} && git pull origin ${BRANCH}
+    rb      = !BRANCH=`git recent | fzf --height '40%' --reverse` && git pull origin ${BRANCH} && git rebase ${BRANCH}
+    mb      = !BRANCH=`git recent | fzf --height '40%' --reverse` && git pull origin ${BRANCH} && git merge ${BRANCH}
+
+	ffix    = !HASH=`git log --pretty=oneline | head -n 100 | fzf --height '40%' --reverse && git fixit `echo ${HASH} | awk '{ print $1 }'`
+
+    vist    = !FILES=`git status -s | awk '{ print $2 }' | fzf -x -m --height '40%' --reverse` && vim -O ${FILES}
+[push]
 
 [color]
 	diff = auto

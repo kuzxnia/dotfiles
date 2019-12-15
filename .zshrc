@@ -6,11 +6,10 @@ export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 plugins=(
     git
-    zsh-autosuggestions 
-    zsh-history-substring-search 
+    zsh-autosuggestions
+    zsh-history-substring-search
     zsh-syntax-highlighting
     vi-mode
-    virtualenvwrapper
 )
 
 autoload -U compinit
@@ -21,36 +20,38 @@ source $ZSH/oh-my-zsh.sh
 export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='mvim'
-fi
+export EDITOR='vim'
 
 eval "$(jump shell)"
 
+alias rs='ranger'
+
 alias ls='ls --color=tty'
-alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
 alias -s {py,js,vue}=vim
 alias -g G='| grep -i'
 
 
-alias ga='git add'
+# ga - forgit
+alias gaa='git add -A'
 alias gap='git add -p'
 
+alias vst='git vist'
 alias gst='git st'
 
 alias gb='git branch'
 alias gbb='git bb'
 
-alias gco='git checkout'
-alias gcob='git checkout -b'
+alias gco='git fco'
+alias gcob='git co -b'
+alias gbd='git fbd'
 
-alias gcd='git checkout development && git pull origin development'
-alias grbd='git pull origin development && git rebase development'
-alias gcs='git checkout staging && git pull origin staging'
-alias grbs='git pull origin staging && git rebase staging'
+alias gpc='git pc'
+alias grb='git rb'
+alias gmb='git mb'
+
+# glo - forgit
 
 alias gcm='git commit -m'
 alias gp='git push origin'
@@ -63,10 +64,6 @@ alias ghs='git stash save'
 alias ghsp='git stash save --patch'
 alias ghw='git stash show -p'
 
-alias gl='git l -20'
-alias gll='git ll -20'
-
-alias gm='git merge'
 alias gmt='git mergetool'
 
 alias gs='git show -p'
@@ -77,4 +74,7 @@ alias ll="l -a"
 alias lt='ls -lt'
 alias ltr='ls -ltr'
 
- [-f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export FZF_DEFAULT_OPTS=" --border --reverse "
+[ -f ~/.dotfiles/plugins/.forgit.plugin.zsh ] && source ~/.dotfiles/plugins/.forgit.plugin.zsh

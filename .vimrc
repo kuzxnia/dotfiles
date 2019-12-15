@@ -101,6 +101,9 @@ Plugin 'majutsushi/tagbar'  " sudo apt-get install exuberant-ctags
 
 " ------------------------------------------------------------
 Plugin 'scrooloose/nerdtree'
+Plugin 'ryanoasis/vim-devicons'
+Plugin 'vwxyutarooo/nerdtree-devicons-syntax'
+
 
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
