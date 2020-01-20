@@ -14,7 +14,9 @@ def setup_vim():
 
     if not os.path.isdir('~/.fzf'):
         execute(
-            'git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf', '~/.fzf/install', msg='installing fzf'
+            'git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf',
+            '~/.fzf/install',
+            msg='installing fzf'
         )
 
     execute(
