@@ -71,3 +71,6 @@
 	current = yellow reverse
 	local = yellow
 	remote = green
+[user]
+	email = kacper.kuzniarski@gmail.com
+	name = kuzxnia

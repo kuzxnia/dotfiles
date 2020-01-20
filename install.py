@@ -84,7 +84,7 @@ def setup_zsh():
     try_to_install('zsh')
     execute('sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"', 'installing oh-my-zsh')
     execute(
-        'git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions',
+        'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
         'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
         'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting',
         'chsh -s $(which zsh)',
@@ -114,7 +114,7 @@ def execute(*commands, msg=None):
 
 
 def main():
-    setups = [x for x in locals().keys() if x.startswith('setup_')]
+    setups = [x[6:] for x in globals().keys() if x.startswith('setup_')]
 
     if not len(sys.argv[1:]):
         print((
