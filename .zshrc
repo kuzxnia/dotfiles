@@ -1,5 +1,7 @@
 export PATH=$HOME/bin:$PATH
+export PATH="/home/kuznia/.pyenv/bin:$PATH"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+
 
 export ZSH=$HOME/.oh-my-zsh
 
@@ -23,6 +25,9 @@ export LANG=en_US.UTF-8
 export EDITOR='vim'
 
 eval "$(jump shell)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+eval "$(pipenv --completion)"
 
 alias rs='ranger'
 

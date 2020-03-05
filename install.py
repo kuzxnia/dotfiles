@@ -31,6 +31,17 @@ def setup_vim():
     )
 
 
+def setup_neovim():
+    execute(
+        'sudo add-apt-repository ppa:neovim-ppa/unstable',
+        'sudo apt-get update',
+        'sudo apt-get install neovim',
+        'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
+        'pip install pynvim'
+
+    )
+
+
 def setup_tmux():
     link_files(['.tmux.conf'])
     execute('git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm')
@@ -42,8 +53,6 @@ def setup_git():
         'wget https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O ~/delta.deb',
         'sudo dpkg -i ~/delta.deb'
     )
-
-
 
 def setup_libs():
     try_to_install(

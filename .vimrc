@@ -64,11 +64,14 @@ let g:ale_sign_warning = '◆'
 let g:ale_sign_error = '✗'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
-let g:ale_linters = {'vue': ['eslint'], 'python': ['flake8'], 'javascript': ['eslint']}
+let g:ale_linters = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}
 let g:ale_python_flake8_executable = 'flake8'
 "let g:ale_python_flake8_options = ''
 let g:ale_linters_explicit = 1
 let g:ale_echo_msg_format = '[%linter%] %code%: %s'
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'always'
 
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
@@ -80,7 +83,6 @@ nmap <Leader>f <Plug>(ale_fix)
 
 " ------------------------------------------------------------
 Plugin 'davidhalter/jedi-vim'
-
 let g:jedi#goto_command = "<leader>d"
 let g:jedi#goto_assignments_command = "<leader>g"
 let g:jedi#goto_definitions_command = ""
@@ -94,6 +96,8 @@ let g:jedi#rename_command = "<leader>r"
 Plugin 'SuperTab'
 let g:SuperTabLongestEnhanced = 1
 let g:SuperTabLongestHighlight = 1
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+
 
 Plugin 'sophacles/vim-bundle-mako'
 " files and classes tree
@@ -249,11 +253,12 @@ set nobackup
 set ruler " Ruler on
 set nu " Line numbers on
 set nowrap " Line wrapping off
-set laststatus=2 " Always show the statusline
+set laststatus=2  " always display the status line "
 set cmdheight=2
 set encoding=utf-8
 
 
+set noswapfile
 set autowrite " Writes on make/shell commands
 set timeoutlen=350 " Time to wait for a command (after leader for example)
 set foldlevelstart=99 " Remove folds
