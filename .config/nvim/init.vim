@@ -1,7 +1,12 @@
+let mapleader=","                            
+                                             
+set nocompatible
+filetype off
+
+set rtp+=~/.local/share/nvim/plugged
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'joshdick/onedark.vim'
-colorscheme onedark
+Plug 'sheerun/vim-polyglot'
 
 
 Plug 'airblade/vim-gitgutter'
@@ -49,9 +54,12 @@ let g:jedi#usages_command = "<leader>u"
 let g:jedi#completions_command = "<C-Space>"      
 let g:jedi#rename_command = "<leader>r"           
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugs' } }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugs' }
 Plug 'zchee/deoplete-jedi'
 let g:deoplete#enable_at_startup = 1
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python'
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 Plug 'scrooloose/nerdtree'
@@ -73,7 +81,7 @@ let g:NERDTreeIgnore = ['\.pyc$']
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 
-Plug 'neomake/neomake'
+Plug 'KeitaNakamura/neodark.vim'
 
 Plug 'jiangmiao/auto-pairs'
 
@@ -125,7 +133,7 @@ Plug 'rking/ag.vim'  " sudo apt-get install silversearcher-ag
 Plug 'itchyny/lightline.vim'
 " Lightline
 let g:lightline = {
-\ 'colorscheme': 'onedark',
+\ 'colorscheme': 'neodark',
 \ 'active': {
 \   'left': [['mode', 'paste'], ['filename', 'modified']],
 \   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok']]
@@ -179,8 +187,94 @@ function! s:MaybeUpdateLightline()
   end
 endfunction
 
+if !has('gui_running')
+    set t_Co=256
+endif
+
+
 Plug 'edkolev/tmuxline.vim'
 let g:tmuxline_preset = 'lightline'
 
-
 call plug#end()
+
+set cursorline
+
+syntax on
+colorscheme neodark
+let g:neodark#background = '#202020'
+
+" other settings
+set nobackup
+
+set ruler
+set nu
+set nowrap
+set laststatus=2
+set cmdheight=2
+set encoding=utf-8
+
+
+set noswapfile
+set autowrite
+set timeoutlen=350
+set foldlevelstart=99
+set formatoptions=crql
+" ---------------
+" Text Format
+" ---------------
+set tabstop=4
+set backspace=2
+set shiftwidth=4
+set cindent
+set autoindent
+set smarttab
+set expandtab
+set backspace=2
+set softtabstop=4
+" ---------------
+" Searching
+" ---------------
+set ignorecase " Case insensitive search
+set smartcase " Non-case sensitive search
+set incsearch
+set hlsearch
+set wildignore+=*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,.sass-cache,*.class
+" ---------------
+" Visual
+" ---------------
+set showmatch " Show matching brackets.
+set matchtime=2 " How many tenths of a second to blink
+" ---------------
+" Sounds
+" ---------------
+set noerrorbells
+set novisualbell
+
+" ---------------
+" Mouse
+" ---------------
+set mousehide
+set number relativenumber
+
+set complete=.,w,b,u,U
+set foldmethod=indent
+set foldlevel=99
+
+set pastetoggle=<F8>
+
+"split navigations
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>l <C-w>l
+nnoremap <leader>h <C-w>h
+
+
+noremap <F5> <Esc>:syntax sync fromstart<CR>
+inoremap <F5> <C-o>syntax sync fromstart<CR>
+noremap <F6> <Esc>:%s/\s\+$//e<CR>
+inoremap <F6> <C-o>Trailing spaces removed<CR>
+noremap <F10> <Esc>:retab<CR>
+inoremap <F10> <C-o>Retab done<CR>
+nmap <silent> <leader>v :e ~/.config/nvim/init.vim<CR> 
+
+let g:indent_guides_enable_on_vim_startup=1
