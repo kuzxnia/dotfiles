@@ -48,7 +48,7 @@ alias gst='git st'
 alias gb='git branch'
 alias gbb='git bb'
 
-alias gco='git fco'
+alias gco='git co'
 alias gcob='git co -b'
 alias gbd='git fbd'
 
@@ -69,6 +69,11 @@ alias ghs='git stash save'
 alias ghsp='git stash save --patch'
 alias ghw='git stash show -p'
 
+alias gcd='git checkout development && git pull origin development'
+alias grbd='git pull origin development && git rebase development'
+alias gcs='git checkout staging && git pull origin staging'
+alias grbs='git pull origin staging && git rebase staging'
+
 alias gmt='git mergetool'
 
 alias gs='git show -p'
@@ -78,6 +83,7 @@ alias l="ls -lh"
 alias ll="l -a"
 alias lt='ls -lt'
 alias ltr='ls -ltr'
+alias vi='nvim'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
