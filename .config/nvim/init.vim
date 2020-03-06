@@ -54,11 +54,15 @@ let g:jedi#usages_command = "<leader>u"
 let g:jedi#completions_command = "<C-Space>"      
 let g:jedi#rename_command = "<leader>r"           
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugs' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
 let g:deoplete#enable_at_startup = 1
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python_host_prog = '/usr/bin/python'
+
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
@@ -76,7 +80,17 @@ let g:NERDTreeMinimalUI = 1
 let g:NERDTreeMarkBookmarks = 0
 let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeStatusLine = -1
+let NERDTreeDirArrowExpandable = "\u00a0"
+let NERDTreeDirArrowCollapsible = "\u00a0"
+" let g:NERDTreeDirArrowExpandable='►'
+" let g:NERDTreeDirArrowCollapsible='▼'
 let g:NERDTreeIgnore = ['\.pyc$']
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:DevIconsEnableFolderExtensionPatternMatching = 1
+
+let g:DevIconsDefaultFolderOpenSymbol=''
+let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
