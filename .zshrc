@@ -36,6 +36,7 @@ alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
 
 alias -s {py,js,vue}=vim
 alias -g G='| grep -i'
+alias -g F='| fzf'
 
 
 # ga - forgit
@@ -87,5 +88,5 @@ alias vi='nvim'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export FZF_DEFAULT_OPTS=" --border --reverse "
+export FZF_DEFAULT_OPTS=" --color=dark --reverse --border"
 [ -f ~/.dotfiles/plugins/.forgit.plugin.zsh ] && source ~/.dotfiles/plugins/.forgit.plugin.zsh

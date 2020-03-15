@@ -6,8 +6,9 @@ filetype off
 set rtp+=~/.local/share/nvim/plugged
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'sheerun/vim-polyglot'
+Plug 'mhinz/vim-startify'
 
+Plug 'sheerun/vim-polyglot'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -43,6 +44,7 @@ highlight link ALEErrorSign Title
 nmap ]w :ALENextWrap<CR>                                                                                 
 nmap [w :ALEPreviousWrap<CR>                                                                             
 nmap <Leader>f <Plug>(ale_fix)                                                                           
+
 
 
 Plug 'davidhalter/jedi-vim'
