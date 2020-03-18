@@ -5,14 +5,55 @@ import sys
 import os
 
 
-def setup_vim():
-    link_files(['.vimrc'])
+def full_setup():
     execute(
-        'git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim',
-        'vim +PluginInstall +qall',
+        'sudo apt update',
+        'sudo apt upgrade -y',
+        'sudo add-apt-repository ppa:papirus/papirus',
+        'sudo apt-get update',
+        'sudo apt-get install papirus-icon-theme',
+        'git clone https://github.com/pyenv/pyenv.git ~/.pyenv',
+        'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
+    )
+    setup_git()
+
+    setup_IDE()
+
+    setup_rust()
+    setup_external_libs()
+
+
+def setup_IDE():
+    setup_libs()
+    setup_vim()
+    setup_neovim()
+    _setup_search_tools()
+    setup_tmux()
+    setup_kitty()
+    setup_zsh()
+
+
+def setup_vim():
+    try_to_install('vim')
+    link_files(['.vimrc'])
+    execute('git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim')
+
+
+def setup_neovim():
+    execute('mkdir ~/.config/nvim')
+    link_files(['.config/init.vim'])
+    execute(
+        'sudo add-apt-repository ppa:neovim-ppa/unstable',
+        'sudo apt-get update',
+        'sudo apt-get install neovim',
+        'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
+        'pip install pynvim',
+        'pip3 install pynvim'
     )
 
-    if not os.path.isdir('~/.fzf'):
+
+def _setup_search_tools():
+    if not os.path.exists('~/.fzf'):
         execute(
             'git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf',
             '~/.fzf/install',
@@ -31,41 +72,38 @@ def setup_vim():
     )
 
 
-def setup_neovim():
-    execute(
-        'sudo add-apt-repository ppa:neovim-ppa/unstable',
-        'sudo apt-get update',
-        'sudo apt-get install neovim',
-        'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
-        'pip install pynvim'
-
-    )
-
-
 def setup_tmux():
+    try_to_install('tmux')
     link_files(['.tmux.conf'])
     execute('git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm')
 
 
 def setup_git():
+    try_to_install('git')
     link_files(['.gitconfig'])
     execute(
         'wget https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O ~/delta.deb',
         'sudo dpkg -i ~/delta.deb'
     )
 
+
 def setup_libs():
     try_to_install(
-        'vim',
-        'tmux',
         'tree',
         'exuberant-ctags',
         'silversearcher-ag',
         'python-pip',
         'python3-pip',
         'flake8',
-        'curl'
+        'curl',
+        'pipenv'
     )
+
+
+def setup_kitty():
+    execute('mkdir ~/.config/kitt', 'curl -o ~/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf')
+    link_files(['.config/kitty/kitty.conf'])
+    try_to_install('kitty')
 
 
 def setup_rust():
@@ -76,7 +114,7 @@ def setup_rust():
     )
 
 
-def setup_ext_libs():
+def setup_external_libs():
     '''not nessesary for pair-programming porpouses'''
     try_to_install(
         'glances',
@@ -84,7 +122,6 @@ def setup_ext_libs():
         'ranger',
         'highlight',
     )
-    execute('ln -sf ~/.dotfiles/rc.conf ~/.config/ranger/rc.conf')
     execute(
         'cargo install exa',
         msg='installing cargo'
@@ -105,11 +142,8 @@ def setup_zsh():
 
 
 def link_files(dotfiles=None):
-    if not dotfiles:
-        for dotfile in dotfiles:
-            execute(f'ln -sf ~/.dotfiles/{dotfile} ~/{dotfile}', msg=f'linking {dotfile}')
-    else:
-        execute('ln -sf ~/.dotfiles/.* ~/', msg='linking all dotfiles')
+    for dotfile in dotfiles:
+        execute(f'ln -sf ~/.dotfiles/{dotfile} ~/{dotfile}', msg=f'linking {dotfile}')
 
 
 def try_to_install(*libs):
@@ -124,23 +158,19 @@ def execute(*commands, msg=None):
         os.system(command)
 
 
-def main():
+if __name__ == '__main__':
+    from pprint import pformat
     setups = [x[6:] for x in globals().keys() if x.startswith('setup_')]
 
     if not len(sys.argv[1:]):
-        print((
-            f'Welcome in env importer!!!\n' +
-            f'Choose what you want to install: [{setups}]'
-        ))
+        print(
+            (
+                f'Welcome in workflow importer!!!\n'
+                f'Choose what you want to install: {pformat(setups)}'
+            )
+        )
         sys.exit(1)
 
     for arg in sys.argv[1:]:
         if arg in setups:
             globals().get(f'setup_{arg}')()
-
-
-if __name__ == '__main__':
-    # TODO: init working env, env wrapper, tox
-    # TODO: not to link .git, not rm fd, jump after succesefull intall
-    # TODO: setup pp, shell,
-    main()
