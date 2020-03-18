@@ -5,6 +5,11 @@ import sys
 import os
 
 
+def setup_dotfiles():
+    setup_git()
+    execute('git clone https://github.com/kuzxnia/dotfiles.git ~/.dotfiles')
+
+
 def full_setup():
     execute(
         'sudo apt update',
@@ -15,8 +20,6 @@ def full_setup():
         'git clone https://github.com/pyenv/pyenv.git ~/.pyenv',
         'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
     )
-    setup_git()
-
     setup_IDE()
 
     setup_rust()
