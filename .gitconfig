@@ -6,11 +6,19 @@
 	decorate = short
 [push]
 	default = current
-[difftool]
-	prompt = false
+[merge]
+    tool = meld
+[mergetool "meld"]
+    cmd = meld --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\" --label \"MERGE (REMOTE BASE MY)\"
+    trustExitCode = false
 [mergetool]
-	prompt = false
-	keepBackup = false
+    prompt = false
+    keepBackup = false
+[diff]
+    guitool = meld
+
+[difftool "meld"]
+    cmd = meld \"$LOCAL\" \"$REMOTE\" --label \"DIFF (ORIGINAL MY)\"
 [pull]
 	default = simple
 [alias]
@@ -51,8 +59,6 @@
 	ffix    = !HASH=`git log --pretty=oneline | head -n 100 | fzf --height '40%' --reverse && git fixit `echo ${HASH} | awk '{ print $1 }'`
 
     vist    = !FILES=`git status -s | awk '{ print $2 }' | fzf -x -m --height '40%' --reverse` && vim -O ${FILES}
-[push]
-
 [color]
 	diff = auto
 	status = auto

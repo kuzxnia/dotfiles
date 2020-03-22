@@ -16,14 +16,16 @@ def full_setup():
         'sudo apt upgrade -y',
         'sudo add-apt-repository ppa:papirus/papirus',
         'sudo apt-get update',
-        'sudo apt-get install papirus-icon-theme',
+        'sudo add-apt-repository universe',
         'git clone https://github.com/pyenv/pyenv.git ~/.pyenv',
         'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
     )
+    try_to_install(
+        'papirus-icon-theme',
+        'gnome-tweak-tool',
+        'gnome-shell-extensions'
+    )
     setup_IDE()
-
-    setup_rust()
-    setup_external_libs()
 
 
 def setup_IDE():
@@ -73,6 +75,7 @@ def _setup_search_tools():
         'sudo dpkg -i ~/jump.deb',
         msg='installing jump'
     )
+    try_to_install('bat', 'ripgrep')
 
 
 def setup_tmux():
@@ -99,7 +102,18 @@ def setup_libs():
         'python3-pip',
         'flake8',
         'curl',
-        'pipenv'
+        'pipenv',
+        'glances',
+        'htop',
+        'ranger',
+        'highlight',
+    )
+    execute(
+        'wget -c https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip',
+        'unzip exa-linux-x86_64-0.9.0.zip',
+        'sudo mv exa-linux-x86_64 /usr/local/bin/exa',
+        'wget https://github.com/jarun/googler/releases/download/v4.0/googler_4.0-1_ubuntu18.04.amd64.deb -O ~/googler.deb',
+        'sudo dpkg -i ~/googler.deb'
     )
 
 
@@ -109,39 +123,18 @@ def setup_kitty():
     try_to_install('kitty')
 
 
-def setup_rust():
-    execute(
-        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh",
-        'source $HOME/.cargo/env',
-        msg='installing cargo'
-    )
-
-
-def setup_external_libs():
-    '''not nessesary for pair-programming porpouses'''
-    try_to_install(
-        'glances',
-        'htop',
-        'ranger',
-        'highlight',
-    )
-    execute(
-        'cargo install exa',
-        msg='installing cargo'
-    )
-
-
 def setup_zsh():
     try_to_install('zsh')
-    execute('sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"', 'installing oh-my-zsh')
     execute(
+        'sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"',
         'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
         'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
-        'git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting',
+        'git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting',
         'chsh -s $(which zsh)',
         msg='fetching/installing zsh plugins'
     )
     link_files(['.zshrc'])
+    link_files(['.zsh/abbreviations.zsh'])
 
 
 def link_files(dotfiles=None):

@@ -102,14 +102,16 @@ Plug 'KeitaNakamura/neodark.vim'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'universal-ctags/ctags'
-" searching
-" FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
+
 set rtp+=/usr/local/opt/fzf
 set rtp+=~/.fzf
 Plug 'junegunn/fzf.vim'
-noremap <C-p> :Files<CR>
-noremap <F11> :Buffers<CR>
+Plug 'yuki-ycino/fzf-preview.vim'
+let $FZF_DEFAULT_OPTS=" --color=dark --border"
 
+noremap <C-f> :Files<CR>
+nnoremap <C-g> :Rg<Cr>
+noremap <F11> :Buffers<CR>
 nmap <F12> :b#<CR>
 imap <F12> <C-O>:b#<CR>
 
@@ -144,7 +146,11 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-Plug 'rking/ag.vim'  " sudo apt-get install silversearcher-ag
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
 " ------------------------------------------------------------
 Plug 'itchyny/lightline.vim'
 " Lightline
