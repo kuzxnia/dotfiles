@@ -7,6 +7,8 @@ import shlex
 import subprocess
 from getpass import getpass
 
+password = None
+
 
 def setup_before_installation():
     execute(
@@ -165,7 +167,7 @@ def setup_zsh():
 
 
 def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
-    from progress.bar import ChargingBar
+    from progress.bar import IncrementalBar
     import pexpect
 
     via_apt = via_apt or []
@@ -185,12 +187,12 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     ]
     commands += via_os
     commands += [
-        f'ln -sf ~/.dotfiles/{dotfile} ~/{dotfile}'
+        f'ln -sf ~/.dotfiles/{dotfile} $HOME/{dotfile}'
         for dotfile in link_files
     ]
 
-    password = getpass('[sudo] password for user: ')
-    bar = ChargingBar(msg, max=bar_len)
+    bar = IncrementalBar(msg, max=bar_len)
+    bar.start()
     for command in commands:
         child = pexpect.spawn(command)
         if child.expect([pexpect.TIMEOUT, 'password', pexpect.EOF]):
@@ -202,6 +204,7 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
 
 
 if __name__ == '__main__':
+    global password
     setups = [x[6:] for x in globals().keys() if x.startswith('setup_')]
 
     if not len(sys.argv[1:]):
@@ -214,5 +217,6 @@ if __name__ == '__main__':
         sys.exit(1)
 
     for arg in sys.argv[1:]:
+        password = getpass('[sudo] password for user: ')
         if arg in setups:
             globals().get(f'setup_{arg}')()
