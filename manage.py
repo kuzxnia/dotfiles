@@ -5,6 +5,7 @@ import sys
 import os
 import shlex
 import subprocess
+from getpass import getpass
 
 
 def setup_before_installation():
@@ -164,7 +165,7 @@ def setup_zsh():
 
 
 def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
-    from progress.bar import IncrementalBar
+    from progress.bar import ChargingBar
 
     via_apt = via_apt or []
     via_pip = via_pip or []
@@ -187,10 +188,11 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
         for dotfile in link_files
     ]
 
-    os.system('sudo -k')
-    bar = IncrementalBar(msg, max=bar_len)
+    password = getpass('[sudo] password for user: ')
+    bar = ChargingBar(msg, max=bar_len)
     for command in commands:
-        subprocess.call(shlex.split(command), stdout=open(os.devnull, "w"), stderr=subprocess.STDOUT)
+        subprocess.Popen(
+            shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate(f'{password}/n')
         bar.next()
 
     bar.finish()
