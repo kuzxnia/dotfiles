@@ -172,7 +172,6 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     link_files = link_files or []
 
     bar_len = len(via_apt) + len(via_pip) + len(via_os) + len(link_files)
-    bar = IncrementalBar(msg, max=len(bar_len))
 
     commands = [
         f'sudo apt-get install -y {command}'
@@ -188,6 +187,8 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
         for dotfile in link_files
     ]
 
+    os.system('sudo -k')
+    bar = IncrementalBar(msg, max=bar_len)
     for command in commands:
         subprocess.call(shlex.split(command), stdout=open(os.devnull, "w"), stderr=subprocess.STDOUT)
         bar.next()
