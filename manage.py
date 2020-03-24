@@ -75,7 +75,7 @@ def setup_neovim():
             'pip install pynvim',
             'pip3 install pynvim'
         ],
-        link_files=['.config/init.vim']
+        link_files=['.config/nvim/init.vim']
     )
 
 
@@ -186,10 +186,6 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
         for command in via_pip
     ]
     commands += via_os
-    commands += [
-        f'ln -sf $HOME/.dotfiles/{dotfile} $HOME/{dotfile}'
-        for dotfile in link_files
-    ]
 
     bar = IncrementalBar(msg, max=bar_len)
     bar.start()
@@ -201,8 +197,14 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
         child.read()
         bar.next()
 
+    home = os.path.expanduser('~')
     for path in link_files:
-        os.symlink(f'$HOME/.dotfiles/{path}', f'$HOME/{path}')
+        path = os.path.join(home, f'.dotfiles/{path}')
+        dest = os.path.join(home, path)
+
+        os.makedirs(dest, exist_ok=True)
+        os.symlink(path, dest)
+
         bar.next()
 
     bar.finish()
