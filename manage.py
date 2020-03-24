@@ -5,6 +5,17 @@ import sys
 import os
 import shlex
 import subprocess
+import progress
+
+
+def before_installation():
+    try_to_install(
+        'git',
+        'python-pip',
+        'python3-pip',
+        'progress',
+        msg='Basic utilities'
+    )
 
 
 def setup_dotfiles():
@@ -148,27 +159,29 @@ def link_files(dotfiles=None):
         execute(f'ln -sf ~/.dotfiles/{dotfile} ~/{dotfile}', msg=f'linking {dotfile}')
 
 
-def try_to_install(*libs):
-    for lib in libs:
-        execute('sudo apt-get install -y {0} || pip install {0} || sudo pip install {0}'.format(lib))
+def try_to_install(*libs, msg=None):
+    execute([
+        'sudo apt-get install -y {0} || pip install {0} || sudo pip install {0}'.format(lib)
+        for lib in libs
+    ], msg)
 
 
 def execute(*commands, msg=None):
+    bar = progress.IncrementalBar(msg, max=len(commands))
     for command in commands:
-        print(f'running: {command}')
-        status = subprocess.call(shlex.split(command), stdout=open(os.devnull, "w"), stderr=subprocess.STDOUT)
-        print(f'{command} {"runned sucessfully" if status == 0 else "failed"}')
+        subprocess.call(shlex.split(command), stdout=open(os.devnull, "w"), stderr=subprocess.STDOUT)
+        bar.next()
+    bar.finish()
 
 
 if __name__ == '__main__':
-    from pprint import pformat
     setups = [x[6:] for x in globals().keys() if x.startswith('setup_')]
 
     if not len(sys.argv[1:]):
         print(
             (
                 f'Welcome in workflow importer!!!\n'
-                f'Choose what you want to install:\n {pformat(setups)}'
+                f'Choose what you want to install:\n {", ".join(setups)}'
             )
         )
         sys.exit(1)
