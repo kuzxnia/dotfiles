@@ -187,17 +187,22 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     ]
     commands += via_os
     commands += [
-        f'ln -sf ~/.dotfiles/{dotfile} $HOME/{dotfile}'
+        f'ln -sf $HOME/.dotfiles/{dotfile} $HOME/{dotfile}'
         for dotfile in link_files
     ]
 
     bar = IncrementalBar(msg, max=bar_len)
     bar.start()
+
     for command in commands:
         child = pexpect.spawn(command)
         if child.expect([pexpect.TIMEOUT, 'password', pexpect.EOF]):
             child.sendline(password)
         child.read()
+        bar.next()
+
+    for path in link_files:
+        os.symlink(f'$HOME/.dotfiles/{path}', f'$HOME/{path}')
         bar.next()
 
     bar.finish()
