@@ -7,8 +7,6 @@ import shlex
 import subprocess
 from getpass import getpass
 
-password = None
-
 
 def setup_before_installation():
     execute(
@@ -191,10 +189,11 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     bar.start()
 
     for command in commands:
-        child = pexpect.spawn(command)
-        if child.expect([pexpect.TIMEOUT, 'password', pexpect.EOF]):
-            child.sendline(password)
-        child.read()
+        p = subprocess.Popen(shlex.split(command), stderr=subprocess.PIPE, stdout=subprocess.PIPE,  stdin=subprocess.PIPE)
+        try:
+            out, err = p.communicate(input=(password+'\n').encode(), timeout=5)
+        except subprocess.TimeoutExpired:
+            p.kill()
         bar.next()
 
     home = os.path.expanduser('~')
