@@ -7,6 +7,7 @@ typeset -A abbrevs
 # General aliases
 abbrevs=(
   "ll"   "ls -al"
+  "sagi" "sudo apt-get install"
   "mdc"  "mkdir -p __CURSOR__ && cd \$_"
   "killsshtty" 'kill $(ps auxww | grep ssh | grep tty| awk "{print \$2}")'
   "kp" 'sudo kill $(ps auxww | grep ssh | grep -e "^pair" | awk "{print \$2}") ; chmod 770 /tmp/tmux-501'

@@ -1,8 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from __future__ import print_function
 
 import sys
 import os
+import shlex
+import subprocess
 
 
 def setup_dotfiles():
@@ -61,7 +63,7 @@ def _setup_search_tools():
     if not os.path.exists('~/.fzf'):
         execute(
             'git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf',
-            '~/.fzf/install',
+            '~/.fzf/install --all',
             msg='installing fzf'
         )
 
@@ -118,9 +120,11 @@ def setup_libs():
 
 
 def setup_kitty():
-    execute('mkdir ~/.config/kitt', 'curl -o ~/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf')
-    link_files(['.config/kitty/kitty.conf'])
     try_to_install('kitty')
+    execute(
+        'curl -o ~/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf'
+    )
+    link_files(['.config/kitty/kitty.conf'])
 
 
 def setup_zsh():
@@ -130,7 +134,9 @@ def setup_zsh():
         'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
         'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
         'git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting',
+        'git clone https://github.com/denysdovhan/spaceship-prompt.git ${ZSH_CUSTOM:-~/.oh-my-zsh}/themes/spaceship-prompt',
         'chsh -s $(which zsh)',
+        'ln -sf ~/.dotfiles/.zsh/themes/raw.zsh-theme ~/.oh-my-zsh/themes/',
         msg='fetching/installing zsh plugins'
     )
     link_files(['.zshrc'])
@@ -144,14 +150,14 @@ def link_files(dotfiles=None):
 
 def try_to_install(*libs):
     for lib in libs:
-        print(f'trying to install {lib}')
-        execute('sudo apt-get install {0} || pip install {0} || sudo pip install {0}'.format(lib))
+        execute('sudo apt-get install -y {0} || pip install {0} || sudo pip install {0}'.format(lib))
 
 
 def execute(*commands, msg=None):
-    print(msg or f'running: {commands}')
     for command in commands:
-        os.system(command)
+        print(f'running: {command}')
+        status = subprocess.call(shlex.split(command), stdout=open(os.devnull, "w"), stderr=subprocess.STDOUT)
+        print(f'{command} {"runned sucessfully" if status == 0 else "failed"}')
 
 
 if __name__ == '__main__':
@@ -162,7 +168,7 @@ if __name__ == '__main__':
         print(
             (
                 f'Welcome in workflow importer!!!\n'
-                f'Choose what you want to install: {pformat(setups)}'
+                f'Choose what you want to install:\n {pformat(setups)}'
             )
         )
         sys.exit(1)
