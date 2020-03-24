@@ -166,6 +166,7 @@ def setup_zsh():
 
 def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     from progress.bar import ChargingBar
+    import pexpect
 
     via_apt = via_apt or []
     via_pip = via_pip or []
@@ -191,8 +192,10 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     password = getpass('[sudo] password for user: ')
     bar = ChargingBar(msg, max=bar_len)
     for command in commands:
-        subprocess.Popen(
-            shlex.split(command), stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate(f'{password}/n')
+        child = pexpect.spawn(command)
+        if child.expect([pexpect.TIMEOUT, 'password', pexpect.EOF]):
+            child.sendline(password)
+        child.read()
         bar.next()
 
     bar.finish()
