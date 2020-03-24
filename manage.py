@@ -5,38 +5,39 @@ import sys
 import os
 import shlex
 import subprocess
-import progress
 
 
-def before_installation():
-    try_to_install(
-        'git',
-        'python-pip',
-        'python3-pip',
-        'progress',
-        msg='Basic utilities'
+def setup_before_installation():
+    execute(
+        'Basic utilities',
+        via_apt=[
+            'git',
+            'python-pip',
+            'python3-pip',
+            'curl',
+        ],
+        via_pip=['progress'],
+        via_os=['git clone https://github.com/kuzxnia/dotfiles.git ~/.dotfiles']
     )
-
-
-def setup_dotfiles():
-    setup_git()
-    execute('git clone https://github.com/kuzxnia/dotfiles.git ~/.dotfiles')
 
 
 def full_setup():
     execute(
-        'sudo apt update',
-        'sudo apt upgrade -y',
-        'sudo add-apt-repository ppa:papirus/papirus',
-        'sudo apt-get update',
-        'sudo add-apt-repository universe',
-        'git clone https://github.com/pyenv/pyenv.git ~/.pyenv',
-        'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
-    )
-    try_to_install(
-        'papirus-icon-theme',
-        'gnome-tweak-tool',
-        'gnome-shell-extensions'
+        'System utils',
+        via_apt=[
+            'papirus-icon-theme',
+            'gnome-tweak-tool',
+            'gnome-shell-extensions'
+        ],
+        via_os=[
+            'sudo apt update',
+            'sudo apt upgrade -y',
+            'sudo add-apt-repository ppa:papirus/papirus',
+            'sudo apt-get update',
+            'sudo add-apt-repository universe',
+            'git clone https://github.com/pyenv/pyenv.git ~/.pyenv',
+            'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
+        ]
     )
     setup_IDE()
 
@@ -52,125 +53,145 @@ def setup_IDE():
 
 
 def setup_vim():
-    try_to_install('vim')
-    link_files(['.vimrc'])
-    execute('git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim')
+    execute(
+        'Vim',
+        via_apt=['vim'],
+        via_os=['git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim'],
+        link_files=['.vimrc']
+    )
 
 
 def setup_neovim():
-    execute('mkdir ~/.config/nvim')
-    link_files(['.config/init.vim'])
     execute(
-        'sudo add-apt-repository ppa:neovim-ppa/unstable',
-        'sudo apt-get update',
-        'sudo apt-get install neovim',
-        'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
-        'pip install pynvim',
-        'pip3 install pynvim'
+        'Neovim',
+        via_os=[
+            'sudo add-apt-repository ppa:neovim-ppa/unstable',
+            'sudo apt-get update',
+            'sudo apt-get install neovim',
+            'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
+            'pip install pynvim',
+            'pip3 install pynvim'
+        ],
+        link_files=['.config/init.vim']
     )
 
 
 def _setup_search_tools():
-    if not os.path.exists('~/.fzf'):
-        execute(
+    execute(
+        'Search utilities',
+        via_apt=['bat', 'ripgrep'],
+        via_os=[
             'git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf',
             '~/.fzf/install --all',
-            msg='installing fzf'
-        )
-
-    execute(
-        'wget https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb -O ~/fd.deb',
-        'sudo dpkg -i ~/fd.deb',
-        msg='installing fd'
+            'wget https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb -O ~/fd.deb',
+            'sudo dpkg -i ~/fd.deb',
+            'wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb -O ~/jump.deb',
+            'sudo dpkg -i ~/jump.deb',
+        ]
     )
-    execute(
-        'wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb -O ~/jump.deb',
-        'sudo dpkg -i ~/jump.deb',
-        msg='installing jump'
-    )
-    try_to_install('bat', 'ripgrep')
 
 
 def setup_tmux():
-    try_to_install('tmux')
-    link_files(['.tmux.conf'])
-    execute('git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm')
+    execute(
+        'tmux',
+        via_apt=['tmux'],
+        via_os=['git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm'],
+        link_files=['.tmux.conf']
+    )
 
 
 def setup_git():
-    try_to_install('git')
-    link_files(['.gitconfig'])
     execute(
-        'wget https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O ~/delta.deb',
-        'sudo dpkg -i ~/delta.deb'
+        'git',
+        via_os=[
+            'wget https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O ~/delta.deb',
+            'sudo dpkg -i ~/delta.deb'
+        ],
+        link_files=['.gitconfig']
     )
 
 
 def setup_libs():
-    try_to_install(
-        'tree',
-        'exuberant-ctags',
-        'silversearcher-ag',
-        'python-pip',
-        'python3-pip',
-        'flake8',
-        'curl',
-        'pipenv',
-        'glances',
-        'htop',
-        'ranger',
-        'highlight',
-    )
     execute(
-        'wget -c https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip',
-        'unzip exa-linux-x86_64-0.9.0.zip',
-        'sudo mv exa-linux-x86_64 /usr/local/bin/exa',
-        'wget https://github.com/jarun/googler/releases/download/v4.0/googler_4.0-1_ubuntu18.04.amd64.deb -O ~/googler.deb',
-        'sudo dpkg -i ~/googler.deb'
+        'Basic libs',
+        via_apt=[
+            'exuberant-ctags',
+            'ripgrep',
+            'flake8',
+            'pipenv',
+            'glances',
+            'htop',
+            'ranger',
+            'highlight',
+        ],
+        via_os=[
+            'wget -c https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip',
+            'unzip exa-linux-x86_64-0.9.0.zip',
+            'sudo mv exa-linux-x86_64 /usr/local/bin/exa',
+            'wget https://github.com/jarun/googler/releases/download/v4.0/googler_4.0-1_ubuntu18.04.amd64.deb -O ~/googler.deb',
+            'sudo dpkg -i ~/googler.deb'
+        ]
     )
 
 
 def setup_kitty():
-    try_to_install('kitty')
     execute(
-        'curl -o ~/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf'
+        'Kitty',
+        via_apt=['kitty'],
+        via_os=['curl -o ~/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf'],
+        link_files=['.config/kitty/kitty.conf']
     )
-    link_files(['.config/kitty/kitty.conf'])
 
 
 def setup_zsh():
-    try_to_install('zsh')
     execute(
-        'sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"',
-        'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
-        'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
-        'git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting',
-        'git clone https://github.com/denysdovhan/spaceship-prompt.git ${ZSH_CUSTOM:-~/.oh-my-zsh}/themes/spaceship-prompt',
-        'chsh -s $(which zsh)',
-        'ln -sf ~/.dotfiles/.zsh/themes/raw.zsh-theme ~/.oh-my-zsh/themes/',
-        msg='fetching/installing zsh plugins'
+        'Zsh',
+        via_apt=['zsh'],
+        via_os=[
+            'sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"',
+            'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
+            'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
+            'git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting',
+            'git clone https://github.com/denysdovhan/spaceship-prompt.git ${ZSH_CUSTOM:-~/.oh-my-zsh}/themes/spaceship-prompt',
+            'chsh -s $(which zsh)',
+            'ln -sf ~/.dotfiles/.zsh/themes/raw.zsh-theme ~/.oh-my-zsh/themes/',
+        ],
+        link_files=[
+            '.zshrc'
+            '.zsh/abbreviations.zsh'
+        ]
     )
-    link_files(['.zshrc'])
-    link_files(['.zsh/abbreviations.zsh'])
 
 
-def link_files(dotfiles=None):
-    for dotfile in dotfiles:
-        execute(f'ln -sf ~/.dotfiles/{dotfile} ~/{dotfile}', msg=f'linking {dotfile}')
+def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
+    from progress.bar import IncrementalBar
 
+    via_apt = via_apt or []
+    via_pip = via_pip or []
+    via_pip = via_pip or []
+    link_files = link_files or []
 
-def try_to_install(*libs, msg=None):
-    execute([
-        'sudo apt-get install -y {0} || pip install {0} || sudo pip install {0}'.format(lib)
-        for lib in libs
-    ], msg)
+    bar_len = len(via_apt) + len(via_pip) + len(via_os) + len(link_files)
+    bar = IncrementalBar(msg, max=len(bar_len))
 
+    commands = [
+        f'sudo apt-get install -y {command}'
+        for command in via_apt
+    ]
+    commands += [
+        'yes | pip3 install {0} || yes | sudo pip3 install {0}'.format(command)
+        for command in via_pip
+    ]
+    commands += via_os
+    commands += [
+        f'ln -sf ~/.dotfiles/{dotfile} ~/{dotfile}'
+        for dotfile in link_files
+    ]
 
-def execute(*commands, msg=None):
-    bar = progress.IncrementalBar(msg, max=len(commands))
     for command in commands:
         subprocess.call(shlex.split(command), stdout=open(os.devnull, "w"), stderr=subprocess.STDOUT)
         bar.next()
+
     bar.finish()
 
 
