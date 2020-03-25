@@ -1,0 +1,45 @@
+% bash
+
+; ----- bash lang cheats -----
+
+# bash for range loop
+for i in {1..5}; do COMMAND-HERE; done
+
+# bash for each loop
+for i in {file.one,file.two}; do <command>; done
+
+$ command: wget "example.com/$i"
+
+# bash for regex loop
+for i in <regex>; do <command>; done
+
+$ regex: *.py
+$ command: wget "example.com/$i"
+
+# remove prefix ending in char ('_' in example)
+$ for i in *; do echo ${i#*_}; done
+
+# remove suffix starting with char ('_' in example)
+$ for i in *; do echo ${i%_*}; done
+
+; ----- utils -----
+
+# lines count for each file
+wc -l
+
+# directory weight(depth=1)
+du --max-depth=1 -hc
+
+# summarize directory weight
+du -hcs
+
+; ----- searching/replacing/removing -----
+
+# find and replace
+find . -type f -name '*.py' -exec sed -i 's/zarzadzenie_wersja/wersjonowanie_wf/g' {} \;
+
+# find and replace
+fd -e py -x sed -i 's/zarzadzenie_wersja/wersjonowanie_wf/g' {} \;
+
+# find and remove directories exactly n characters
+find . type d -maxdepth 1 -regextype egrep  -regex '.*/.{3,}$' -exec rm {} \;
