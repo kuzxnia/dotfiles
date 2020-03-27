@@ -3,6 +3,13 @@ from __future__ import print_function
 
 import os
 import subprocess
+import logging
+from time import sleep
+from importlib.util import find_spec
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
+log = logging.getLogger(__name__)
+log.disabled = not bool(os.environ.get('LOGGING'))
 
 
 def setup_before_installation():
@@ -15,8 +22,13 @@ def setup_before_installation():
             'curl',
             'wget'
         ],
-        via_pip=['progress'],
-        via_os=['git clone https://github.com/kuzxnia/dotfiles.git $HOME/.dotfiles']
+        via_pip=['tqdm'],
+        via_os=[
+            (
+                lambda: os.path.exists('$HOME/.dotfiles'),
+                'git clone https://github.com/kuzxnia/dotfiles.git $HOME/.dotfiles'
+            )
+        ]
     )
 
 
@@ -44,17 +56,17 @@ def _setup_search_tools():
         via_apt=['bat', 'ripgrep'],
         via_os=[
             (
-                lambda: not os.path.exists('$HOME/.fzf'),
+                lambda: os.path.exists('$HOME/.fzf'),
                 'git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf',
                 '$HOME/.fzf/install --all'
             ),
             (
-                lambda: not check_installed('fd'),
+                lambda: check_installed('fd'),
                 'wget -q https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb -O $HOME/fd.deb',
                 'sudo dpkg -i $HOME/fd.deb'
             ),
             (
-                lambda: not check_installed('jump'),
+                lambda: check_installed('jump'),
                 'wget -q https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb -O $HOME/jump.deb',
                 'sudo dpkg -i $HOME/jump.deb'
             )
@@ -64,17 +76,20 @@ def _setup_search_tools():
 
 def setup_tmux():
     execute(
-        'tmux',
+        'Tmux',
         via_apt=['tmux'],
+        link_files=['.tmux.conf']
+    )
+    execute(
+        'Tmux plugins',
         via_os=[
             (
-                lambda: not os.path.exists('$HOME/.tmux/plugins/tpm'),
+                lambda: os.path.exists('$HOME/.tmux/plugins/tpm'),
                 'git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm',
-                'tmux source-file ~/.tmux.conf',
+                'tmux source-file $HOME/.tmux.conf',
                 '$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh'
             )
-        ],
-        link_files=['.tmux.conf']
+        ]
     )
 
 
@@ -82,11 +97,8 @@ def setup_git():
     execute(
         'git',
         via_os=[
-            (
-                lambda: True,
-                'wget -q https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O $HOME/delta.deb',
-                'sudo dpkg -i $HOME/delta.deb'
-            )
+            'wget -q https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O $HOME/delta.deb',
+            'sudo dpkg -i $HOME/delta.deb'
         ],
         link_files=['.gitconfig']
     )
@@ -107,7 +119,7 @@ def setup_libs():
         ],
         via_os=[
             (
-                lambda: not check_installed('exa'),
+                lambda: check_installed('exa'),
                 'wget -q https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip -O $HOME/exa-linux-x86_64-0.9.0.zip',
                 'unzip $HOME/exa-linux-x86_64-0.9.0.zip -d $HOME',
                 'sudo mv $HOME/exa-linux-x86_64 /usr/local/bin/exa'
@@ -145,97 +157,110 @@ def setup_zsh():
             'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
             'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
             'git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting',
-            'chsh -s $(which zsh)'
-            # 'ln -sf ~/.dotfiles/.zsh/themes/raw.zsh-theme ~/.oh-my-zsh/themes/raw.zsh-theme',
+            (
+                lambda: not check_installed('echo "$SHELL" | grep -q *zsh$'),
+                'sudo chsh -s "$(which zsh)"'
+            )
         ],
         link_files=[
-            '.zshrc'
-            '.zsh/abbreviations.zsh'
+            '.zshrc',
+            '.zsh/abbreviations.zsh',
+            '.oh-my-zsh/themes/raw.zsh-theme'
         ]
     )
 
 
-def check_installed(command):
-    return not bool(subprocess.run(command, shell=True, stdout=subprocess.PIPE).returncode)
+class InstalationStatistic:
+    SUCCES = 0
+    FAIL = 0
+    SKIP = 0
 
-
-def check_apt_installed(package):
-    return not bool(subprocess.run('dpkg --get-selections | grep -q "^%s*[[:space:]]*install$"' % package, shell=True, stdout=subprocess.PIPE).returncode)
-
-
-def is_sudo():
-    return not bool(subprocess.run('groups | grep -q "\\bsudo\b"', shell=True, stdout=subprocess.PIPE).returncode)
+    @classmethod
+    def summarize(cls):
+        print('Installed sucessfuly {}, skipped {}, failed {}'.format(cls.SUCCES, cls.SKIP, cls.FAIL))
 
 
 def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
-    from progress.bar import IncrementalBar
+    def gen_commands():
+        for command in via_apt:
+            yield 'sudo apt-get install -y {}'.format(command) if check_apt_installed(command) else None
+
+        for command in via_pip:
+            yield 'yes | pip install {0}; yes | sudo pip3 install {0}'.format(command)
+
+        for command in via_os:
+            if isinstance(command, tuple):
+                contition, *commands = command
+                for command in commands:
+                    yield command if contition() else None
+            else:
+                yield command
+
+        for path in link_files:
+            if isinstance(path, tuple):
+                yield f"mkdir -p {os.path.dirname(path[1])} && ln -sf $HOME/.dotfiles/{path[0]} {path[1]}"
+            else:
+                yield f"mkdir -p $HOME/{os.path.dirname(path)} && ln -sf $HOME/.dotfiles/{path} $HOME/{path}"
+
+    if find_spec('tqdm'):
+        from tqdm import tqdm
+    else:
+        tqdm = lambda x, *args, **kwargs: x  # noqa: E731
 
     via_apt = via_apt or []
     via_pip = via_pip or []
     via_os = via_os or []
     link_files = link_files or []
 
-    bar_len = len(via_apt) + len(via_pip) + len(via_os) + len(link_files)
+    commands_amound = sum(
+        1 if not isinstance(command, tuple) else len(command)-1
+        for command in via_apt + via_pip + via_os + link_files
+    )
 
-    bar = IncrementalBar(msg, max=bar_len)
-    bar.start()
+    for command in tqdm(gen_commands(), msg, total=commands_amound, smoothing=0.5):
+        run(command)
 
-    if is_sudo:
-        for command in via_apt:
-            if not check_apt_installed(command):
-                print('running %s', command)
-                output = subprocess.run(f'sudo apt-get install -y {command}', shell=True, stdout=subprocess.PIPE)
-                if output.returncode != 0:
-                    print('%s output\n %r', command, output)
-                else:
-                    print('%s installed sucessfuly', command)
 
-            bar.next()
+def check_installed(command):
+    return bool(subprocess.run(command, shell=True, stdout=subprocess.PIPE).returncode)
 
-    for command in via_pip:
-        print('running %s', command)
-        output = subprocess.run('yes | pip3 install {0}; yes | sudo pip3 install {0}'.format(command), shell=True, stdout=subprocess.PIPE)
-        if output.returncode != 0:
-            print('%s output\n %r', command, output)
-        else:
-            print('%s installed sucessfuly', command)
-        bar.next()
 
-    for command in via_os:
-        if isinstance(command, tuple):
-            contition, *commands = command
-            if contition():
-                for command in commands:
-                    print('running %s', command)
-                    output = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
-                    if output.returncode != 0:
-                        print('%s output\n %r', command, output)
-                    else:
-                        print('%s installed sucessfuly', command)
+def check_apt_installed(package):
+    return check_installed('dpkg --get-selections | grep -q "^{}*[[:space:]]*install$"'.format(package))
 
-        else:
-            print('running %s', command)
-            output = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
-            if output.returncode != 0:
-                print('%s output\n %r', command, output)
-            else:
-                print('%s installed sucessfuly', command)
-        bar.next()
 
-    home = os.path.expanduser('~')
-    for path in link_files:
-        dest = os.path.join(home, path)
-        path = os.path.join(home, f'.dotfiles/{path}')
+def check_pip_installed(package):
+    return check_installed('pip freeze | grep -q {0} && pip freeze | grep -q {0}'.format(package))
 
-        os.makedirs(os.path.dirname(dest), exist_ok=True)
-        os.symlink(path, dest)
-        bar.next()
 
-    bar.finish()
+def run(command):
+    if not bool(os.environ.get('LOGGING')):
+        sleep(0.01)  # pleasing to the eye, debug off
+    log.debug('Executing command=%s', command)
+
+    if not command:
+        InstalationStatistic.SKIP += 1
+        log.debug('Command skipped.')
+        return
+
+    output = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+
+    if output.returncode == 0:
+        log.debug('Command executed succesfuly.')
+        InstalationStatistic.SUCCES += 1
+    else:
+        log.error('Found errors %r', output.stdout)
+        InstalationStatistic.FAIL += 1
 
 
 if __name__ == '__main__':
-    # dodawanie statystyk ilosc zainstalowanych, pominietych, nieudanych
+    log.debug('Starting importing dotfiles.')
+
+    if not bool(subprocess.run('groups | grep -q "\\bsudo\b"', shell=True, stdout=subprocess.PIPE).returncode):
+        print('Sudo not set. Exit.')
+        exit(0)
+
+    setup_before_installation()
     # execute(
     #     'System utils',
     #     via_apt=[
@@ -249,17 +274,17 @@ if __name__ == '__main__':
     #         'sudo add-apt-repository ppa:papirus/papirus',
     #         'sudo apt-get update',
     #         'sudo add-apt-repository universe',
-    #         'git clone https://github.com/pyenv/pyenv.git ~/.pyenv',
+    #         'git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv',
     #         'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
     #     ]
     # )
-    print('rozpoczynam instalacje')
-    setup_before_installation()
     setup_libs()
     setup_tmux()
     setup_git()
     _setup_search_tools()
     setup_vim()
-    setup_neovim()
     setup_kitty()
+    setup_neovim()
     setup_zsh()
+
+    InstalationStatistic.summarize()
