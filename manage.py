@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import print_function
 
-import sys
 import os
-import shlex
 import subprocess
-from getpass import getpass
 
 
 def setup_before_installation():
@@ -16,9 +13,10 @@ def setup_before_installation():
             'python-pip',
             'python3-pip',
             'curl',
+            'wget'
         ],
         via_pip=['progress'],
-        via_os=['git clone https://github.com/kuzxnia/dotfiles.git ~/.dotfiles']
+        via_os=['git clone https://github.com/kuzxnia/dotfiles.git $HOME/.dotfiles']
     )
 
 
@@ -26,7 +24,7 @@ def setup_vim():
     execute(
         'Vim',
         via_apt=['vim'],
-        via_os=['git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim'],
+        via_os=['git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim'],
         link_files=['.vimrc']
     )
 
@@ -34,14 +32,8 @@ def setup_vim():
 def setup_neovim():
     execute(
         'Neovim',
-        via_os=[
-            'sudo add-apt-repository ppa:neovim-ppa/unstable',
-            'sudo apt-get update',
-            'sudo apt-get install neovim',
-            'curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
-            'pip install pynvim',
-            'pip3 install pynvim'
-        ],
+        via_apt=['neovim'],
+        via_pip=['pynvim'],
         link_files=['.config/nvim/init.vim']
     )
 
@@ -51,9 +43,21 @@ def _setup_search_tools():
         'Search utilities',
         via_apt=['bat', 'ripgrep'],
         via_os=[
-            ('git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf', '~/.fzf/install --all',)
-            ('wget https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb -O ~/fd.deb', 'sudo dpkg -i ~/fd.deb',)
-            ('wget https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb -O ~/jump.deb', 'sudo dpkg -i ~/jump.deb',)
+            (
+                lambda: not os.path.exists('$HOME/.fzf'),
+                'git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf',
+                '$HOME/.fzf/install --all'
+            ),
+            (
+                lambda: not check_installed('fd'),
+                'wget -q https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb -O $HOME/fd.deb',
+                'sudo dpkg -i $HOME/fd.deb'
+            ),
+            (
+                lambda: not check_installed('jump'),
+                'wget -q https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb -O $HOME/jump.deb',
+                'sudo dpkg -i $HOME/jump.deb'
+            )
         ]
     )
 
@@ -63,7 +67,12 @@ def setup_tmux():
         'tmux',
         via_apt=['tmux'],
         via_os=[
-            (lambda: not os.path.exists('~/.tmux/plugins/tpm'), 'git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm', '$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh')
+            (
+                lambda: not os.path.exists('$HOME/.tmux/plugins/tpm'),
+                'git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm',
+                'tmux source-file ~/.tmux.conf',
+                '$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh'
+            )
         ],
         link_files=['.tmux.conf']
     )
@@ -73,7 +82,11 @@ def setup_git():
     execute(
         'git',
         via_os=[
-            (lambda: True, 'wget https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O ~/delta.deb', 'sudo dpkg -i ~/delta.deb')
+            (
+                lambda: True,
+                'wget -q https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O $HOME/delta.deb',
+                'sudo dpkg -i $HOME/delta.deb'
+            )
         ],
         link_files=['.gitconfig']
     )
@@ -87,14 +100,23 @@ def setup_libs():
             'ripgrep',
             'flake8',
             'pipenv',
-            'glances',
             'htop',
+            'zip',
             'ranger',
             'highlight',
         ],
         via_os=[
-            (lambda: not check_installed('exa'), 'wget -c https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip', 'unzip exa-linux-x86_64-0.9.0.zip', 'sudo mv exa-linux-x86_64 /usr/local/bin/exa'),
-            (lambda: True, 'wget -q https://github.com/jarun/googler/releases/download/v4.0/googler_4.0-1_ubuntu18.04.amd64.deb -O ~/googler.deb', 'sudo dpkg -i ~/googler.deb')
+            (
+                lambda: not check_installed('exa'),
+                'wget -q https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip -O $HOME/exa-linux-x86_64-0.9.0.zip',
+                'unzip $HOME/exa-linux-x86_64-0.9.0.zip -d $HOME',
+                'sudo mv $HOME/exa-linux-x86_64 /usr/local/bin/exa'
+            ),
+            (
+                lambda: True,
+                'wget -q https://github.com/jarun/googler/releases/download/v4.0/googler_4.0-1_ubuntu18.04.amd64.deb -O $HOME/googler.deb',
+                'sudo dpkg -i $HOME/googler.deb'
+            )
         ]
     )
 
@@ -103,7 +125,10 @@ def setup_kitty():
     execute(
         'Kitty',
         via_apt=['kitty'],
-        via_os=['curl -o ~/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf'],
+        via_os=[
+            'mkdir -p $HOME/.config/kitty',
+            'curl -o $HOME/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf'
+        ],
         link_files=['.config/kitty/kitty.conf']
     )
 
@@ -113,12 +138,15 @@ def setup_zsh():
         'Zsh',
         via_apt=['zsh'],
         via_os=[
-            (lambda: os.path.exists('~/.oh-my-zsh'), 'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<<"exit"'),
+            (
+                lambda: os.path.exists('~/.oh-my-zsh'),
+                'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<<"exit"'
+            ),
             'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
             'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
             'git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting',
-            'chsh -s $(which zsh)',
-            'ln -sf ~/.dotfiles/.zsh/themes/raw.zsh-theme ~/.oh-my-zsh/themes/raw.zsh-theme',
+            'chsh -s $(which zsh)'
+            # 'ln -sf ~/.dotfiles/.zsh/themes/raw.zsh-theme ~/.oh-my-zsh/themes/raw.zsh-theme',
         ],
         link_files=[
             '.zshrc'
@@ -144,7 +172,7 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
 
     via_apt = via_apt or []
     via_pip = via_pip or []
-    via_pip = via_pip or []
+    via_os = via_os or []
     link_files = link_files or []
 
     bar_len = len(via_apt) + len(via_pip) + len(via_os) + len(link_files)
@@ -155,11 +183,22 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     if is_sudo:
         for command in via_apt:
             if not check_apt_installed(command):
-                subprocess.run(f'sudo apt-get install -y {command}', shell=True, stdout=subprocess.PIPE)
+                print('running %s', command)
+                output = subprocess.run(f'sudo apt-get install -y {command}', shell=True, stdout=subprocess.PIPE)
+                if output.returncode != 0:
+                    print('%s output\n %r', command, output)
+                else:
+                    print('%s installed sucessfuly', command)
+
             bar.next()
 
     for command in via_pip:
-        subprocess.run('yes | pip3 install {0}; yes | sudo pip3 install {0}'.format(command), shell=True, stdout=subprocess.PIPE)
+        print('running %s', command)
+        output = subprocess.run('yes | pip3 install {0}; yes | sudo pip3 install {0}'.format(command), shell=True, stdout=subprocess.PIPE)
+        if output.returncode != 0:
+            print('%s output\n %r', command, output)
+        else:
+            print('%s installed sucessfuly', command)
         bar.next()
 
     for command in via_os:
@@ -167,10 +206,20 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
             contition, *commands = command
             if contition():
                 for command in commands:
-                    subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+                    print('running %s', command)
+                    output = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+                    if output.returncode != 0:
+                        print('%s output\n %r', command, output)
+                    else:
+                        print('%s installed sucessfuly', command)
 
         else:
-            subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+            print('running %s', command)
+            output = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+            if output.returncode != 0:
+                print('%s output\n %r', command, output)
+            else:
+                print('%s installed sucessfuly', command)
         bar.next()
 
     home = os.path.expanduser('~')
@@ -186,6 +235,7 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
 
 
 if __name__ == '__main__':
+    # dodawanie statystyk ilosc zainstalowanych, pominietych, nieudanych
     # execute(
     #     'System utils',
     #     via_apt=[
@@ -204,10 +254,12 @@ if __name__ == '__main__':
     #     ]
     # )
     print('rozpoczynam instalacje')
+    setup_before_installation()
     setup_libs()
-    # setup_vim()
-    # setup_neovim()
-    # _setup_search_tools()
-    # setup_tmux()
-    # setup_kitty()
-    # setup_zsh()
+    setup_tmux()
+    setup_git()
+    _setup_search_tools()
+    setup_vim()
+    setup_neovim()
+    setup_kitty()
+    setup_zsh()

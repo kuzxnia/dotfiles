@@ -24,5 +24,7 @@ ENV HOME /home/tester
 # Change working directory
 WORKDIR /home/tester/.dotfiles
 
+RUN python3 -u manage.py
+
 # Run setup
-CMD ["python3", "manage.py"]
+CMD ["bin/bash"]
