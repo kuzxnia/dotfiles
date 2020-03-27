@@ -1,0 +1,7 @@
+% vim, neovim
+
+# search and replace in single file
+:%s/<text>/<text>/g
+
+# search and replace in range
+:12:30s/<text>/<text>/g
