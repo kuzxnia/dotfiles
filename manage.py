@@ -222,7 +222,7 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
 
 
 def check_installed(command):
-    return bool(subprocess.run(command, shell=True, stdout=subprocess.PIPE).returncode)
+    return bool(subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode)
 
 
 def check_apt_installed(package):
@@ -243,7 +243,7 @@ def run(command):
         log.debug('Command skipped.')
         return
 
-    output = subprocess.run(command, shell=True, stdout=subprocess.PIPE)
+    output = subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
     if output.returncode == 0:
         log.debug('Command executed succesfuly.')
@@ -251,6 +251,8 @@ def run(command):
     else:
         log.error('Found errors %r', output.stdout)
         InstalationStatistic.FAIL += 1
+        with open('$HOME/.dotfiles.log', 'w+') as f:
+            f.write(output.stderr)
 
 
 if __name__ == '__main__':

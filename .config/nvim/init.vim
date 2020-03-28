@@ -46,7 +46,6 @@ nmap [w :ALEPreviousWrap<CR>
 nmap <Leader>f <Plug>(ale_fix)                                                                           
 
 
-
 Plug 'davidhalter/jedi-vim'
 let g:jedi#goto_command = "<leader>d"             
 let g:jedi#goto_assignments_command = "<leader>g" 
@@ -98,6 +97,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 
 Plug 'KeitaNakamura/neodark.vim'
+Plug 'joshdick/onedark.vim'
 
 Plug 'jiangmiao/auto-pairs'
 
@@ -155,7 +155,7 @@ command! -bang -nargs=* Rg
 Plug 'itchyny/lightline.vim'
 " Lightline
 let g:lightline = {
-\ 'colorscheme': 'neodark',
+\ 'colorscheme': 'onedark',
 \ 'active': {
 \   'left': [['mode', 'paste'], ['filename', 'modified']],
 \   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok']]
@@ -222,7 +222,7 @@ call plug#end()
 set cursorline
 
 syntax on
-colorscheme neodark
+colorscheme onedark
 let g:neodark#background = '#202020'
 
 " other settings
