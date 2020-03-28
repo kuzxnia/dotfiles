@@ -18,7 +18,7 @@ log.disabled = not is_debug_on
 
 def setup_before_installation():
     execute(
-        'Installing: git, pip, wget and cloning repo...\n',
+        'Installing: git, pip, wget and cloning repo...',
         via_apt=[
             'git',
             'python-pip',
@@ -231,9 +231,7 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     if find_spec('tqdm'):
         from tqdm import tqdm
     else:
-        def tqdm(x, msg, *args, **kwargs):
-            print(msg)
-            return x
+        tqdm = lambda x, *args, **kwargs: x  # noqa: E731
 
     via_apt = via_apt or []
     via_pip = via_pip or []

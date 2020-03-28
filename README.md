@@ -11,7 +11,11 @@ There is a `manage.py` setup script which run as installation process.
 # :rocket: Installation
 
 ```bash
-curl -sSL wget https://raw.githubusercontent.com/kuzxnia/dotfiles/master/manage.py | python3
+# using curl
+curl -sSL https://raw.githubusercontent.com/kuzxnia/dotfiles/master/manage.py | python3
+
+# using wget
+python3 -c "$(wget -O - https://raw.githubusercontent.com/kuzxnia/dotfiles/master/manage.py)"
 
 # or if you have clonned repository
 python3 manage.py
