@@ -18,12 +18,13 @@ log.disabled = not is_debug_on
 
 def setup_before_installation():
     execute(
-        'Installing: git, pip, wget and cloning repo...',
+        'Basic utilities(git, pip and repo clone)',
         via_apt=[
             'git',
             'python-pip',
             'python3-pip',
-            'wget'
+            'wget',
+            'curl'
         ],
         via_pip=['tqdm'],
         via_os=[
@@ -41,7 +42,7 @@ def setup_vim():
         via_apt=['vim'],
         via_os=[
             (
-                lambda: not is_directory_exists('~/.Vundle'),
+                lambda: not is_directory_exists('~/.vim/bundle'),
                 'git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim'
             )
         ],
@@ -283,7 +284,7 @@ def run(command):
         log.error('Found errors %r', output.stdout)
         InstalationStatistic.FAIL += 1
         if not is_debug_on:
-            with open('.dotfiles.log', 'wb') as f:
+            with open('.dotfiles.log', 'ab') as f:
                 f.write(output.stderr)
         else:
             exit(0)  # to fail docker build
