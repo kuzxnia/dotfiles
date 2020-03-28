@@ -36,6 +36,8 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 eval "$(pipenv --completion)"
 
+source <(navi widget zsh)
+
 alias ls="exa --icons"
 alias ll="exa --long"
 

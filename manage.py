@@ -104,7 +104,7 @@ def setup_tmux():
 
 def setup_git():
     execute(
-        'git',
+        'Git',
         via_os=[
             'wget -q https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O $HOME/delta.deb',
             'sudo dpkg -i $HOME/delta.deb'
@@ -184,6 +184,18 @@ def setup_zsh():
             '.zshrc',
             '.zsh/abbreviations.zsh',
             '.oh-my-zsh/themes/raw.zsh-theme'
+        ]
+    )
+
+
+def setup_navi():
+    execute(
+        'Navi',
+        via_os=[
+            'mkdir $HOME/.tmpbin',
+            'BIN_DIR=$HOME/.tmpbin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install)',
+            'sudo cp $HOME/.tmpbin/navi /usr/local/bin/',
+            'rm -rf $HOME/.tmpbin'
         ]
     )
 
@@ -323,5 +335,6 @@ if __name__ == '__main__':
     setup_kitty()
     setup_neovim()
     setup_zsh()
+    setup_navi()
 
     InstalationStatistic.summarize()
