@@ -196,9 +196,9 @@ class InstalationStatistic:
     @classmethod
     def summarize(cls):
         print(
-            '\033[92m' if cls.FAIL == 0 else '\033[91m'
-            'Installed sucessfuly {}, skipped {}, failed {}{}'
+            '{}Installed sucessfuly {}, skipped {}, failed {}{}'
             .format(
+                '\033[92m' if cls.FAIL == 0 else '\033[91m',
                 cls.SUCCES,
                 cls.SKIP,
                 cls.FAIL,
