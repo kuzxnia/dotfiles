@@ -163,15 +163,15 @@ def setup_zsh():
                 'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<<<"exit"'
             ),
             (
-                lambda: not is_directory_exists('~/.oh-my-zsh/plugins/zsh-autosuggestions'),
+                lambda: not is_directory_exists('~/.oh-my-zsh/custom/plugins/zsh-autosuggestions'),
                 'git clone git://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions',
             ),
             (
-                lambda: not is_directory_exists('~/.oh-my-zsh/plugins/zsh-history-substring-search'),
+                lambda: not is_directory_exists('~/.oh-my-zsh/custom/plugins/zsh-history-substring-search'),
                 'git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search',
             ),
             (
-                lambda: not is_directory_exists('~/.oh-my-zsh/plugins/fash-syntax-highlighting'),
+                lambda: not is_directory_exists('~/.oh-my-zsh/custom/plugins/fast-syntax-highlighting'),
                 'git clone https://github.com/zdharma/fast-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting',
             ),
             (
@@ -267,7 +267,7 @@ def check_pip_installed(package):
 
 def run(command):
     if not is_debug_on:
-        sleep(0.01)  # pleasing to the eye, debug off
+        sleep(0.1)  # pleasing to the eye, debug off
 
     if not command:
         InstalationStatistic.SKIP += 1
