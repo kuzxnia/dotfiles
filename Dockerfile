@@ -23,7 +23,7 @@ ENV HOME /home/tester
 # Change working directory
 WORKDIR /home/tester/.dotfiles
 
-RUN LOGGING=true python3 -u manage.py
+RUN DEBUG=true python3 -u manage.py
 
 # Run setup
 CMD ["bin/bash"]

@@ -7,9 +7,12 @@ import logging
 from time import sleep
 from importlib.util import find_spec
 
+
+is_debug_on = bool(os.environ.get('DEBUG'))
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 log = logging.getLogger(__name__)
-log.disabled = not bool(os.environ.get('LOGGING'))
+log.disabled = not is_debug_on
 
 
 def setup_before_installation():
@@ -36,7 +39,12 @@ def setup_vim():
     execute(
         'Vim',
         via_apt=['vim'],
-        via_os=['git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim'],
+        via_os=[
+            (
+                lambda: os.path.exists('$HOME/.Vundle'),
+                'git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim'
+            )
+        ],
         link_files=['.vimrc']
     )
 
@@ -177,7 +185,15 @@ class InstalationStatistic:
 
     @classmethod
     def summarize(cls):
-        print('Installed sucessfuly {}, skipped {}, failed {}'.format(cls.SUCCES, cls.SKIP, cls.FAIL))
+        print(
+            'Installed sucessfuly {}, skipped {}, failed {}{}'
+            .format(
+                cls.SUCCES,
+                cls.SKIP,
+                cls.FAIL,
+                ' stderr logs in .dotfiles.log' if cls.FAIL != 0 else ''
+            )
+        )
 
 
 def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
@@ -234,14 +250,15 @@ def check_pip_installed(package):
 
 
 def run(command):
-    if not bool(os.environ.get('LOGGING')):
+    if not is_debug_on:
         sleep(0.01)  # pleasing to the eye, debug off
-    log.debug('Executing command=%s', command)
 
     if not command:
         InstalationStatistic.SKIP += 1
         log.debug('Command skipped.')
         return
+
+    log.debug('Executing command=%s', command)
 
     output = subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
@@ -251,8 +268,11 @@ def run(command):
     else:
         log.error('Found errors %r', output.stdout)
         InstalationStatistic.FAIL += 1
-        with open('$HOME/.dotfiles.log', 'w+') as f:
-            f.write(output.stderr)
+        if not is_debug_on:
+            with open('.dotfiles.log', 'wb') as f:
+                f.write(output.stderr)
+        else:
+            exit(0)  # to fail docker build
 
 
 if __name__ == '__main__':
