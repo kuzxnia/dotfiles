@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import os
+import pathlib
 import subprocess
 import logging
 from time import sleep
@@ -17,18 +18,17 @@ log.disabled = not is_debug_on
 
 def setup_before_installation():
     execute(
-        'Basic utilities',
+        'Installing: git, pip, wget and cloning repo',
         via_apt=[
             'git',
             'python-pip',
             'python3-pip',
-            'curl',
             'wget'
         ],
         via_pip=['tqdm'],
         via_os=[
             (
-                lambda: os.path.exists('$HOME/.dotfiles'),
+                lambda: not is_directory_exists('~/.dotfiles'),
                 'git clone https://github.com/kuzxnia/dotfiles.git $HOME/.dotfiles'
             )
         ]
@@ -41,7 +41,7 @@ def setup_vim():
         via_apt=['vim'],
         via_os=[
             (
-                lambda: os.path.exists('$HOME/.Vundle'),
+                lambda: not is_directory_exists('~/.Vundle'),
                 'git clone https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim'
             )
         ],
@@ -64,7 +64,7 @@ def _setup_search_tools():
         via_apt=['bat', 'ripgrep'],
         via_os=[
             (
-                lambda: os.path.exists('$HOME/.fzf'),
+                lambda: not is_directory_exists('~/.fzf'),
                 'git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf',
                 '$HOME/.fzf/install --all'
             ),
@@ -92,7 +92,7 @@ def setup_tmux():
         'Tmux plugins',
         via_os=[
             (
-                lambda: os.path.exists('$HOME/.tmux/plugins/tpm'),
+                lambda: not is_directory_exists('~/.tmux/plugins/tpm'),
                 'git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm',
                 'tmux source-file $HOME/.tmux.conf',
                 '$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh'
@@ -159,7 +159,7 @@ def setup_zsh():
         via_apt=['zsh'],
         via_os=[
             (
-                lambda: os.path.exists('~/.oh-my-zsh'),
+                lambda: not is_directory_exists('$HOME/.oh-my-zsh'),
                 'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<<"exit"'
             ),
             'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
@@ -186,6 +186,7 @@ class InstalationStatistic:
     @classmethod
     def summarize(cls):
         print(
+            '\033[92m' if cls.FAIL == 0 else '\033[91m'
             'Installed sucessfuly {}, skipped {}, failed {}{}'
             .format(
                 cls.SUCCES,
@@ -221,7 +222,9 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     if find_spec('tqdm'):
         from tqdm import tqdm
     else:
-        tqdm = lambda x, *args, **kwargs: x  # noqa: E731
+        def tdqm(x, msg, *args, **kwargs):
+            print(msg)
+            return x
 
     via_apt = via_apt or []
     via_pip = via_pip or []
@@ -235,6 +238,10 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
 
     for command in tqdm(gen_commands(), msg, total=commands_amound, smoothing=0.5):
         run(command)
+
+
+def is_directory_exists(path):
+    return pathlib.Path(path).expanduser().exists()
 
 
 def check_installed(command):

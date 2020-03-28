@@ -1,7 +1,7 @@
 <h3 align="center">
   <span><img width="18" src="https://image.flaticon.com/icons/svg/226/226772.svg" alt="Linux - Icon made by Freepik from Flaticon" /></span>
   kuzxnia/dotfiles
-  <span><img alt="Travis CI" src="https://img.shields.io/travis/kuzxnia/dotfiles"></span>
+  <span><img alt="Travis CI" src="https://travis-ci.com/kuzxnia/dotfiles.svg?branch=master"></span>
 </h3>
 
 
@@ -11,7 +11,7 @@ There is a `manage.py` setup script which run as installation process.
 # :rocket: Installation
 
 ```bash
-python3 -c "$(wget https://raw.githubusercontent.com/kuzxnia/dotfiles/master/manage.py -O)"
+curl -sSL wget https://raw.githubusercontent.com/kuzxnia/dotfiles/master/manage.py | python3
 
 # or if you have clonned repository
 python3 manage.py
