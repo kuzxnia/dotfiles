@@ -19,7 +19,6 @@ RUN chown -R tester:tester /home/tester
 USER tester
 ENV HOME /home/tester
 
-ARG CACHEBUST=1
 RUN curl -sSL https://raw.githubusercontent.com/kuzxnia/dotfiles/master/manage.py | DEBUG=true python3 
 
 # Run setup

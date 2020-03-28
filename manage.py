@@ -222,7 +222,7 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
     if find_spec('tqdm'):
         from tqdm import tqdm
     else:
-        def tdqm(x, msg, *args, **kwargs):
+        def tqdm(x, msg, *args, **kwargs):
             print(msg)
             return x
 
