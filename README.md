@@ -4,11 +4,18 @@
   <span><img alt="Travis CI" src="https://travis-ci.com/kuzxnia/dotfiles.svg?branch=master"></span>
 </h3>
 
+<h3 align="center">
+    <img alt="Installation process" src="https://github.com/kuzxnia/dotfiles/blob/master/demo/installation.gif">
+</h3>
 
-# :star: Approach
+<p align="center">
+<a href='#install'>How to</a> • <a href='#components'>What's inside</a> • <a href='#testing'>Testing</a>
+</p>
+
+## <a name='approach'>:star: Approach </a>
 There is a `manage.py` setup script which run as installation process.
 
-# :rocket: Installation
+## <a name='install'>:rocket: Installation</a>
 
 ```bash
 # using curl
@@ -21,7 +28,8 @@ python3 -c "$(wget -O - https://raw.githubusercontent.com/kuzxnia/dotfiles/maste
 python3 manage.py
 ```
 
-# :postbox: What's in the box?
+## <a name='components'>:postbox: What's in the box?</a>
+
 * zsh
 * vim and neovim
 * tmux
@@ -29,5 +37,5 @@ python3 manage.py
 * fzf and ripgrep
 
 
-# :ok_hand: Testing
+## <a name='testing'>:ok_hand: Testing</a>
 In an attempt to ensure that this dotfiles setup will always work on a brand new, clean machine. I use the docker image in this repository to apply this repository to a clean Ubuntu 19.10 container.

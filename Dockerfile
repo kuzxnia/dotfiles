@@ -13,13 +13,17 @@ RUN usermod -aG sudo tester
 RUN echo "tester   ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers
 
 # Add dotfiles and chown
+ADD . /home/tester/.dotfiles
 RUN chown -R tester:tester /home/tester
 
 # Switch testuser
 USER tester
 ENV HOME /home/tester
 
-RUN curl -sSL https://raw.githubusercontent.com/kuzxnia/dotfiles/master/manage.py | DEBUG=true python3 
+# Change working directory
+WORKDIR /home/tester/.dotfiles
+
+RUN DEBUG=true python3 -u manage.py
 
 # Run setup
 CMD ["bin/bash"]
