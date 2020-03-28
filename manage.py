@@ -18,7 +18,7 @@ log.disabled = not is_debug_on
 
 def setup_before_installation():
     execute(
-        'Installing: git, pip, wget and cloning repo',
+        'Installing: git, pip, wget and cloning repo...\n',
         via_apt=[
             'git',
             'python-pip',
@@ -159,12 +159,21 @@ def setup_zsh():
         via_apt=['zsh'],
         via_os=[
             (
-                lambda: not is_directory_exists('$HOME/.oh-my-zsh'),
-                'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<<"exit"'
+                lambda: not is_directory_exists('~/.oh-my-zsh'),
+                'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<<<"exit"'
             ),
-            'git clone git://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions',
-            'git clone https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search',
-            'git clone https://github.com/zdharma/fast-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting',
+            (
+                lambda: not is_directory_exists('~/.oh-my-zsh/plugins/zsh-autosuggestions'),
+                'git clone git://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions',
+            ),
+            (
+                lambda: not is_directory_exists('~/.oh-my-zsh/plugins/zsh-history-substring-search'),
+                'git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search',
+            ),
+            (
+                lambda: not is_directory_exists('~/.oh-my-zsh/plugins/fash-syntax-highlighting'),
+                'git clone https://github.com/zdharma/fast-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting',
+            ),
             (
                 lambda: not check_installed('echo "$SHELL" | grep -q *zsh$'),
                 'sudo chsh -s "$(which zsh)"'
