@@ -1,0 +1,13 @@
+% db, postgresql
+
+# Create database user
+sudo -u postgres createuser <username>
+
+# Create new database
+sudo -u postgres psql -c 'CREATE DATABASE <database>;'
+
+# Grand all privileges to database
+sudo -u postgres psql -c 'GRANT ALL PRIVILEGES ON DATABASE <database> TO <username>;'
+
+$ username: echo 'kuznia'
+$ database: echo 'test'
