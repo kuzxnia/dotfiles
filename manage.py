@@ -161,7 +161,7 @@ def setup_zsh():
         via_os=[
             (
                 lambda: not is_directory_exists('~/.oh-my-zsh'),
-                'sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"<<<"exit"'
+                'git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh'
             ),
             (
                 lambda: not is_directory_exists('~/.oh-my-zsh/custom/plugins/zsh-autosuggestions'),
@@ -193,7 +193,7 @@ def setup_navi():
         'Navi',
         via_os=[
             'mkdir $HOME/.tmpbin',
-            'BIN_DIR=$HOME/.tmpbin bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install)',
+            'curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install | BIN_DIR=$HOME/.tmpbin bash',
             'sudo cp $HOME/.tmpbin/navi /usr/local/bin/',
             'rm -rf $HOME/.tmpbin'
         ]
