@@ -11,11 +11,15 @@ for i in {file.one,file.two}; do "<command>"; done
 # bash for regex loop
 for i in <regex>; do <command>; done
 
+
 # remove prefix ending in char ('_' in example)
 $ for i in *; do echo ${i#*_}; done
 
 # remove suffix starting with char ('_' in example)
 $ for i in *; do echo ${i%_*}; done
+
+# split text into n size chunks
+$ echo '12345678901234567890' | sed -r 's/(.{5})/\1 /g'
 
 ; ----- utils -----
 
