@@ -30,11 +30,19 @@ python3 manage.py
 
 ## <a name='components'>:postbox: What's in the box?</a>
 
-* zsh
-* vim and neovim
-* tmux
-* kitty
-* fzf and ripgrep
+<h4> • <span><img width="18" src="https://github.com/kuzxnia/dotfiles/blob/master/demo/neovim.png"/></span></h4>
+
+I loved my <span><img width="14" src="https://github.com/kuzxnia/dotfiles/blob/master/demo/vim.svg"/></span>. It was fast and enjoyable. But I have switched to `NeoVim`. The main reason is that `Vim` is slowly maintained and async support is not best. `NeoVim` is the future :smile:.
+Here's how my new setup looks like:
+
+<h3 align="center">
+    <img alt="NeoVim setup" src="https://github.com/kuzxnia/dotfiles/blob/master/demo/neovim.gif">
+</h3>
+
+#### • tmux
+#### • zsh
+#### • kitty
+#### • fzf, ripgrep, fd and exa
 
 
 ## <a name='testing'>:ok_hand: Testing</a>
