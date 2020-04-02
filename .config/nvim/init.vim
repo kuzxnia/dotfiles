@@ -11,11 +11,14 @@ Plug 'mhinz/vim-startify'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
 let g:gitgutter_sign_added = '∙'
 let g:gitgutter_sign_modified = '∙'
 let g:gitgutter_sign_removed = '∙'
 let g:gitgutter_sign_modified_removed = '∙'
+Plug 'rhysd/git-messenger.vim'
+let g:git_messenger_into_popup_after_show = 1
+let g:git_messenger_always_into_popup = 1
+nmap <Leader>gm <Plug>(git-messenger)
 
 nmap <Leader>gc :Gcommit<CR>
 nmap <Leader>gw :Gwrite<CR>
