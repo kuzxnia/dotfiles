@@ -39,10 +39,64 @@ Here's how my new setup looks like:
     <img alt="NeoVim setup" src="https://github.com/kuzxnia/dotfiles/blob/master/demo/nvim.gif" style="width: 700px">
 </h3>
 
-#### • tmux
-#### • zsh
-#### • kitty
-#### • fzf, ripgrep, fd and exa
+#### NeoVim shortcuts
+
+* git messenger:
+    * open commit info <kbd>,</kbd>+<kbd>g</kbd>+<kbd>m</kbd>
+* ale:
+    * next issue <kbd>]</kbd>+<kbd>w</kbd>
+    * previous issue <kbd>[</kbd>+<kbd>w</kbd>
+    * auto fix <kbd>,</kbd>+<kbd>f</kbd>
+* jedi, deoplete:
+    * go to command <kbd>,</kbd>+<kbd>d</kbd>
+    * go to assignments <kbd>,</kbd>+<kbd>d</kbd>
+    * show documentation <kbd>K</kbd>
+    * show usages <kbd>,</kbd>+<kbd>u</kbd>
+    * command completions <kbd>ctrl</kbd>+<kbd>space</kbd>
+    * rename command <kbd>,</kbd>+<kbd>r</kbd>
+    * up in popup <kbd>ctrl</kbd>+<kbd>k</kbd>
+    * down in popup <kbd>ctrl</kbd>+<kbd>j</kbd>
+* nerdtree:
+    * open/toggle <kbd>,</kbd>+<kbd>n</kbd>+<kbd>n</kbd>
+    * find open file <kbd>,</kbd>+<kbd>n</kbd>+<kbd>f</kbd>
+    * open mirror (usefull with multiple tabs) <kbd>,</kbd>+<kbd>n</kbd>+<kbd>m</kbd>
+* fzf, ripgrep, buffers:
+    * fuzzy file search <kbd>ctrl</kbd>+<kbd>f</kbd>
+    * fuzzy grep search <kbd>ctrl</kbd>+<kbd>g</kbd>
+    * open file in new tab <kbd>ctrl</kbd>+<kbd>t</kbd>
+    * open file in vertical split <kbd>ctrl</kbd>+<kbd>v</kbd>
+    * open file in horizontal split <kbd>ctrl</kbd>+<kbd>x</kbd>
+    * open buffers <kbd>F11</kbd>
+    * last buffers <kbd>F12</kbd>
+* split panels:
+    * move to left panel <kbd>,</kbd>+<kbd>h</kbd>
+    * move to right panel <kbd>,</kbd>+<kbd>l</kbd>
+    * move to upper panel <kbd>,</kbd>+<kbd>k</kbd>
+    * move to lower panel <kbd>,</kbd>+<kbd>j</kbd>
+* else:
+    * syntax sync <kbd>F5</kbd>
+    * remove trailing spaces <kbd>F6</kbd>
+    * set paste/nopaste <kbd>F8</kbd>
+    * retab <kbd>F10</kbd>
+    * open neovim configuration <kbd>,</kbd>+<kbd>v</kbd>
+
+#### tmux
+
+* split panels
+    * open sessions tree <kbd>ctrl</kbd><kbd>a</kbd>+<kbd>s</kbd>
+    * move to left panel <kbd>alt</kbd>+<kbd>h</kbd>
+    * move to right panel <kbd>alt</kbd>+<kbd>l</kbd>
+    * move to upper panel <kbd>alt</kbd>+<kbd>k</kbd>
+    * move to lower panel <kbd>alt</kbd>+<kbd>j</kbd>
+
+#### command line (zsh, fzf)
+
+* recent commands:
+    * command completions <kbd>ctrl</kbd>+<kbd>space</kbd>
+    * previous command <kbd>ctrl</kbd>+<kbd>k</kbd>
+    * next command <kbd>ctrl</kbd>+<kbd>j</kbd>
+    * insert sudo before command <kbd>ESC</kbd>+<kbd>ESC</kbd>
+    * last command fuzzy search <kbd>ctrl</kbd>+<kbd>r</kbd>
 
 
 ## <a name='testing'>:ok_hand: Testing</a>

@@ -19,14 +19,6 @@ Plug 'rhysd/git-messenger.vim'
 let g:git_messenger_into_popup_after_show = 1
 let g:git_messenger_always_into_popup = 1
 nmap <Leader>gm <Plug>(git-messenger)
-
-nmap <Leader>gc :Gcommit<CR>
-nmap <Leader>gw :Gwrite<CR>
-nmap <Leader>gs :Gstatus<CR>
-nmap <Leader>gp :Git push<CR>
-nmap <Leader>gu :Git pull<CR>
-nmap <Leader>gd :Gdiff<CR>
-nmap <Leader>gx :wincmd h<CR>:q<CR>
  
 Plug 'w0rp/ale'                                                                                        
 let g:ale_sign_warning = '◆'                                                                             
@@ -47,7 +39,6 @@ highlight link ALEErrorSign Title
 nmap ]w :ALENextWrap<CR>                                                                                 
 nmap [w :ALEPreviousWrap<CR>                                                                             
 nmap <Leader>f <Plug>(ale_fix)                                                                           
-
 
 Plug 'davidhalter/jedi-vim'
 let g:jedi#goto_command = "<leader>d"             
@@ -76,7 +67,6 @@ Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 nnoremap <leader>nm :NERDTreeMirror<CR>
-nnoremap <leader>mm :TagbarToggle<CR>
 
 let g:NERDTreeShowBookmarks=1
 let g:NERDTreeChDirMode=2
@@ -216,7 +206,6 @@ if !has('gui_running')
     set t_Co=256
 endif
 
-
 Plug 'edkolev/tmuxline.vim'
 let g:tmuxline_preset = 'lightline'
 
@@ -280,12 +269,9 @@ set novisualbell
 " ---------------
 set mousehide
 set number relativenumber
-
 set complete=.,w,b,u,U
 set foldmethod=indent
 set foldlevel=99
-
-set pastetoggle=<F8>
 
 "split navigations
 nnoremap <leader>j <C-w>j
@@ -298,6 +284,7 @@ noremap <F5> <Esc>:syntax sync fromstart<CR>
 inoremap <F5> <C-o>syntax sync fromstart<CR>
 noremap <F6> <Esc>:%s/\s\+$//e<CR>
 inoremap <F6> <C-o>Trailing spaces removed<CR>
+set pastetoggle=<F8>
 noremap <F10> <Esc>:retab<CR>
 inoremap <F10> <C-o>Retab done<CR>
 nmap <silent> <leader>v :e ~/.config/nvim/init.vim<CR> 
