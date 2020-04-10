@@ -21,7 +21,6 @@ Plug 'joshdick/onedark.vim'
 Plug 'KeitaNakamura/neodark.vim'
 Plug 'mhinz/vim-startify'
 Plug 'ryanoasis/vim-devicons'
-Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 Plug 'itchyny/lightline.vim'
 Plug 'luochen1990/rainbow'
 
@@ -30,6 +29,7 @@ Plug 'luochen1990/rainbow'
 " fuzzy, browse files
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 
 " linting, completion
 Plug 'w0rp/ale'
@@ -83,7 +83,7 @@ set nocursorcolumn scrolljump=5 lazyredraw redrawtime=10000 synmaxcol=180 re=1
 " required by coc
 set hidden nobackup nowritebackup cmdheight=2 updatetime=300 shortmess+=c signcolumn=yes
 
-let g:indent_guides_enable_on_vim_startup=1
+" let g:indent_guides_enable_on_vim_startup=1
 
 " ___________________________ plugins configurations ___________________________
 
@@ -143,41 +143,42 @@ endfunction
 
 " snippets
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsExpandTrigger        = "<tab>"
+let g:UltiSnipsJumpForwardTrigger   = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger  = "<s-tab>"
 
 " ale
-let g:ale_sign_warning = '◆'
-let g:ale_sign_error = '✗'
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_linters = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}
-let g:ale_python_flake8_executable = 'flake8'
-let g:ale_linters_explicit = 1
-let g:ale_echo_msg_format = '[%linter%] %code%: %s'
-let g:ale_lint_on_enter = 1
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 'always'
+let g:ale_sign_warning              = '◆'
+let g:ale_sign_error                = '✗'
+let g:ale_echo_msg_error_str        = 'E'
+let g:ale_echo_msg_warning_str      = 'W'
+let g:ale_linters                   = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}
+let g:ale_python_flake8_executable  = 'flake8'
+let g:ale_linters_explicit          = 1
+let g:ale_echo_msg_format           = '[%linter%] %code%: %s'
+let g:ale_lint_on_enter             = 1
+let g:ale_lint_on_save              = 1
+let g:ale_lint_on_text_changed      = 'always'
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
 
 " nerdtree
-let g:NERDTreeShowBookmarks=1
-let g:NERDTreeChDirMode=2
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeMarkBookmarks = 0
-let g:NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeStatusLine = -1
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeDirArrowExpandable = "\u00a0"
-let g:NERDTreeDirArrowCollapsible = "\u00a0"
-let g:NERDTreeIgnore = ['\.pyc$']
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:DevIconsEnableFoldersOpenClose = 1
-let g:DevIconsEnableFolderExtensionPatternMatching = 1
-let g:DevIconsDefaultFolderOpenSymbol=''
-let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
+let g:NERDTreeShowBookmarks                              = 1
+let g:NERDTreeChDirMode                                  = 2
+let g:NERDTreeMinimalUI                                  = 1
+let g:NERDTreeMarkBookmarks                              = 0
+let g:NERDTreeAutoDeleteBuffer                           = 1
+let g:NERDTreeStatusLine                                 = -1
+let g:NERDTreeShowHidden                                 = 1
+let NERDTreeDirArrowExpandable                           = "\u00a0"
+let NERDTreeDirArrowCollapsible                          = "\u00a0"
+let g:NERDTreeIgnore                                     = ['\.pyc$', '\.git$']
+let g:WebDevIconsUnicodeDecorateFolderNodes              = 1
+let g:DevIconsEnableFoldersOpenClose                     = 1
+let g:DevIconsEnableFolderExtensionPatternMatching       = 1
+let g:DevIconsDefaultFolderOpenSymbol                    = ''
+let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = ''
+
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " auto save
@@ -186,28 +187,28 @@ let g:auto_save_silent = 1
 let g:auto_save_events = ["InsertLeave", "TextChanged", "FocusLost"]
 
 " gitgutter, gitmessenger
-let g:gitgutter_sign_added = '∙'
-let g:gitgutter_sign_modified = '∙'
-let g:gitgutter_sign_removed = '∙'
-let g:gitgutter_sign_modified_removed = '∙'
-let g:git_messenger_into_popup_after_show = 1
-let g:git_messenger_always_into_popup = 1
+let g:gitgutter_sign_added                  = '∙'
+let g:gitgutter_sign_modified               = '∙'
+let g:gitgutter_sign_removed                = '∙'
+let g:gitgutter_sign_modified_removed       = '∙'
+let g:git_messenger_into_popup_after_show   = 1
+let g:git_messenger_always_into_popup       = 1
 
 " deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#sources#syntax#min_keyword_length = 2
-let g:python3_host_prog = '/usr/bin/python3'
-let g:python_host_prog = '/usr/bin/python'
+let g:deoplete#enable_at_startup                    = 1
+let g:deoplete#enable_smart_case                    = 1
+let g:deoplete#sources#syntax#min_keyword_length    = 2
+let g:python3_host_prog                             = '/usr/bin/python3'
+let g:python_host_prog                              = '/usr/bin/python'
 
 " closetag
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue,*.md'
-let g:closetag_shortcut = '>'
+let g:closetag_filenames    = '*.html,*.xhtml,*.phtml,*.vue,*.md'
+let g:closetag_shortcut     = '>'
 
 " startify
 let g:startify_session_persistence = 1
 let g:startify_fortune_use_unicode = 1
-let g:startify_enable_special = 0
+let g:startify_enable_special      = 0
 
 " rainbow brackets
 let g:rainbow_active = 1
@@ -223,8 +224,8 @@ let g:semshi#error_sign = v:false
 " FZF
 " general
 set rtp+=~/.fzf
-let $FZF_DEFAULT_OPTS="--reverse "                      " top to bottom
-let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
+let $FZF_DEFAULT_OPTS   = "--reverse "
+let g:fzf_layout        = { 'window': 'call CreateCenteredFloatingWindow()' }
 
 " use rg by default
 if executable('rg')
@@ -275,7 +276,7 @@ endfunction
 
 
 " ___________________________ mappings ___________________________
-let mapleader=","
+let mapleader = ","
 
 "split navigations
 nnoremap <leader>j <C-w>j
@@ -289,13 +290,13 @@ nmap [w :ALEPreviousWrap<CR>
 nmap <Leader>f <Plug>(ale_fix)
 
 " jedi
-let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_command             = "<leader>d"
 let g:jedi#goto_assignments_command = "<leader>g"
 let g:jedi#goto_definitions_command = ""
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>u"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = "<leader>r"
+let g:jedi#documentation_command    = "K"
+let g:jedi#usages_command           = "<leader>u"
+let g:jedi#completions_command      = "<C-Space>"
+let g:jedi#rename_command           = "<leader>r"
 
 " deoplete, ctrl+j/k instead tab/shift+tab
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
