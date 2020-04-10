@@ -18,16 +18,15 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 " ___________________________ gui ___________________________
 Plug 'joshdick/onedark.vim'
-Plug 'KeitaNakamura/neodark.vim'  
+Plug 'KeitaNakamura/neodark.vim'
 Plug 'mhinz/vim-startify'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 Plug 'itchyny/lightline.vim'
 Plug 'luochen1990/rainbow'
-Plug 'psliwka/vim-smoothie'
 
 " ___________________________ functionalities ___________________________
-Plug 'w0rp/ale'                                                                                        
+Plug 'w0rp/ale'
 
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
@@ -52,6 +51,8 @@ Plug 'rhysd/git-messenger.vim'
 " other
 Plug '907th/vim-auto-save'
 Plug 'farmergreg/vim-lastplace'
+Plug 'wellle/tmux-complete.vim'
+Plug 'farmergreg/vim-lastplace'
 
 call plug#end()
 
@@ -60,8 +61,8 @@ call plug#end()
 syntax on
 colorscheme onedark
 
-set cursorline
-set ruler nu nowrap laststatus=2 encoding=utf-8
+set termguicolors
+set cursorline ruler nu nowrap laststatus=2 encoding=utf-8
 set noswapfile autowrite timeoutlen=350 foldlevelstart=99 formatoptions=crql
 " text format
 set tabstop=4 backspace=2 shiftwidth=4 cindent autoindent smarttab expandtab backspace=2 softtabstop=4
@@ -136,19 +137,19 @@ function! s:MaybeUpdateLightline()
 endfunction
 
 " ale
-let g:ale_sign_warning = '◆'                                                                             
-let g:ale_sign_error = '✗'                                                                               
-let g:ale_echo_msg_error_str = 'E'                                                                       
-let g:ale_echo_msg_warning_str = 'W'                                                                     
-let g:ale_linters = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}        
-let g:ale_python_flake8_executable = 'flake8'                                                            
-let g:ale_linters_explicit = 1                                                                           
-let g:ale_echo_msg_format = '[%linter%] %code%: %s'                                                      
-let g:ale_lint_on_enter = 1                                                                              
-let g:ale_lint_on_save = 1                                                                               
-let g:ale_lint_on_text_changed = 'always'                                                                
-highlight link ALEWarningSign String                                                                     
-highlight link ALEErrorSign Title                                                                        
+let g:ale_sign_warning = '◆'
+let g:ale_sign_error = '✗'
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_linters = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}
+let g:ale_python_flake8_executable = 'flake8'
+let g:ale_linters_explicit = 1
+let g:ale_echo_msg_format = '[%linter%] %code%: %s'
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 'always'
+highlight link ALEWarningSign String
+highlight link ALEErrorSign Title
 
 " nerdtree
 let g:NERDTreeShowBookmarks=1
@@ -204,7 +205,7 @@ let g:auto_save_silent = 1
 let g:auto_save_events = ["InsertLeave", "TextChanged", "FocusLost"]
 
 " semshi settings
-let g:semshi#error_sign	= v:false
+let g:semshi#error_sign = v:false
 
 " FZF
 " general
@@ -261,7 +262,7 @@ endfunction
 
 
 " ___________________________ mappings ___________________________
-let mapleader=","                            
+let mapleader=","
 
 "split navigations
 nnoremap <leader>j <C-w>j
@@ -270,18 +271,18 @@ nnoremap <leader>l <C-w>l
 nnoremap <leader>h <C-w>h
 
 " ale, syntax
-nmap ]w :ALENextWrap<CR>                                                                                 
-nmap [w :ALEPreviousWrap<CR>                                                                             
-nmap <Leader>f <Plug>(ale_fix)                                                                           
+nmap ]w :ALENextWrap<CR>
+nmap [w :ALEPreviousWrap<CR>
+nmap <Leader>f <Plug>(ale_fix)
 
 " jedi
-let g:jedi#goto_command = "<leader>d"             
-let g:jedi#goto_assignments_command = "<leader>g" 
-let g:jedi#goto_definitions_command = ""          
-let g:jedi#documentation_command = "K"            
-let g:jedi#usages_command = "<leader>u"           
-let g:jedi#completions_command = "<C-Space>"      
-let g:jedi#rename_command = "<leader>r"           
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>u"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
 
 " deoplete, ctrl+j/k instead tab/shift+tab
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
@@ -315,4 +316,4 @@ inoremap <F10> <C-o>Tabs to spaces<CR>
 noremap <F10> <Esc>:retab<CR>
 
 " edit neovim config
-nmap <silent> <leader>v :e ~/.config/nvim/init.vim<CR> 
+nmap <silent> <leader>v :e ~/.config/nvim/init.vim<CR>
