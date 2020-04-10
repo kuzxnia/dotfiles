@@ -183,6 +183,7 @@ def setup_zsh():
         link_files=[
             '.zshrc',
             '.zsh/abbreviations.zsh',
+            '.zsh/aliases.zsh',
             '.oh-my-zsh/themes/raw.zsh-theme'
         ]
     )

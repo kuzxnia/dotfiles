@@ -1,152 +1,87 @@
-let mapleader=","                            
-                                             
-set nocompatible
-filetype off
+" plug
 
-set rtp+=~/.local/share/nvim/plugged
+let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
+
+if !filereadable(vimplug_exists)
+  if !executable("curl")
+    echoerr "You have to install curl or first install vim-plug yourself!"
+    execute "q!"
+  endif
+  echo "Installing Vim-Plug..."
+  echo ""
+  silent exec "!\curl -fLo " . vimplug_exists . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  let g:not_finish_vimplug = "yes"
+  autocmd VimEnter * PlugInstall
+endif
+
 call plug#begin('~/.local/share/nvim/plugged')
 
+" ___________________________ gui ___________________________
+Plug 'joshdick/onedark.vim'
+Plug 'KeitaNakamura/neodark.vim'  
 Plug 'mhinz/vim-startify'
-
-Plug 'sheerun/vim-polyglot'
-
-Plug 'airblade/vim-gitgutter'
-let g:gitgutter_sign_added = '∙'
-let g:gitgutter_sign_modified = '∙'
-let g:gitgutter_sign_removed = '∙'
-let g:gitgutter_sign_modified_removed = '∙'
-Plug 'rhysd/git-messenger.vim'
-let g:git_messenger_into_popup_after_show = 1
-let g:git_messenger_always_into_popup = 1
-nmap <Leader>gm <Plug>(git-messenger)
- 
-Plug 'w0rp/ale'                                                                                        
-let g:ale_sign_warning = '◆'                                                                             
-let g:ale_sign_error = '✗'                                                                               
-let g:ale_echo_msg_error_str = 'E'                                                                       
-let g:ale_echo_msg_warning_str = 'W'                                                                     
-let g:ale_linters = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}        
-let g:ale_python_flake8_executable = 'flake8'                                                            
-let g:ale_linters_explicit = 1                                                                           
-let g:ale_echo_msg_format = '[%linter%] %code%: %s'                                                      
-let g:ale_lint_on_enter = 1                                                                              
-let g:ale_lint_on_save = 1                                                                               
-let g:ale_lint_on_text_changed = 'always'                                                                
-                                                                                                         
-highlight link ALEWarningSign String                                                                     
-highlight link ALEErrorSign Title                                                                        
-                                                                                                         
-nmap ]w :ALENextWrap<CR>                                                                                 
-nmap [w :ALEPreviousWrap<CR>                                                                             
-nmap <Leader>f <Plug>(ale_fix)                                                                           
-
-Plug 'davidhalter/jedi-vim'
-let g:jedi#goto_command = "<leader>d"             
-let g:jedi#goto_assignments_command = "<leader>g" 
-let g:jedi#goto_definitions_command = ""          
-let g:jedi#documentation_command = "K"            
-let g:jedi#usages_command = "<leader>u"           
-let g:jedi#completions_command = "<C-Space>"      
-let g:jedi#rename_command = "<leader>r"           
-
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
-let g:deoplete#enable_at_startup = 1
-let g:python3_host_prog = '/usr/bin/python3'
-let g:python_host_prog = '/usr/bin/python'
-
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
-
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'vwxyutarooo/nerdtree-devicons-syntax'
-nnoremap <leader>nn :NERDTreeToggle<CR>
-nnoremap <leader>nf :NERDTreeFind<CR>
-nnoremap <leader>nm :NERDTreeMirror<CR>
+Plug 'itchyny/lightline.vim'
+Plug 'luochen1990/rainbow'
+Plug 'psliwka/vim-smoothie'
 
-let g:NERDTreeShowBookmarks=1
-let g:NERDTreeChDirMode=2
-let g:NERDTreeMinimalUI = 1
-let g:NERDTreeMarkBookmarks = 0
-let g:NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeStatusLine = -1
-let NERDTreeDirArrowExpandable = "\u00a0"
-let NERDTreeDirArrowCollapsible = "\u00a0"
-" let g:NERDTreeDirArrowExpandable='►'
-" let g:NERDTreeDirArrowCollapsible='▼'
-let g:NERDTreeIgnore = ['\.pyc$']
-let g:WebDevIconsUnicodeDecorateFolderNodes = 1
-let g:DevIconsEnableFoldersOpenClose = 1
-let g:DevIconsEnableFolderExtensionPatternMatching = 1
+" ___________________________ functionalities ___________________________
+Plug 'w0rp/ale'                                                                                        
 
-let g:DevIconsDefaultFolderOpenSymbol=''
-let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
 
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-
-Plug 'KeitaNakamura/neodark.vim'
-Plug 'joshdick/onedark.vim'
-
-Plug 'jiangmiao/auto-pairs'
-
+Plug 'davidhalter/jedi-vim'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'zchee/deoplete-jedi'
 Plug 'universal-ctags/ctags'
 
-set rtp+=/usr/local/opt/fzf
-set rtp+=~/.fzf
-Plug 'junegunn/fzf.vim'
-Plug 'yuki-ycino/fzf-preview.vim'
-let $FZF_DEFAULT_OPTS=" --color=dark --border"
 
-noremap <C-f> :Files<CR>
-nnoremap <C-g> :Rg<Cr>
-noremap <F11> :Buffers<CR>
-nmap <F12> :b#<CR>
-imap <F12> <C-O>:b#<CR>
+Plug 'jiangmiao/auto-pairs'
+Plug 'alvan/vim-closetag'  " for closing html tags
 
-" An action can be a reference to a function that processes selected lines
-function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
-endfunction
+" languages
+Plug 'sheerun/vim-polyglot'
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python syntax highlight
 
-let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
+" git
+Plug 'airblade/vim-gitgutter'
+Plug 'rhysd/git-messenger.vim'
 
-let g:fzf_layout = { 'down': '~40%' }
+" other
+Plug '907th/vim-auto-save'
+Plug 'farmergreg/vim-lastplace'
 
-" Customize fzf colors to match your color scheme
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+call plug#end()
 
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
+" ___________________________ configuration ___________________________
 
-" ------------------------------------------------------------
-Plug 'itchyny/lightline.vim'
-" Lightline
+syntax on
+colorscheme onedark
+
+set cursorline
+set ruler nu nowrap laststatus=2 encoding=utf-8
+set noswapfile autowrite timeoutlen=350 foldlevelstart=99 formatoptions=crql
+" text format
+set tabstop=4 backspace=2 shiftwidth=4 cindent autoindent smarttab expandtab backspace=2 softtabstop=4
+" searching
+set ignorecase smartcase incsearch hlsearch
+set wildignore+=*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,.sass-cache,*.class
+" sounds
+set noerrorbells novisualbell
+" mouse
+set mousehide complete=.,w,b,u,U foldmethod=indent foldlevel=99
+" performance tweaks
+set nocursorcolumn scrolljump=5 lazyredraw redrawtime=10000 synmaxcol=180 re=1
+" required by coc
+set hidden nobackup nowritebackup cmdheight=2 updatetime=300 shortmess+=c signcolumn=yes
+
+let g:indent_guides_enable_on_vim_startup=1
+
+" ___________________________ plugins configurations ___________________________
+
+" lightline
 let g:lightline = {
 \ 'colorscheme': 'onedark',
 \ 'active': {
@@ -193,8 +128,6 @@ augroup lightline#ale
   autocmd User ALEFixPost call s:MaybeUpdateLightline()
 augroup END
 
-"autocmd BufWritePost * call s:MaybeUpdateLightline() works after save
-
 " Update and show lightline but only if it's visible (e.g., not in Goyo)
 function! s:MaybeUpdateLightline()
   if exists('#lightline')
@@ -202,76 +135,133 @@ function! s:MaybeUpdateLightline()
   end
 endfunction
 
-if !has('gui_running')
-    set t_Co=256
+" ale
+let g:ale_sign_warning = '◆'                                                                             
+let g:ale_sign_error = '✗'                                                                               
+let g:ale_echo_msg_error_str = 'E'                                                                       
+let g:ale_echo_msg_warning_str = 'W'                                                                     
+let g:ale_linters = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}        
+let g:ale_python_flake8_executable = 'flake8'                                                            
+let g:ale_linters_explicit = 1                                                                           
+let g:ale_echo_msg_format = '[%linter%] %code%: %s'                                                      
+let g:ale_lint_on_enter = 1                                                                              
+let g:ale_lint_on_save = 1                                                                               
+let g:ale_lint_on_text_changed = 'always'                                                                
+highlight link ALEWarningSign String                                                                     
+highlight link ALEErrorSign Title                                                                        
+
+" nerdtree
+let g:NERDTreeShowBookmarks=1
+let g:NERDTreeChDirMode=2
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeMarkBookmarks = 0
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeStatusLine = -1
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeDirArrowExpandable = "\u00a0"
+let g:NERDTreeDirArrowCollapsible = "\u00a0"
+let g:NERDTreeIgnore = ['\.pyc$']
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:DevIconsEnableFolderExtensionPatternMatching = 1
+let g:DevIconsDefaultFolderOpenSymbol=''
+let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol=''
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" auto save
+let g:auto_save        = 1
+let g:auto_save_silent = 1
+let g:auto_save_events = ["InsertLeave", "TextChanged", "FocusLost"]
+
+" gitgutter, gitmessenger
+let g:gitgutter_sign_added = '∙'
+let g:gitgutter_sign_modified = '∙'
+let g:gitgutter_sign_removed = '∙'
+let g:gitgutter_sign_modified_removed = '∙'
+let g:git_messenger_into_popup_after_show = 1
+let g:git_messenger_always_into_popup = 1
+
+" deoplete
+let g:deoplete#enable_at_startup = 1
+let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python'
+
+" closetag
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue,*.md'
+let g:closetag_shortcut = '>'
+
+" startify
+let g:startify_session_persistence = 1
+let g:startify_fortune_use_unicode = 1
+let g:startify_enable_special = 0
+
+" rainbow brackets
+let g:rainbow_active = 1
+
+" auto save
+let g:auto_save        = 1
+let g:auto_save_silent = 1
+let g:auto_save_events = ["InsertLeave", "TextChanged", "FocusLost"]
+
+" semshi settings
+let g:semshi#error_sign	= v:false
+
+" FZF
+" general
+set rtp+=~/.fzf
+let $FZF_DEFAULT_OPTS="--reverse "                      " top to bottom
+let g:fzf_layout = { 'window': 'call CreateCenteredFloatingWindow()' }
+
+" use rg by default
+if executable('rg')
+  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+  set grepprg=rg\ --vimgrep
 endif
 
-Plug 'edkolev/tmuxline.vim'
-let g:tmuxline_preset = 'lightline'
 
-call plug#end()
+" ___________________________ functions ___________________________
 
-set cursorline
+" files window with preview
+command! -bang -nargs=? -complete=dir Files
+        \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-syntax on
-colorscheme onedark
-let g:neodark#background = '#202020'
+" advanced grep(faster with preview)
+function! RipgrepFzf(query, fullscreen)
+    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
+    let initial_command = printf(command_fmt, shellescape(a:query))
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang Rg call RipgrepFzf(<q-args>, <bang>0)
 
-" other settings
-set nobackup
+" floating fzf window with borders
+function! CreateCenteredFloatingWindow()
+    let width = min([&columns - 4, max([80, &columns - 20])])
+    let height = min([&lines - 4, max([20, &lines - 10])])
+    let top = ((&lines - height) / 2) - 1
+    let left = (&columns - width) / 2
+    let opts = {'relative': 'editor', 'row': top, 'col': left, 'width': width, 'height': height, 'style': 'minimal'}
 
-set ruler
-set nu
-set nowrap
-set laststatus=2
-set cmdheight=2
-set encoding=utf-8
+    let top = "╭" . repeat("─", width - 2) . "╮"
+    let mid = "│" . repeat(" ", width - 2) . "│"
+    let bot = "╰" . repeat("─", width - 2) . "╯"
+    let lines = [top] + repeat([mid], height - 2) + [bot]
+    let s:buf = nvim_create_buf(v:false, v:true)
+    call nvim_buf_set_lines(s:buf, 0, -1, v:true, lines)
+    call nvim_open_win(s:buf, v:true, opts)
+    set winhl=Normal:Floating
+    let opts.row += 1
+    let opts.height -= 2
+    let opts.col += 2
+    let opts.width -= 4
+    call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
+    au BufWipeout <buffer> exe 'bw '.s:buf
+endfunction
 
 
-set noswapfile
-set autowrite
-set timeoutlen=350
-set foldlevelstart=99
-set formatoptions=crql
-" ---------------
-" Text Format
-" ---------------
-set tabstop=4
-set backspace=2
-set shiftwidth=4
-set cindent
-set autoindent
-set smarttab
-set expandtab
-set backspace=2
-set softtabstop=4
-" ---------------
-" Searching
-" ---------------
-set ignorecase " Case insensitive search
-set smartcase " Non-case sensitive search
-set incsearch
-set hlsearch
-set wildignore+=*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,.sass-cache,*.class
-" ---------------
-" Visual
-" ---------------
-set showmatch " Show matching brackets.
-set matchtime=2 " How many tenths of a second to blink
-" ---------------
-" Sounds
-" ---------------
-set noerrorbells
-set novisualbell
-
-" ---------------
-" Mouse
-" ---------------
-set mousehide
-set number relativenumber
-set complete=.,w,b,u,U
-set foldmethod=indent
-set foldlevel=99
+" ___________________________ mappings ___________________________
+let mapleader=","                            
 
 "split navigations
 nnoremap <leader>j <C-w>j
@@ -279,14 +269,50 @@ nnoremap <leader>k <C-w>k
 nnoremap <leader>l <C-w>l
 nnoremap <leader>h <C-w>h
 
+" ale, syntax
+nmap ]w :ALENextWrap<CR>                                                                                 
+nmap [w :ALEPreviousWrap<CR>                                                                             
+nmap <Leader>f <Plug>(ale_fix)                                                                           
 
+" jedi
+let g:jedi#goto_command = "<leader>d"             
+let g:jedi#goto_assignments_command = "<leader>g" 
+let g:jedi#goto_definitions_command = ""          
+let g:jedi#documentation_command = "K"            
+let g:jedi#usages_command = "<leader>u"           
+let g:jedi#completions_command = "<C-Space>"      
+let g:jedi#rename_command = "<leader>r"           
+
+" deoplete, ctrl+j/k instead tab/shift+tab
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" fuzzy search, grep, buffers
+noremap <C-f> :Files<CR>
+nnoremap <C-g> :Rg<Cr>
+noremap <F11> :Buffers<CR>
+nmap <F12> :b#<CR>
+imap <F12> <C-O>:b#<CR>
+
+" nerdtree
+nnoremap <leader>nn :NERDTreeToggle<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+nnoremap <leader>nm :NERDTreeMirror<CR>
+
+" git
+nmap <Leader>gm <Plug>(git-messenger)
+
+" editor
+inoremap <F5> <C-o>Syntax restart<CR>
 noremap <F5> <Esc>:syntax sync fromstart<CR>
-inoremap <F5> <C-o>syntax sync fromstart<CR>
-noremap <F6> <Esc>:%s/\s\+$//e<CR>
 inoremap <F6> <C-o>Trailing spaces removed<CR>
+noremap <F6> <Esc>:%s/\s\+$//e<CR>
+" set paste/nopaste
 set pastetoggle=<F8>
+inoremap <F10> <C-o>Tabs to spaces<CR>
 noremap <F10> <Esc>:retab<CR>
-inoremap <F10> <C-o>Retab done<CR>
-nmap <silent> <leader>v :e ~/.config/nvim/init.vim<CR> 
 
-let g:indent_guides_enable_on_vim_startup=1
+" edit neovim config
+nmap <silent> <leader>v :e ~/.config/nvim/init.vim<CR> 
