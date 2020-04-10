@@ -26,17 +26,22 @@ Plug 'itchyny/lightline.vim'
 Plug 'luochen1990/rainbow'
 
 " ___________________________ functionalities ___________________________
-Plug 'w0rp/ale'
 
+" fuzzy, browse files
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 
+" linting, completion
+Plug 'w0rp/ale'
 Plug 'davidhalter/jedi-vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
-Plug 'universal-ctags/ctags'
 
+" snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
+" auto brackets, html tags
 Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'  " for closing html tags
 
@@ -136,6 +141,12 @@ function! s:MaybeUpdateLightline()
   end
 endfunction
 
+" snippets
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
 " ale
 let g:ale_sign_warning = '◆'
 let g:ale_sign_error = '✗'
@@ -184,6 +195,8 @@ let g:git_messenger_always_into_popup = 1
 
 " deoplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#sources#syntax#min_keyword_length = 2
 let g:python3_host_prog = '/usr/bin/python3'
 let g:python_host_prog = '/usr/bin/python'
 
