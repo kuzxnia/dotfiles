@@ -7,7 +7,7 @@ setopt no_beep             # No bells
 
 export PATH=$HOME/bin:$PATH
 export PATH="/home/kuznia/.pyenv/bin:$PATH"
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 
 export ZSH=$HOME/.oh-my-zsh
 
@@ -23,6 +23,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 source "$HOME/.zsh/abbreviations.zsh"
+source "$HOME/.zsh/aliases.zsh"
 
 export LANG=en_US.UTF-8
 export EDITOR='nvim'
@@ -37,13 +38,6 @@ eval "$(pyenv virtualenv-init -)"
 eval "$(pipenv --completion)"
 
 source <(navi widget zsh)
-
-alias ls="exa --icons"
-alias ll="exa --long"
-
-alias -s {py,js,vue}=vim
-alias -g G='| rg -i'
-alias -g F='| fzf'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

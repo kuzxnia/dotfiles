@@ -6,7 +6,6 @@ typeset -A abbrevs
 
 # General aliases
 abbrevs=(
-  "ll"   "ls -al"
   "sagi" "sudo apt-get install"
   "mdc"  "mkdir -p __CURSOR__ && cd \$_"
   "killsshtty" 'kill $(ps auxww | grep ssh | grep tty| awk "{print \$2}")'
@@ -146,14 +145,14 @@ abbrevs+=(
 
   "gp"    "git push"
   "gpu"   "git push -u"
-  "gpf"   "git push --force-with-lease"
+  "gpf"   "git push --force"
   "gpo"   "git push origin"
   "gpod"  "git push origin --delete"
 
-  "gl"    "git pull"
-  "glr"   "git pull --rebase"
-  "glor"  "git pull origin --rebase"
-  "glomr" "git pull origin master --rebase"
+  "gpl"    "git pull"
+  "gplr"   "git pull --rebase"
+  "gplor"  "git pull origin --rebase"
+  "gplomr" "git pull origin master --rebase"
 
   "gpr"    "git pull-request"
   "gprbc"  "git pull-request --browse --copy"

@@ -8,11 +8,9 @@ import logging
 from time import sleep
 from importlib.util import find_spec
 
-
-is_debug_on = bool(os.environ.get('DEBUG'))
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 log = logging.getLogger(__name__)
+is_debug_on = bool(os.environ.get('DEBUG'))
 log.disabled = not is_debug_on
 
 
@@ -183,6 +181,7 @@ def setup_zsh():
         link_files=[
             '.zshrc',
             '.zsh/abbreviations.zsh',
+            '.zsh/aliases.zsh',
             '.oh-my-zsh/themes/raw.zsh-theme'
         ]
     )
