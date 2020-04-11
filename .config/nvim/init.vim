@@ -17,8 +17,13 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 
 " ___________________________ gui ___________________________
+" themes
 Plug 'joshdick/onedark.vim'
 Plug 'KeitaNakamura/neodark.vim'
+Plug 'rakr/vim-one'
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
+
+" other
 Plug 'mhinz/vim-startify'
 Plug 'ryanoasis/vim-devicons'
 Plug 'itchyny/lightline.vim'
@@ -57,16 +62,19 @@ Plug 'rhysd/git-messenger.vim'
 Plug '907th/vim-auto-save'
 Plug 'farmergreg/vim-lastplace'
 Plug 'wellle/tmux-complete.vim'
-Plug 'farmergreg/vim-lastplace'
 
 call plug#end()
 
 " ___________________________ configuration ___________________________
 
-syntax on
-colorscheme onedark
+colorscheme onehalfdark
 
-set termguicolors
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+
 set cursorline ruler nu nowrap laststatus=2 encoding=utf-8
 set noswapfile autowrite timeoutlen=350 foldlevelstart=99 formatoptions=crql
 " text format
@@ -83,7 +91,17 @@ set nocursorcolumn scrolljump=5 lazyredraw redrawtime=10000 synmaxcol=180 re=1
 " required by coc
 set hidden nobackup nowritebackup cmdheight=2 updatetime=300 shortmess+=c signcolumn=yes
 
-" let g:indent_guides_enable_on_vim_startup=1
+let g:polyglot_disabled = ['python']
+syntax on
+
+" tmux cursor shape
+if exists('$TMUX')
+    let &t_SI .= "\ePtmux;\e\e[=1c\e\\"
+    let &t_EI .= "\ePtmux;\e\e[=2c\e\\"
+ else
+    let &t_SI .= "\e[=1c"
+    let &t_EI .= "\e[=2c"
+endif
 
 " ___________________________ plugins configurations ___________________________
 
