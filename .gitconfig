@@ -80,3 +80,6 @@
 [user]
 	email = kacper.kuzniarski@gmail.com
 	name = kuzxnia
+[hub]
+	protocol = https
+	host = github.com

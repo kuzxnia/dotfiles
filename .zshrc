@@ -36,6 +36,7 @@ eval "$(jump shell)"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 eval "$(pipenv --completion)"
+eval "$(hub alias -s)"
 
 source <(navi widget zsh)
 

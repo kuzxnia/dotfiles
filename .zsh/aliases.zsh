@@ -6,6 +6,7 @@ alias_lst=(
     "vi" "nvim"
     "ls" "exa --icons"
     "ll" "exa --icons --long"
+    "la" "exa --icons --long --all"
 )
 
 for al in ${(k)alias_lst}; do
