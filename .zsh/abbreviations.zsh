@@ -76,7 +76,6 @@ abbrevs+=(
 
 # Vim
 abbrevs+=(
-  "vi"   'nvim'
   "vrcf" 'nvim -c ":RuboCop $(git diff origin/master:./ --name-only | grep -E .rb$ | paste -sd\  -)"'
   "vbs"  'nvim -p board-now.md board-later.md board-scratch-pad.md'
 )

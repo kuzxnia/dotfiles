@@ -103,9 +103,11 @@ def setup_tmux():
 def setup_git():
     execute(
         'Git',
+        via_apt=['hub'],
         via_os=[
             'wget -q https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O $HOME/delta.deb',
             'sudo dpkg -i $HOME/delta.deb'
+            'cp $HOME/.dotfiles/.config/hub $HOME/.config/hub'
         ],
         link_files=['.gitconfig']
     )
