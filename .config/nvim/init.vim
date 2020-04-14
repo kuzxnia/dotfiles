@@ -67,7 +67,7 @@ call plug#end()
 
 " ___________________________ configuration ___________________________
 
-colorscheme onehalfdark
+colorscheme onedark
 
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -170,7 +170,7 @@ let g:ale_sign_warning              = '◆'
 let g:ale_sign_error                = '✗'
 let g:ale_echo_msg_error_str        = 'E'
 let g:ale_echo_msg_warning_str      = 'W'
-let g:ale_linters                   = {'vue': ['eslint'], 'python': ['flake8', 'pylint'], 'javascript': ['eslint']}
+let g:ale_linters                   = {'vue': ['eslint'], 'python': ['flake8', 'pylint', 'mypy'], 'javascript': ['eslint']}
 let g:ale_python_flake8_executable  = 'flake8'
 let g:ale_linters_explicit          = 1
 let g:ale_echo_msg_format           = '[%linter%] %code%: %s'

@@ -107,9 +107,8 @@ def setup_git():
         via_os=[
             'wget -q https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O $HOME/delta.deb',
             'sudo dpkg -i $HOME/delta.deb'
-            'cp $HOME/.dotfiles/.config/hub $HOME/.config/hub'
         ],
-        link_files=['.gitconfig']
+        link_files=['.gitconfig', '.config/hub']
     )
 
 
@@ -160,20 +159,8 @@ def setup_zsh():
         via_apt=['zsh'],
         via_os=[
             (
-                lambda: not is_directory_exists('~/.oh-my-zsh'),
-                'git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh'
-            ),
-            (
-                lambda: not is_directory_exists('~/.oh-my-zsh/custom/plugins/zsh-autosuggestions'),
-                'git clone git://github.com/zsh-users/zsh-autosuggestions $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions',
-            ),
-            (
-                lambda: not is_directory_exists('~/.oh-my-zsh/custom/plugins/zsh-history-substring-search'),
-                'git clone https://github.com/zsh-users/zsh-history-substring-search $HOME/.oh-my-zsh/custom/plugins/zsh-history-substring-search',
-            ),
-            (
-                lambda: not is_directory_exists('~/.oh-my-zsh/custom/plugins/fast-syntax-highlighting'),
-                'git clone https://github.com/zdharma/fast-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting',
+                lambda: not is_directory_exists('~/.zplug'),
+                'curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh'
             ),
             (
                 lambda: not check_installed('echo "$SHELL" | grep -q *zsh$'),
@@ -184,7 +171,6 @@ def setup_zsh():
             '.zshrc',
             '.zsh/abbreviations.zsh',
             '.zsh/aliases.zsh',
-            '.oh-my-zsh/themes/raw.zsh-theme'
         ]
     )
 
