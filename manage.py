@@ -19,7 +19,6 @@ def setup_before_installation():
         'Basic utilities(git, pip and repo clone)',
         via_apt=[
             'git',
-            'python-pip',
             'python3-pip',
             'wget',
             'curl'
@@ -124,6 +123,8 @@ def setup_libs():
             'zip',
             'ranger',
             'highlight',
+            'ncdu',
+            'tldr',
         ],
         via_os=[
             (
@@ -171,6 +172,7 @@ def setup_zsh():
             '.zshrc',
             '.zsh/abbreviations.zsh',
             '.zsh/aliases.zsh',
+            'chsh -s $(which zsh)'
         ]
     )
 
@@ -212,7 +214,7 @@ def execute(msg, via_apt=None, via_pip=None, via_os=None, link_files=None):
             yield 'sudo apt-get install -y {}'.format(command) if check_apt_installed(command) else None
 
         for command in via_pip:
-            yield 'yes | pip install {0}; yes | sudo pip3 install {0}'.format(command)
+            yield 'yes | pip3 install {0}; yes | sudo pip3 install {0}'.format(command)
 
         for command in via_os:
             if isinstance(command, tuple):
@@ -260,7 +262,7 @@ def check_apt_installed(package):
 
 
 def check_pip_installed(package):
-    return check_installed('pip freeze | grep -q {0} && pip freeze | grep -q {0}'.format(package))
+    return check_installed('pip3 freeze | grep -q {0} && pip3 freeze | grep -q {0}'.format(package))
 
 
 def run(command):
@@ -297,23 +299,23 @@ if __name__ == '__main__':
         exit(0)
 
     setup_before_installation()
-    # execute(
-    #     'System utils',
-    #     via_apt=[
-    #         'papirus-icon-theme',
-    #         'gnome-tweak-tool',
-    #         'gnome-shell-extensions'
-    #     ],
-    #     via_os=[
-    #         'sudo apt update',
-    #         'sudo apt upgrade -y',
-    #         'sudo add-apt-repository ppa:papirus/papirus',
-    #         'sudo apt-get update',
-    #         'sudo add-apt-repository universe',
-    #         'git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv',
-    #         'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
-    #     ]
-    # )
+    execute(
+        'System utils',
+        via_apt=[
+            'papirus-icon-theme',
+            'gnome-tweak-tool',
+            'gnome-shell-extensions'
+        ],
+        via_os=[
+            'sudo apt update',
+            'sudo apt upgrade -y',
+            'sudo add-apt-repository ppa:papirus/papirus',
+            'sudo apt-get update',
+            'sudo add-apt-repository universe',
+            'git clone https://github.com/pyenv/pyenv.git $HOME/.pyenv',
+            'git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv',
+        ]
+    )
     setup_libs()
     setup_tmux()
     setup_git()

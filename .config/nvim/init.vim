@@ -78,7 +78,8 @@ endif
 set cursorline ruler nu nowrap laststatus=2 encoding=utf-8
 set noswapfile autowrite timeoutlen=350 foldlevelstart=99 formatoptions=crql
 " text format
-set tabstop=4 backspace=2 shiftwidth=4 cindent autoindent smarttab expandtab backspace=2 softtabstop=4
+setlocal conceallevel=3
+set tabstop=4 backspace=2 shiftwidth=4 cindent autoindent smarttab expandtab backspace=2 softtabstop=4 
 " searching
 set ignorecase smartcase incsearch hlsearch
 set wildignore+=*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,.sass-cache,*.class
@@ -90,9 +91,14 @@ set mousehide complete=.,w,b,u,U foldmethod=indent foldlevel=99
 set nocursorcolumn scrolljump=5 lazyredraw redrawtime=10000 synmaxcol=180 re=1
 " required by coc
 set hidden nobackup nowritebackup cmdheight=2 updatetime=300 shortmess+=c signcolumn=yes
+" status line
+set cmdheight=1
+
+if has('syntax') && !exists('g:syntax_on')
+  syntax enable
+endif
 
 let g:polyglot_disabled = ['python']
-syntax on
 
 " tmux cursor shape
 if exists('$TMUX')
@@ -181,21 +187,18 @@ highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
 
 " nerdtree
-let g:NERDTreeShowBookmarks                              = 1
-let g:NERDTreeChDirMode                                  = 2
 let g:NERDTreeMinimalUI                                  = 1
-let g:NERDTreeMarkBookmarks                              = 0
 let g:NERDTreeAutoDeleteBuffer                           = 1
 let g:NERDTreeStatusLine                                 = -1
 let g:NERDTreeShowHidden                                 = 1
-let NERDTreeDirArrowExpandable                           = "\u00a0"
-let NERDTreeDirArrowCollapsible                          = "\u00a0"
-let g:NERDTreeIgnore                                     = ['\.pyc$', '\.git$']
-let g:WebDevIconsUnicodeDecorateFolderNodes              = 1
+let NERDTreeIgnore                                       =['\.pyc','\~$','\.swp', '\.git$']
 let g:DevIconsEnableFoldersOpenClose                     = 1
 let g:DevIconsEnableFolderExtensionPatternMatching       = 1
 let g:DevIconsDefaultFolderOpenSymbol                    = ''
 let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = ''
+let g:NERDTreeDirArrowExpandable                           = "\u00a0"
+let g:NERDTreeDirArrowCollapsible                          = "\u00a0"
+
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
@@ -214,7 +217,6 @@ let g:git_messenger_always_into_popup       = 1
 
 " deoplete
 let g:deoplete#enable_at_startup                    = 1
-let g:deoplete#enable_smart_case                    = 1
 let g:deoplete#sources#syntax#min_keyword_length    = 2
 let g:python3_host_prog                             = '/usr/bin/python3'
 let g:python_host_prog                              = '/usr/bin/python'
