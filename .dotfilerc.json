@@ -173,5 +173,10 @@
             "rm -rf $HOME/.tmpbin"
         ]
     },
-    "12:bspwm_sxkhd_polybar_compton": { }
+    "12:bspwm_sxkhd_polybar_compton": {
+        "apt": {
+            "mate-applets"
+        }
+
+    }
 }

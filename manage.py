@@ -134,45 +134,12 @@ class ConfigParser:
             if instr not in self.validation_actions:
                 yield instr, command
 
-# list
-# list of dict
-# dict
-# str
-
 def execute():
-
-
-
-    def gen_commands():
-        for command in via_apt:
-            yield 'sudo apt-get install -y {}'.format(command) if check_apt_installed(command) else None
-
-        for command in via_pip:
-            yield 'yes | pip3 install {0}; yes | sudo pip3 install {0}'.format(command)
-
-        for command in via_os:
-            if isinstance(command, tuple):
-                contition, *commands = command
-                for command in commands:
-                    yield command if contition() else None
-            else:
-                yield command
-
-        for path in link_files:
-            if isinstance(path, tuple):
-                yield f"mkdir -p {os.path.dirname(path[1])} && ln -sf $HOME/.dotfiles/{path[0]} {path[1]}"
-            else:
-                yield f"mkdir -p $HOME/{os.path.dirname(path)} && ln -sf $HOME/.dotfiles/{path} $HOME/{path}"
-
     if find_spec('tqdm'):
         from tqdm import tqdm
     else:
         tqdm = lambda x, *args, **kwargs: x  # noqa: E731
 
-    via_apt = via_apt or []
-    via_pip = via_pip or []
-    via_os = via_os or []
-    link_files = link_files or []
 
     commands_amound = sum(
         1 if not isinstance(command, tuple) else len(command)-1

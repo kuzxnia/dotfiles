@@ -24,9 +24,9 @@ Plug 'rakr/vim-one'
 Plug 'sonph/onehalf', {'rtp': 'vim/'}
 
 " other
-Plug 'mhinz/vim-startify'
 Plug 'ryanoasis/vim-devicons'
-Plug 'itchyny/lightline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'luochen1990/rainbow'
 
 " ___________________________ functionalities ___________________________
@@ -57,6 +57,7 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python syntax h
 " git
 Plug 'airblade/vim-gitgutter'
 Plug 'rhysd/git-messenger.vim'
+Plug 'tpope/vim-fugitive'
 
 " other
 Plug '907th/vim-auto-save'
@@ -68,6 +69,7 @@ call plug#end()
 " ___________________________ configuration ___________________________
 
 colorscheme onedark
+" autocmd FileType * colorscheme onedark
 
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -111,59 +113,8 @@ endif
 
 " ___________________________ plugins configurations ___________________________
 
-" lightline
-let g:lightline = {
-\ 'colorscheme': 'onedark',
-\ 'active': {
-\   'left': [['mode', 'paste'], ['filename', 'modified']],
-\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok']]
-\ },
-\ 'component_expand': {
-\   'linter_warnings': 'LightlineLinterWarnings',
-\   'linter_errors': 'LightlineLinterErrors',
-\   'linter_ok': 'LightlineLinterOK'
-\ },
-\ 'component_type': {
-\   'readonly': 'error',
-\   'linter_warnings': 'warning',
-\   'linter_errors': 'error'
-\ },
-\ }
-
-function! LightlineLinterWarnings() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-  return l:counts.total == 0 ? '' : printf('%d ◆', all_non_errors)
-endfunction
-
-function! LightlineLinterErrors() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-  return l:counts.total == 0 ? '' : printf('%d ✗', all_errors)
-endfunction
-
-function! LightlineLinterOK() abort
-  let l:counts = ale#statusline#Count(bufnr(''))
-  let l:all_errors = l:counts.error + l:counts.style_error
-  let l:all_non_errors = l:counts.total - l:all_errors
-  return l:counts.total == 0 ? '✓ ' : ''
-endfunction
-
-augroup lightline#ale
-  autocmd!
-  autocmd User ALEJobStarted call s:MaybeUpdateLightline()
-  autocmd User ALELintPost call s:MaybeUpdateLightline()
-  autocmd User ALEFixPost call s:MaybeUpdateLightline()
-augroup END
-
-" Update and show lightline but only if it's visible (e.g., not in Goyo)
-function! s:MaybeUpdateLightline()
-  if exists('#lightline')
-    call lightline#update()
-  end
-endfunction
+let g:airline#extensions#ale#enabled = 1 
+let g:airline#extensions#branch#enabled=1
 
 " snippets
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -201,6 +152,7 @@ let g:NERDTreeDirArrowCollapsible                          = "\u00a0"
 
 
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " auto save
 let g:auto_save        = 1
@@ -224,11 +176,6 @@ let g:python_host_prog                              = '/usr/bin/python'
 " closetag
 let g:closetag_filenames    = '*.html,*.xhtml,*.phtml,*.vue,*.md'
 let g:closetag_shortcut     = '>'
-
-" startify
-let g:startify_session_persistence = 1
-let g:startify_fortune_use_unicode = 1
-let g:startify_enable_special      = 0
 
 " rainbow brackets
 let g:rainbow_active = 1
