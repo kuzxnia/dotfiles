@@ -29,8 +29,7 @@ Plug 'luochen1990/rainbow'
 " ___________________________ functionalities ___________________________
 " fuzzy, browse files
 Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'vwxyutarooo/nerdtree-devicons-syntax'
+Plug 'brooth/far.vim'
 
 " linting, completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -61,9 +60,9 @@ Plug 'wellle/tmux-complete.vim'
 " See what keys do like in emacs
 Plug 'liuchengxu/vim-which-key'
 
-" naviagation with tmux
+" naviagation
 Plug 'christoomey/vim-tmux-navigator'
-" plans
+Plug 'unblevable/quick-scope'
 
 call plug#end()
 
@@ -145,6 +144,8 @@ let g:lightline = {
 \ },
 \ 'component_function': {
 \   'gitbranch': 'fugitive#head',
+\   'lineinfo': 'LightlineLineinfo',
+\   'mode': 'LightlineMode',
 \ },
 \ 'component_expand': {
 \   'linter_warnings': 'LightlineLinterWarnings',
@@ -185,6 +186,25 @@ augroup lightline#ale
   autocmd User ALELintPost call s:MaybeUpdateLightline()
   autocmd User ALEFixPost call s:MaybeUpdateLightline()
 augroup END
+
+function! LightlineLineinfo() abort
+    if winwidth(0) < 86
+        return ''
+    endif
+
+    let l:current_line = printf('%-3s', line('.'))
+    let l:max_line = printf('%-3s', line('$'))
+    let l:lineinfo = ' ' . l:current_line . '/' . l:max_line
+    return l:lineinfo
+endfunction
+
+function! LightlineMode() abort
+    let ftmap = {
+                \ 'coc-explorer': 'EXPLORER',
+                \ 'fugitive': 'FUGITIVE'
+                \ }
+    return get(ftmap, &filetype, lightline#mode())
+endfunction
 
 " Update and show lightline but only if it's visible (e.g., not in Goyo)
 function! s:MaybeUpdateLightline()
@@ -322,6 +342,9 @@ autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | end
 " tmux navigator 
 let g:tmux_navigator_no_mappings = 1
 
+" quick-scope
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
 " ___________________________ functions ___________________________
 
 " files window with preview
@@ -385,6 +408,9 @@ nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
 
+nnoremap <silent> <tab> gt
+nnoremap <silent> <s-tab> gT
+
 " fuzzy search, grep, buffers
 noremap <C-f> :Files<CR>
 nnoremap <C-g> :Rg<Cr>
@@ -393,7 +419,6 @@ nmap <F12> :b#<CR>
 imap <F12> <C-O>:b#<CR>
 
 " COC
-
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <expr><C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
