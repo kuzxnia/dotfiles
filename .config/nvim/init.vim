@@ -1,4 +1,5 @@
 " plug
+"
 
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
 
@@ -19,28 +20,21 @@ call plug#begin('~/.local/share/nvim/plugged')
 " ___________________________ gui ___________________________
 " themes
 Plug 'joshdick/onedark.vim'
-Plug 'KeitaNakamura/neodark.vim'
-Plug 'rakr/vim-one'
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
 
 " other
 Plug 'ryanoasis/vim-devicons'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
 Plug 'luochen1990/rainbow'
 
 " ___________________________ functionalities ___________________________
-
 " fuzzy, browse files
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vwxyutarooo/nerdtree-devicons-syntax'
 
 " linting, completion
-Plug 'w0rp/ale'
-Plug 'davidhalter/jedi-vim'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'dense-analysis/ale'
 
 " snippets
 Plug 'SirVer/ultisnips'
@@ -64,12 +58,24 @@ Plug '907th/vim-auto-save'
 Plug 'farmergreg/vim-lastplace'
 Plug 'wellle/tmux-complete.vim'
 
+" See what keys do like in emacs
+Plug 'liuchengxu/vim-which-key'
+
+" naviagation with tmux
+Plug 'christoomey/vim-tmux-navigator'
+" plans
+
 call plug#end()
+
+" Automatically install missing plugins on startup
+autocmd VimEnter *
+  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall --sync | q
+  \| endif
 
 " ___________________________ configuration ___________________________
 
 colorscheme onedark
-" autocmd FileType * colorscheme onedark
 
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
@@ -100,7 +106,6 @@ if has('syntax') && !exists('g:syntax_on')
   syntax enable
 endif
 
-let g:polyglot_disabled = ['python']
 
 " tmux cursor shape
 if exists('$TMUX')
@@ -113,18 +118,12 @@ endif
 
 " ___________________________ plugins configurations ___________________________
 
-let g:airline#extensions#ale#enabled = 1 
-let g:airline#extensions#branch#enabled=1
-
-" snippets
-inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-let g:UltiSnipsExpandTrigger        = "<tab>"
-let g:UltiSnipsJumpForwardTrigger   = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger  = "<s-tab>"
+" which key
+source $HOME/.dotfiles/.config/nvim/plug/which_key.vim
 
 " ale
-let g:ale_sign_warning              = '◆'
-let g:ale_sign_error                = '✗'
+let g:ale_sign_warning              = ' '
+let g:ale_sign_error                = ''
 let g:ale_echo_msg_error_str        = 'E'
 let g:ale_echo_msg_warning_str      = 'W'
 let g:ale_linters                   = {'vue': ['eslint'], 'python': ['flake8', 'pylint', 'mypy'], 'javascript': ['eslint']}
@@ -134,25 +133,75 @@ let g:ale_echo_msg_format           = '[%linter%] %code%: %s'
 let g:ale_lint_on_enter             = 1
 let g:ale_lint_on_save              = 1
 let g:ale_lint_on_text_changed      = 'always'
-highlight link ALEWarningSign String
-highlight link ALEErrorSign Title
+" highlight link ALEWarningSign String
+" highlight link ALEErrorSign Title
 
-" nerdtree
-let g:NERDTreeMinimalUI                                  = 1
-let g:NERDTreeAutoDeleteBuffer                           = 1
-let g:NERDTreeStatusLine                                 = -1
-let g:NERDTreeShowHidden                                 = 1
-let NERDTreeIgnore                                       =['\.pyc','\~$','\.swp', '\.git$']
-let g:DevIconsEnableFoldersOpenClose                     = 1
-let g:DevIconsEnableFolderExtensionPatternMatching       = 1
-let g:DevIconsDefaultFolderOpenSymbol                    = ''
-let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = ''
-let g:NERDTreeDirArrowExpandable                           = "\u00a0"
-let g:NERDTreeDirArrowCollapsible                          = "\u00a0"
+" lightline
+let g:lightline = {
+\ 'colorscheme': 'onedark',
+\ 'active': {
+\   'left': [['mode', 'paste'], ['filename', 'modified']],
+\   'right': [['lineinfo'], ['percent'], ['readonly', 'linter_warnings', 'linter_errors', 'linter_ok', 'gitbranch']]
+\ },
+\ 'component_function': {
+\   'gitbranch': 'fugitive#head',
+\ },
+\ 'component_expand': {
+\   'linter_warnings': 'LightlineLinterWarnings',
+\   'linter_errors': 'LightlineLinterErrors',
+\   'linter_ok': 'LightlineLinterOK'
+\ },
+\ 'component_type': {
+\   'readonly': 'error',
+\   'linter_warnings': 'warning',
+\   'linter_errors': 'error'
+\ },
+\ }
 
+function! LightlineLinterWarnings() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '' : printf('%d  ', all_non_errors)
+endfunction
 
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+function! LightlineLinterErrors() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '' : printf('%d ', all_errors)
+endfunction
+
+function! LightlineLinterOK() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:all_non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? '✓' : ''
+endfunction
+
+augroup lightline#ale
+  autocmd!
+  autocmd User ALEJobStarted call s:MaybeUpdateLightline()
+  autocmd User ALELintPost call s:MaybeUpdateLightline()
+  autocmd User ALEFixPost call s:MaybeUpdateLightline()
+augroup END
+
+" Update and show lightline but only if it's visible (e.g., not in Goyo)
+function! s:MaybeUpdateLightline()
+  if exists('#lightline')
+    call lightline#update()
+  end
+endfunction
+
+" semshi settings
+let g:semshi#error_sign = v:false
+let g:polyglot_disabled = ['python']
+
+" snippets
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:UltiSnipsExpandTrigger        = "<tab>"
+let g:UltiSnipsJumpForwardTrigger   = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger  = "<s-tab>"
 
 " auto save
 let g:auto_save        = 1
@@ -167,12 +216,6 @@ let g:gitgutter_sign_modified_removed       = '∙'
 let g:git_messenger_into_popup_after_show   = 1
 let g:git_messenger_always_into_popup       = 1
 
-" deoplete
-let g:deoplete#enable_at_startup                    = 1
-let g:deoplete#sources#syntax#min_keyword_length    = 2
-let g:python3_host_prog                             = '/usr/bin/python3'
-let g:python_host_prog                              = '/usr/bin/python'
-
 " closetag
 let g:closetag_filenames    = '*.html,*.xhtml,*.phtml,*.vue,*.md'
 let g:closetag_shortcut     = '>'
@@ -184,9 +227,6 @@ let g:rainbow_active = 1
 let g:auto_save        = 1
 let g:auto_save_silent = 1
 let g:auto_save_events = ["InsertLeave", "TextChanged", "FocusLost"]
-
-" semshi settings
-let g:semshi#error_sign = v:false
 
 " FZF
 " general
@@ -200,6 +240,87 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
 endif
 
+" COC
+let g:coc_global_extensions = [
+    \ 'coc-snippets',
+    \ 'coc-actions',
+    \ 'coc-sh',
+    \ 'coc-java-debug',
+    \ 'coc-java',
+    \ 'coc-lists',
+    \ 'coc-emmet',
+    \ 'coc-tasks',
+    \ 'coc-pairs',
+    \ 'coc-tsserver',
+    \ 'coc-floaterm',
+    \ 'coc-html',
+    \ 'coc-css',
+    \ 'coc-emoji',
+    \ 'coc-cssmodules',
+    \ 'coc-yaml',
+    \ 'coc-python',
+    \ 'coc-explorer',
+    \ 'coc-svg',
+    \ 'coc-prettier',
+    \ 'coc-vimlsp',
+    \ 'coc-xml',
+    \ 'coc-yank',
+    \ 'coc-json',
+    \ 'coc-marketplace',
+    \ ]
+
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+augroup mygroup
+autocmd!
+" Setup formatexpr specified filetype(s).
+autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+" Update signature help on jump placeholder.
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call CocAction('runCommand', 'editor.action.organizeImport')
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Explorer
+let g:coc_explorer_global_presets = {
+\   'floating': {
+\      'position': 'floating',
+\   },
+\   'floatingLeftside': {
+\      'position': 'floating',
+\      'floating-position': 'left-center',
+\      'floating-width': 30,
+\   },
+\   'floatingRightside': {
+\      'position': 'floating',
+\      'floating-position': 'right-center',
+\      'floating-width': 30,
+\   },
+\   'simplify': {
+\     'file.child.template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+\   }
+\ }
+
+autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
+
+" tmux navigator 
+let g:tmux_navigator_no_mappings = 1
 
 " ___________________________ functions ___________________________
 
@@ -241,35 +362,28 @@ function! CreateCenteredFloatingWindow()
     au BufWipeout <buffer> exe 'bw '.s:buf
 endfunction
 
+" coc
+function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+        execute 'h '.expand('<cword>')
+    else
+        call CocAction('doHover')
+    endif
+endfunction
 
 " ___________________________ mappings ___________________________
-let mapleader = ","
+let g:mapleader = "\<Space>"
+let g:maplocalleader = ','
 
 "split navigations
-nnoremap <leader>j <C-w>j
-nnoremap <leader>k <C-w>k
-nnoremap <leader>l <C-w>l
-nnoremap <leader>h <C-w>h
-
-" ale, syntax
-nmap ]w :ALENextWrap<CR>
-nmap [w :ALEPreviousWrap<CR>
-nmap <Leader>f <Plug>(ale_fix)
-
-" jedi
-let g:jedi#goto_command             = "<leader>d"
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = ""
-let g:jedi#documentation_command    = "K"
-let g:jedi#usages_command           = "<leader>u"
-let g:jedi#completions_command      = "<C-Space>"
-let g:jedi#rename_command           = "<leader>r"
-
-" deoplete, ctrl+j/k instead tab/shift+tab
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+" nnoremap <M-j> <C-w>j
+" nnoremap <M-k> <C-w>k
+" nnoremap <M-l> <C-w>l
+" nnoremap <M-h> <C-w>h
+nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <M-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <M-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <M-l> :TmuxNavigateRight<cr>
 
 " fuzzy search, grep, buffers
 noremap <C-f> :Files<CR>
@@ -277,6 +391,41 @@ nnoremap <C-g> :Rg<Cr>
 noremap <F11> :Buffers<CR>
 nmap <F12> :b#<CR>
 imap <F12> <C-O>:b#<CR>
+
+" COC
+
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <expr><C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr><C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+if exists('*complete_info')
+    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+    imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" smart rename
+nmap <silent> rn <Plug>(coc-rename)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" coc explorer
+nmap <silent><space>e :CocCommand explorer<CR>
+
+" Map leader to which_key
+nnoremap <silent> <leader> :silent <c-u> :silent WhichKey '<Space>'<CR>
+vnoremap <silent> <leader> :silent <c-u> :silent WhichKeyVisual '<Space>'<CR>
 
 " nerdtree
 nnoremap <leader>nn :NERDTreeToggle<CR>
@@ -298,3 +447,59 @@ noremap <F10> <Esc>:retab<CR>
 
 " edit neovim config
 nmap <silent> <leader>v :e ~/.config/nvim/init.vim<CR>
+
+
+" TODO
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+" xmap <leader>a  <Plug>(coc-codeaction-selected)
+" nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current line.
+" nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+" nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
+" nmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <TAB> <Plug>(coc-range-select)
+"
+" Mappings using CoCList:
+" Show all diagnostics.
+" TODO add these to which key
+" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" " Manage extensions.
+" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" " Show commands.
+" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" " Find symbol of current document.
+" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" " Search workspace symbols.
+" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" " Do default action for next item.
+" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item.
+" nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" " Resume latest coc list.
+" nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+"
+
+" Snippets
+" Use <C-l> for trigger snippet expand.
+" imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+" vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+" let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+" let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+" imap <C-j> <Plug>(coc-snippets-expand-jump)
+
