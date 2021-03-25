@@ -23,6 +23,7 @@ Plug 'joshdick/onedark.vim'
 
 " other
 Plug 'ryanoasis/vim-devicons'
+Plug 'bryanmylee/vim-colorscheme-icons'
 Plug 'itchyny/lightline.vim'
 Plug 'luochen1990/rainbow'
 
@@ -34,6 +35,7 @@ Plug 'brooth/far.vim'
 " linting, completion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'dense-analysis/ale'
+Plug 'tweekmonster/django-plus.vim'
 
 " snippets
 Plug 'SirVer/ultisnips'
@@ -44,8 +46,9 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'  " for closing html tags
 
 " languages
+" let g:polyglot_disabled = ['python']
 Plug 'sheerun/vim-polyglot'
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python syntax highlight
+" Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}  " better python syntax highlight
 
 " git
 Plug 'airblade/vim-gitgutter'
@@ -146,6 +149,7 @@ let g:lightline = {
 \   'gitbranch': 'fugitive#head',
 \   'lineinfo': 'LightlineLineinfo',
 \   'mode': 'LightlineMode',
+\   'filename': 'LightlineFilename',
 \ },
 \ 'component_expand': {
 \   'linter_warnings': 'LightlineLinterWarnings',
@@ -158,6 +162,10 @@ let g:lightline = {
 \   'linter_errors': 'error'
 \ },
 \ }
+
+function! LightlineFilename()
+    return expand('%:~:.')
+endfunction
 
 function! LightlineLinterWarnings() abort
   let l:counts = ale#statusline#Count(bufnr(''))
@@ -215,7 +223,6 @@ endfunction
 
 " semshi settings
 let g:semshi#error_sign = v:false
-let g:polyglot_disabled = ['python']
 
 " snippets
 inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -288,7 +295,6 @@ let g:coc_global_extensions = [
     \ 'coc-json',
     \ 'coc-marketplace',
     \ ]
-
 
 function! s:check_back_space() abort
     let col = col('.') - 1
@@ -397,6 +403,19 @@ endfunction
 " ___________________________ mappings ___________________________
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
+
+set clipboard+=unnamedplus
+" " Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+
+" " Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
 
 "split navigations
 " nnoremap <M-j> <C-w>j

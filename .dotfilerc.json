@@ -172,11 +172,5 @@
             "sudo cp $HOME/.tmpbin/navi /usr/local/bin/",
             "rm -rf $HOME/.tmpbin"
         ]
-    },
-    "12:bspwm_sxkhd_polybar_compton": {
-        "apt": {
-            "mate-applets"
-        }
-
     }
 }

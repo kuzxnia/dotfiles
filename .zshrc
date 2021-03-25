@@ -21,7 +21,7 @@ export PATH="/home/kuznia/.pyenv/bin:$PATH"
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 
 export TERMINAL=kitty
-export MONITOR=$(polybar -m|tail -1|sed -e 's/:.*$//g')
+# export MONITOR=$(polybar -m|tail -1|sed -e 's/:.*$//g')
 export BROWSER="google-chrome"
 export EDITOR="nvim"
 export VISUAL="nvim"
