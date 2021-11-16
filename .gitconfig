@@ -1,24 +1,25 @@
 [core]
-	editor= vim
-	excludesfile = ~/.gitignore
+	editor= nvim
+	excludesfile = /home/kkuzniarski/.gitignore_global
 	pager = delta --dark
+	exludesfile = /home/kkuzniarski/.gitignore_global
 [log]
 	decorate = short
 [push]
 	default = current
 [merge]
-    tool = meld
-[mergetool "meld"]
-    cmd = meld --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output \"$MERGED\" --label \"MERGE (REMOTE BASE MY)\"
+    tool = smerge
+[mergetool "smerge"]
+    cmd = smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
     trustExitCode = false
 [mergetool]
     prompt = false
     keepBackup = false
 [diff]
-    guitool = meld
+    guitool = smerge
 
-[difftool "meld"]
-    cmd = meld \"$LOCAL\" \"$REMOTE\" --label \"DIFF (ORIGINAL MY)\"
+[difftool "smerge"]
+    cmd = smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
 [pull]
 	default = simple
 [alias]
@@ -78,8 +79,8 @@
 	local = yellow
 	remote = green
 [user]
-	email = kacper.kuzniarski@gmail.com
-	name = kuzxnia
+	email = kacper.kuzniarski@cloudservices.pl
+	name = Kacper Kuźniarski
 [hub]
 	protocol = https
 	host = github.com
