@@ -51,12 +51,14 @@ require('packer').startup(function(use)
   }
   use 'hoob3rt/lualine.nvim'
   -- fuzzy, browse files
-  use 'junegunn/fzf.vim'
   use 'brooth/far.vim'
   use {
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  -- might require make clean && make in ~/.local/share/nvim/site/pack/../start/telescope-fzf-native.nvim
+
   use {
     "nvim-telescope/telescope-frecency.nvim",
     config = function()
@@ -150,6 +152,20 @@ local actions = require('telescope.actions')
 
 require('telescope').setup{
   defaults = {
+    prompt_prefix = '🔍 ',
+    layout_strategy = 'vertical',
+    layout_config = {
+      width = 0.9,
+      height = 0.95
+    },
+    vimgrep_arguments = {
+      'rg',
+      '--no-heading',
+      '--line-number',
+      '--column',
+      '--smart-case',
+      '-u' -- thats the new thing
+    },
     mappings = {
       i = {
         ["<esc>"] = actions.close,
@@ -160,6 +176,13 @@ require('telescope').setup{
     },
   },
   extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    },
     frecency = {
       db_root = "/home/kkuzniarski/.local/share/nvim",
       show_scores = false,
@@ -172,11 +195,17 @@ require('telescope').setup{
     }
   },
   pickers = {
+    default = {
+      find_command = {'rg', '--ignore', '--hidden', '--files', '--no-ignore-vcs'},
+    },
     buffers = {
       sort_lastused = true
     }
   }
 }
+
+require('telescope').load_extension('fzf')
+
 _G.telescope_find_files_in_path = function(path)
  local _path = path or vim.fn.input("Dir: ", "", "dir")
  require("telescope.builtin").find_files({search_dirs = {_path}})
@@ -185,6 +214,11 @@ _G.telescope_live_grep_in_path = function(path)
  local _path = path or vim.fn.input("Dir: ", "", "dir")
  require("telescope.builtin").live_grep({search_dirs = {_path}})
 end
+
+_G.telescope_live_grep_git = function()
+ require("telescope.builtin").live_grep({vimgrep_arguments = { 'rg', '--no-heading', '--column', '--smart-case', '--ignore-vcs'}})
+end
+
 _G.telescope_files_or_git_files = function()
  local utils = require('telescope.utils')
  local builtin = require('telescope.builtin')
@@ -200,9 +234,11 @@ end
 map('n', '<leader><space>', ':lua telescope_files_or_git_files()<CR>')
 map('n', '<leader>fd', ':lua telescope_find_files_in_path()<CR>')
 map('n', '<leader>fD', ':lua telescope_live_grep_in_path()<CR>')
+--map('n', "<leader>fe', ':lua telescope_live_grep_in_path('venv')<CR><CR>")
 --map('n', '<leader>ft', ':lua telescope_find_files_in_path("./tests")<CR>')
 --map('n', '<leader>fT', ':lua telescope_live_grep_in_path("./tests")<CR>')
-map('n', '<leader>fg', ':Telescope live_grep<CR>')
+map('n', '<leader>fg', ':lua telescope_live_grep_git()<CR>')
+map('n', '<leader>fG', ':Telescope live_grep<CR>')
 map('n', '<leader>fo', ':Telescope file_browser<CR>')
 map('n', '<leader>ff', ':Telescope find_files<CR>')
 map('n', '<leader>fb', ':Telescope buffers<CR>')
@@ -441,7 +477,6 @@ vim.g['sneak#use_ic_scs'] = 1
 vim.g['sneak#s_next'] = 1
 vim.cmd[[highlight Sneak guifg=black guibg=#00C7DF ctermfg=black ctermbg=cyan]]
 vim.cmd[[highlight SneakScope guifg=red guibg=yellow ctermfg=red ctermbg=yellow]]
-vim.g['sneak#prompt'] = '🕵'
 vim.g['sneak#prompt'] = '🔎'
 
 -- autosave
@@ -549,15 +584,16 @@ wk.register({
     f = {
       name = "Find in files",
       f = { "<cmd>Telescope find_files<cr>", "Find file" },
-      d = { "<cmd>Telescope find_files<cr>", "Find file in directory" },
-      g = { "<cmd>Telescope live_grep<cr>", "Search in files" },
-      G = { "<cmd>lua telescope_live_grep_in_path()<CR>", "Search in files in directory" },
+      -- d = { "<cmd>Telescope find_files<cr>", "Find file in directory" },
+      g = { "<cmd>lua telescope_live_grep_git()<CR>", "Search in files git" },
+      G = { "<cmd>Telescope live_grep<cr>", "Search in files" },
+      e = { "<cmd>lua telescope_live_grep_in_path('venv')<CR>", "Search in files in virtual enviroment" },
       b = { "<cmd>Telescope buffers<cr>", "Find buffers" },
       B = { "<cmd>Telescope git_branches<cr>", "Find branches" },
       o = { "<cmd>Telescope file_browser<cr>", "File browser" },
 
     },
-    ["<space>"] = { "<cmd>lua telescope_files_or_git_files()<CR>", "Find File" },
+    ["<space>"] = { "<cmd>lua telescope_files_or_git_files()<CR>", "Find file git" },
     ["w"] = { "<cmd>w!<CR>", "Save" },
     ["q"] = { "<cmd>q!<CR>", "Quit" },
     g = {
