@@ -195,7 +195,7 @@ require('telescope').setup{
     }
   },
   pickers = {
-    default = {
+    find_files = {
       find_command = {'rg', '--ignore', '--hidden', '--files', '--no-ignore-vcs'},
     },
     buffers = {
@@ -247,6 +247,10 @@ map('n', '<leader>b', ':Telescope buffers<CR>')
 map('n', '<leader>fs', ':Telescope lsp_document_symbols<CR>')
 map('n', '<leader>fbb', ':Telescope git_branches<CR>')
 
+map('n', '<leader>lr', ':Telescope lsp_references<CR>')
+map('n', '<leader>ld', ':Telescope lsp_definitions<CR>')
+map('n', '<leader>lw', ':Telescope lsp_workspace_symbols<CR>')
+map('n', '<leader>lc', ':Telescope lsp_code_actions<CR>')
 u.command("LspRef", "Telescope lsp_references")
 u.command("LspDef", "Telescope lsp_definitions")
 u.command("LspSym", "Telescope lsp_workspace_symbols")
