@@ -7,7 +7,7 @@ local options = {
   fileencoding = "utf-8",                  -- the encoding written to a file
   hlsearch = true,                         -- highlight all matches on previous search pattern
   ignorecase = true,                       -- ignore case in search patterns
-  mouse = "a",                             -- allow the mouse to be used in neovim
+  -- mouse = "a",                             -- allow the mouse to be used in neovim
   pumheight = 10,                          -- pop up menu height
   showmode = false,                        -- we don't need to see things like -- INSERT -- anymore
   showtabline = 2,                         -- always show tabs
@@ -69,7 +69,6 @@ vim.g['sneak#prompt'] = '🔎'
 vim.g.auto_save = 1
 vim.g.auto_save_silent = 1
 vim.g.auto_save_events = {"InsertLeave", "TextChanged", "FocusLost"}
-
 
 
 --- GLOBALS ---

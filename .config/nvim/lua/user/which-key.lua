@@ -14,6 +14,10 @@ wk.register({
       o = { "<cmd>Telescope file_browser<cr>", "File browser" },
 
     },
+    l = {
+      name = "LSP",
+      f = { "<cmd>Format<cr>", "Format file" },
+    },
     ["<space>"] = { "<cmd>lua telescope_files_or_git_files()<CR>", "Find file git" },
     ["w"] = { "<cmd>w!<CR>", "Save" },
     ["q"] = { "<cmd>q!<CR>", "Quit" },
