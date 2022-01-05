@@ -89,7 +89,7 @@ vim.cmd[[set mousehide complete=.,w,b,u,U foldmethod=indent foldlevel=99]]
 -- performance tweaks
 vim.cmd[[set nocursorcolumn scrolljump=5 lazyredraw redrawtime=10000 synmaxcol=180 re=0]]
 -- required by coc
-vim.cmd[[set hidden nobackup nowritebackup cmdheight=2 updatetime=300 shortmess+=c signcolumn=yes]]
+vim.cmd[[set hidden nobackup nowritebackup cmdheight=2 updatetime=300 signcolumn=yes]]
 -- status line
 vim.cmd[[set cmdheight=1]]
 vim.cmd[[set t_Co=256]]

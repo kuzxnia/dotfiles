@@ -45,6 +45,9 @@ return packer.startup(function(use)
   use "nvim-lua/popup.nvim" -- An implementation of the Popup API from vim in Neovim
   use "nvim-lua/plenary.nvim" -- Useful lua functions used ny lots of plugins
 
+  -- faster load time - cache
+  use "lewis6991/impatient.nvim"
+
   -- Colorschemes
   use 'Mofiqul/vscode.nvim'
   use 'navarasu/onedark.nvim'
@@ -55,11 +58,11 @@ return packer.startup(function(use)
 
     -- cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin
-  use "hrsh7th/cmp-nvim-lsp" -- The completion plugin
   use "hrsh7th/cmp-buffer" -- buffer completions
   use "hrsh7th/cmp-path" -- path completions
   use "hrsh7th/cmp-cmdline" -- cmdline completions
   use "saadparwaiz1/cmp_luasnip" -- snippet completions
+  use "hrsh7th/cmp-nvim-lsp" -- The completion plugin
 
   -- snippets
   use "L3MON4D3/LuaSnip" --snippet engine
@@ -68,6 +71,7 @@ return packer.startup(function(use)
   -- LSP
   use "neovim/nvim-lspconfig" -- enable LSP
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
+  use "jose-elias-alvarez/null-ls.nvim"
   use "RRethy/vim-illuminate"  -- highlights and allows moving between variable references
 
   -- Git
@@ -85,6 +89,10 @@ return packer.startup(function(use)
   -- explorer, line
   use { 'kyazdani42/nvim-tree.lua', requires = 'kyazdani42/nvim-web-devicons' }
   use 'hoob3rt/lualine.nvim'
+
+  -- buffers
+  use "akinsho/bufferline.nvim"
+  use "famiu/bufdelete.nvim"
 
   -- fuzzy, browse files
   use 'brooth/far.vim'
@@ -109,6 +117,7 @@ return packer.startup(function(use)
   use 'rcarriga/nvim-dap-ui'
 
   -- other
+  use "goolord/alpha-nvim"
   use '907th/vim-auto-save'
   use 'farmergreg/vim-lastplace'
   use 'wellle/tmux-complete.vim'

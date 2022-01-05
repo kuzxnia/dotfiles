@@ -1,6 +1,10 @@
 require "user.options"
 require "user.keybindings"
 require "user.plugins"
+require "user.impatient"
+require "user.alpha"
+require "user.autopairs"
+require "user.bufferline"
 require "user.cmp"
 require 'user.lsp'
 require 'user.telescope'
@@ -9,5 +13,4 @@ require 'user.tree'
 require 'user.lualine'
 require 'user.dap'
 
-require("nvim-autopairs").setup({})
 require('gitsigns').setup()

@@ -31,6 +31,11 @@ map('n', '<leader>ld', ':Telescope lsp_definitions<CR>')
 map('n', '<leader>lw', ':Telescope lsp_workspace_symbols<CR>')
 map('n', '<leader>lc', ':Telescope lsp_code_actions<CR>')
 
+--- buffers ---
+vim.api.nvim_set_keymap('n', 'H', ':BufferLineCyclePrev<CR>',  {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'L', ':BufferLineCycleNext<CR>',  {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'gb', ':BufferLinePick<CR>',  {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'Q', ':Bdelete<CR>',  {noremap = true, silent = true})
 
 --- tmux navigator ---
 vim.api.nvim_set_keymap('n', '<M-h>', ':TmuxNavigateLeft<CR>',  {noremap = true, silent = true})
