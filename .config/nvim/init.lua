@@ -1,4 +1,5 @@
 require "user.options"
+require "user.autocommands"
 require "user.keybindings"
 require "user.plugins"
 require "user.impatient"
@@ -14,3 +15,4 @@ require 'user.lualine'
 require 'user.dap'
 
 require('gitsigns').setup()
+require('shade').setup({ overlay_opacity = 50, opacity_step = 1 })

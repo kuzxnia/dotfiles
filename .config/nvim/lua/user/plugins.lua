@@ -52,9 +52,10 @@ return packer.startup(function(use)
   use 'Mofiqul/vscode.nvim'
   use 'navarasu/onedark.nvim'
   use 'LunarVim/onedarker.nvim'
-  use 'sheerun/vim-polyglot'
   use 'ryanoasis/vim-devicons'
   use 'bryanmylee/vim-colorscheme-icons'
+  use 'sunjon/shade.nvim'
+
 
     -- cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin

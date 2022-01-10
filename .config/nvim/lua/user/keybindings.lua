@@ -1,11 +1,9 @@
-local cmd = vim.cmd
-local fn = vim.fn
-local g = vim.g
-local opt = vim.opt
+local opts = { noremap = true, silent = true }
+local expr_opts = { expr = true }
 
-local function map(mode, lhs, rhs, opts)
+local function map(mode, lhs, rhs, lopts)
   local options = {noremap = true}
-  if opts then options = vim.tbl_extend('force', options, opts) end
+  if lopts then options = vim.tbl_extend('force', options, lopts) end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
@@ -30,43 +28,44 @@ map('n', '<leader>lr', ':Telescope lsp_references<CR>')
 map('n', '<leader>ld', ':Telescope lsp_definitions<CR>')
 map('n', '<leader>lw', ':Telescope lsp_workspace_symbols<CR>')
 map('n', '<leader>lc', ':Telescope lsp_code_actions<CR>')
+map('n', '<leader>lf', ':Format<CR>')
 
 --- buffers ---
-vim.api.nvim_set_keymap('n', 'H', ':BufferLineCyclePrev<CR>',  {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', 'L', ':BufferLineCycleNext<CR>',  {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', 'gb', ':BufferLinePick<CR>',  {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', 'Q', ':Bdelete<CR>',  {noremap = true, silent = true})
+map('n', 'H', ':BufferLineCyclePrev<CR>', opts)
+map('n', 'L', ':BufferLineCycleNext<CR>', opts)
+map('n', 'gb', ':BufferLinePick<CR>', opts)
+map('n', 'Q', ':Bdelete<CR>', opts)
 
 --- tmux navigator ---
-vim.api.nvim_set_keymap('n', '<M-h>', ':TmuxNavigateLeft<CR>',  {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<M-j>', ':TmuxNavigateDown<CR>',  {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<M-k>', ':TmuxNavigateUp<CR>',    {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<M-l>', ':TmuxNavigateRight<CR>', {noremap = true, silent = true})
+map('n', '<M-h>', ':TmuxNavigateLeft<CR>',  opts)
+map('n', '<M-j>', ':TmuxNavigateDown<CR>',  opts)
+map('n', '<M-k>', ':TmuxNavigateUp<CR>',    opts)
+map('n', '<M-l>', ':TmuxNavigateRight<CR>', opts)
 
 -- Copy to clipboard
-vim.api.nvim_set_keymap("v", "<leader>y", '"+y', {expr = true})
-vim.api.nvim_set_keymap("n", "<leader>Y", '"+yg_', {expr = true})
-vim.api.nvim_set_keymap("n", "<leader>y", '"+y', {expr = true})
-vim.api.nvim_set_keymap("n", "<leader>yy", '"+yy', {expr = true})
+map("v", "<leader>y", '"+y', expr_opts)
+map("n", "<leader>Y", '"+yg_', expr_opts)
+map("n", "<leader>y", '"+y', expr_opts)
+map("n", "<leader>yy", '"+yy', expr_opts)
 
 -- Paste from clipboard
-vim.api.nvim_set_keymap("n", "<leader>p", '"+p', {expr = true})
-vim.api.nvim_set_keymap("n", "<leader>P", '"+P', {expr = true})
-vim.api.nvim_set_keymap("v", "<leader>p", '"+p', {expr = true})
-vim.api.nvim_set_keymap("v", "<leader>P", '"+P', {expr = true})
+map("n", "<leader>p", '"+p', expr_opts)
+map("n", "<leader>P", '"+P', expr_opts)
+map("v", "<leader>p", '"+p', expr_opts)
+map("v", "<leader>P", '"+P', expr_opts)
 
 -- better indenting
-vim.api.nvim_set_keymap('v', '<', '<gv', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('v', '>', '>gv', {noremap = true, silent = true})
+map('v', '<', '<gv', opts)
+map('v', '>', '>gv', opts)
 
 -- Move selected line / block of text in visual mode
-vim.api.nvim_set_keymap('x', 'K', ':move \'<-2<CR>gv-gv', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('x', 'J', ':move \'>+1<CR>gv-gv', {noremap = true, silent = true})
+map('x', 'K', ':move \'<-2<CR>gv-gv', opts)
+map('x', 'J', ':move \'>+1<CR>gv-gv', opts)
 
 -- kommentary
-vim.api.nvim_set_keymap("n", "<leader>cc", "<Plug>kommentary_line_default", {})
-vim.api.nvim_set_keymap("n", "<leader>c", "<Plug>kommentary_motion_default", {})
-vim.api.nvim_set_keymap("x", "<leader>c", "<Plug>kommentary_visual_default", {})
+map("n", "<leader>cc", "<Plug>kommentary_line_default", {})
+map("n", "<leader>c", "<Plug>kommentary_motion_default", {})
+map("x", "<leader>c", "<Plug>kommentary_visual_default", {})
 
 -- tree
-vim.api.nvim_set_keymap("n", "<Leader>e", ":NvimTreeToggle<CR>", {noremap = true, silent = true})
+map("n", "<Leader>e", ":NvimTreeToggle<CR>", opts)

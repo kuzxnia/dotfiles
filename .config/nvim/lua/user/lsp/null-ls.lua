@@ -14,9 +14,8 @@ null_ls.setup({
         diagnostics.flake8,
 		formatting.isort,
 
-		formatting.prettierd.with({filetypes = { "html", "json", "yaml", } }),
-		-- formatting.prettier.with({ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }),
-		
+		-- formatting.prettierd.with({filetypes = { "html", "json", "yaml", } }),
+		formatting.prettier,
 		code_actions.gitsigns,
 	},
 })
