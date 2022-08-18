@@ -1,5 +1,8 @@
 <h3 align="center">
-  <span><img width="18" src="https://image.flaticon.com/icons/svg/226/226772.svg" alt="Linux - Icon made by Freepik from Flaticon" /></span>
+  REBUILD IN PROGRESS!!!
+</h3>
+
+<h3 align="center">
   kuzxnia/dotfiles
   <span><img alt="Travis CI" src="https://travis-ci.com/kuzxnia/dotfiles.svg?branch=master"></span>
 </h3>
