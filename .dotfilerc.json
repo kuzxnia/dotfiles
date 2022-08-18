@@ -1,0 +1,176 @@
+{
+    "1:before": {
+        "apt": [
+            "git",
+            "python3-pip",
+            "wget",
+            "curl"
+        ],
+        "pip": [
+            "tqdm"
+        ],
+        "execute": [
+            {
+                "not_exists": "$HOME/.dotfiles",
+                "clone": "https://github.com/kuzxnia/dotfiles.git $HOME/.dotfiles"
+            }
+        ]
+    },
+    "2:system_utils": {
+        "apt": [
+            "papirus-icon-theme",
+            "gnome-tweak-tool",
+            "gnome-shell-extensions"
+        ],
+        "execute": [
+            "sudo apt update",
+            "sudo apt upgrade -y",
+            "sudo add-apt-repository ppa:papirus/papirus",
+            "sudo apt-get update",
+            "sudo add-apt-repository universe"
+        ],
+        "clone": [
+            "https://github.com/pyenv/pyenv.git $HOME/.pyenv",
+            "https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv"
+        ]
+    },
+    "3:external_libs": {
+        "apt": [
+            "exuberant-ctags",
+            "ripgrep",
+            "flake8",
+            "pipenv",
+            "htop",
+            "zip",
+            "ranger",
+            "highlight",
+            "ncdu",
+            "tldr"
+        ],
+        "execute": [
+            {
+                "not_installed": "exa",
+                "execute": [
+                    "wget -q https://github.com/ogham/exa/releases/download/v0.9.0/exa-linux-x86_64-0.9.0.zip -O $HOME/exa-linux-x86_64-0.9.0.zip",
+                    "unzip $HOME/exa-linux-x86_64-0.9.0.zip -d $HOME",
+                    "sudo mv $HOME/exa-linux-x86_64 /usr/local/bin/exa"
+                ]
+            },
+            {
+                "execute": [
+                    "wget -q https://github.com/jarun/googler/releases/download/v4.0/googler_4.0-1_ubuntu18.04.amd64.deb -O $HOME/googler.deb",
+                    "sudo dpkg -i $HOME/googler.deb"
+                ]
+            }
+        ]
+    },
+    "4:tmux": {
+        "1:apt": "tmux",
+        "2:link": ".tmux.conf",
+        "3:execute": [
+            {
+                "not_exists": "~/.tmux/plugins/tpm",
+                "execute": [
+                    "git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm",
+                    "tmux source-file $HOME/.tmux.conf",
+                    "$HOME/.tmux/plugins/tpm/scripts/install_plugins.sh"
+                ]
+            }
+        ]
+    },
+    "5:git": {
+        "apt": "hub",
+        "execute": [
+            "wget -q https://github.com/dandavison/delta/releases/download/0.0.15/git-delta_0.0.15_amd64.deb -O $HOME/delta.deb",
+            "sudo dpkg -i $HOME/delta.deb"
+        ],
+        "link": [
+            ".gitconfig",
+            ".config/hub"
+        ]
+    },
+    "6:search_tools": {
+        "apt": [
+            "bat",
+            "ripgrep"
+        ],
+        "execute": [
+            {
+                "not_exists": "$HOME/.fzf",
+                "execute": [
+                    "git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf",
+                    "$HOME/.fzf/install --all"
+                ]
+            },
+            {
+                "not_installed": "fd",
+                "execute": [
+                    "wget -q https://github.com/sharkdp/fd/releases/download/v7.4.0/fd_7.4.0_amd64.deb -O $HOME/fd.deb",
+                    "sudo dpkg -i $HOME/fd.deb"
+                ]
+            },
+            {
+                "not_installed": "jump",
+                "execute": [
+                    "wget -q https://github.com/gsamokovarov/jump/releases/download/v0.23.0/jump_0.23.0_amd64.deb -O $HOME/jump.deb",
+                    "sudo dpkg -i $HOME/jump.deb"
+                ]
+            }
+        ]
+
+    },
+    "7:vim": {
+        "apt": [
+            "vim"
+        ],
+        "execute": [
+            {
+                "not_exists": "$HOME/.vim/bundle",
+                "clone": "https://github.com/VundleVim/Vundle.vim.git $HOME/.vim/bundle/Vundle.vim"
+            }
+        ],
+        "link": ".vimrc"
+    },
+    "8:kitty": {
+        "apt": [
+            "kitty"
+        ],
+        "execute": [
+            "mkdir -p $HOME/.config/kitty",
+            "curl -o $HOME/.config/kitty/snazzy.conf https://raw.githubusercontent.com/connorholyday/kitty-snazzy/master/snazzy.conf"
+        ],
+        "link": ".config/kitty/kitty.conf"
+    },
+    "9:neovim": {
+        "apt": "neovim",
+        "pip": "pynvim",
+        "link": ".config/nvim/init.vim"
+    },
+    "10:zsh": {
+        "apt": "zsh",
+        "execute": [
+            {
+                "not_exists": "$HOME/.zplug",
+                "execute": "curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh"
+            },
+            {
+                "not_installed": "echo \"$SHELL\" | grep -q *zsh$",
+                "execute": "sudo chsh -s \"$(which zsh)\""
+            }
+        ],
+        "link": [
+            ".zshrc",
+            ".zsh/abbreviations.zsh",
+            ".zsh/aliases.zsh",
+            "chsh -s $(which zsh)"
+        ]
+    },
+    "11:navi": {
+        "execute": [
+            "mkdir $HOME/.tmpbin",
+            "curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install | BIN_DIR=$HOME/.tmpbin bash",
+            "sudo cp $HOME/.tmpbin/navi /usr/local/bin/",
+            "rm -rf $HOME/.tmpbin"
+        ]
+    }
+}

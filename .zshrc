@@ -15,13 +15,14 @@ compinit -C
 
 setopt interactivecomments # Allow comments after commands
 setopt no_beep             # No bells
+unsetopt autocd
 
 export PATH=$HOME/bin:$PATH
-export PATH="/home/kuznia/.pyenv/bin:$PATH"
+# export PATH="$HOME/.pyenv/bin:$PATH"
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 
-export TERMINAL=kitty
-export MONITOR=$(polybar -m|tail -1|sed -e 's/:.*$//g')
+# export TERMINAL=kitty
+# export MONITOR=$(polybar -m|tail -1|sed -e 's/:.*$//g')
 export BROWSER="google-chrome"
 export EDITOR="nvim"
 export VISUAL="nvim"
@@ -60,7 +61,7 @@ zplug load
 source "$HOME/.zsh/abbreviations.zsh"
 source "$HOME/.zsh/aliases.zsh"
 source "$HOME/.zplug/repos/zsh-users/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source <(navi widget zsh)
+# source <(navi widget zsh)
 
 # oh-my-zsh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=239'
@@ -75,7 +76,10 @@ bindkey "^K" up-line-or-search
 bindkey "^J" down-line-or-search
 
 eval "$(jump shell)"
-eval "$(hub alias -s)"
+# eval "$(hub alias -s)"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+# eval "$(hub alias -s)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 [ -f ~/.dotfiles/plugins/.forgit.plugin.zsh ] && source ~/.dotfiles/plugins/.forgit.plugin.zsh
@@ -91,3 +95,11 @@ nvm() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH=$HOME/.config/nvcode/utils/bin:$PATH
+export PATH="$HOME/.poetry/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/kuzxnia/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/kuzxnia/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/kuzxnia/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/kuzxnia/google-cloud-sdk/completion.zsh.inc'; fi
