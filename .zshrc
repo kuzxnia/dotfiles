@@ -97,3 +97,9 @@ nvm() {
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 export PATH=$HOME/.config/nvcode/utils/bin:$PATH
 export PATH="$HOME/.poetry/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/kuzxnia/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/kuzxnia/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/kuzxnia/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/kuzxnia/google-cloud-sdk/completion.zsh.inc'; fi

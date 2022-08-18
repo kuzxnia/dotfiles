@@ -9,7 +9,7 @@ wk.register({
       g = { "<cmd>lua telescope_live_grep_git()<CR>", "Search in files git" },
       G = { "<cmd>Telescope live_grep<cr>", "Search in files" },
       e = { "<cmd>lua telescope_live_grep_in_path('venv')<CR>", "Search in files in virtual enviroment" },
-      b = { "<cmd>Telescope buffers<cr>", "Find buffers" },
+      b = { "<cmd>Telescope file_browser<cr>", "File browser" },
       B = { "<cmd>Telescope git_branches<cr>", "Find branches" },
       o = { "<cmd>Telescope file_browser<cr>", "File browser" },
 
@@ -19,6 +19,7 @@ wk.register({
       f = { "<cmd>Format<cr>", "Format file" },
     },
     ["<space>"] = { "<cmd>lua telescope_files_or_git_files()<CR>", "Find file git" },
+    ["*"] = { ":%s/<C-r><C-w>//<Left>", "Find and replace word under cursor"},
     ["w"] = { "<cmd>w!<CR>", "Save" },
     ["q"] = { "<cmd>q!<CR>", "Quit" },
     g = {

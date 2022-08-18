@@ -48,22 +48,23 @@ vim.cmd [[ set formatoptions=crql ]]
 vim.cmd [[ nnoremap Y Y ]]
 
 -- colorscheme
-vim.cmd[[colorscheme onedarker]]
-vim.g.vscode_style = "dark"
+vim.cmd[[colorscheme onedark]]
+vim.cmd[[highlight Comment cterm=italic gui=italic]]
+vim.cmd[[highlight Statement cterm=italic gui=italic]]
 
--- tmux navigator 
+-- tmux navigator
 vim.g.tmux_navigator_no_mappings = 1
 
 -- kommentary
 vim.g.kommentary_create_default_mappings = false
 
 -- sneak
-vim.g['sneak#label'] = 1
-vim.g['sneak#use_ic_scs'] = 1
-vim.g['sneak#s_next'] = 1
-vim.cmd[[highlight Sneak guifg=black guibg=#00C7DF ctermfg=black ctermbg=cyan]]
-vim.cmd[[highlight SneakScope guifg=red guibg=yellow ctermfg=red ctermbg=yellow]]
-vim.g['sneak#prompt'] = '🔎'
+-- vim.g['sneak#label'] = 1
+-- vim.g['sneak#use_ic_scs'] = 1
+-- vim.g['sneak#s_next'] = 1
+-- vim.cmd[[highlight Sneak guifg=black guibg=#00C7DF ctermfg=black ctermbg=cyan]]
+-- vim.cmd[[highlight SneakScope guifg=red guibg=yellow ctermfg=red ctermbg=yellow]]
+-- vim.g['sneak#prompt'] = '🔎'
 
 -- autosave
 vim.g.auto_save = 1
@@ -88,6 +89,8 @@ vim.cmd[[set noerrorbells novisualbell]]
 vim.cmd[[set mousehide complete=.,w,b,u,U foldmethod=indent foldlevel=99]]
 -- performance tweaks
 vim.cmd[[set nocursorcolumn scrolljump=5 lazyredraw redrawtime=10000 synmaxcol=180 re=0]]
+-- diff 
+-- vim.cmd[[set diffopt+=algorithm:patience]]
 -- required by coc
 vim.cmd[[set hidden nobackup nowritebackup cmdheight=2 updatetime=300 signcolumn=yes]]
 -- status line

@@ -17,9 +17,9 @@
     keepBackup = false
 [diff]
     guitool = smerge
-
 [difftool "smerge"]
     cmd = smerge mergetool "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
+
 [pull]
 	default = simple
 [alias]
@@ -79,7 +79,7 @@
 	local = yellow
 	remote = green
 [user]
-	email = kacper.kuzniarski@cloudservices.pl
+	email = kacper.kuzniarski@gmail.pl
 	name = Kacper Kuźniarski
 [hub]
 	protocol = https

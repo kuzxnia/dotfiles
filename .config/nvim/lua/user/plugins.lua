@@ -52,10 +52,12 @@ return packer.startup(function(use)
   use 'Mofiqul/vscode.nvim'
   use 'navarasu/onedark.nvim'
   use 'LunarVim/onedarker.nvim'
+  use "lunarvim/darkplus.nvim"
+
+  use 'folke/tokyonight.nvim'
   use 'ryanoasis/vim-devicons'
   use 'bryanmylee/vim-colorscheme-icons'
   use 'sunjon/shade.nvim'
-
 
     -- cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin
@@ -99,22 +101,18 @@ return packer.startup(function(use)
   use 'brooth/far.vim'
   use 'nvim-telescope/telescope.nvim'
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- might require make clean && make in ~/.local/share/nvim/site/pack/../start/telescope-fzf-native.nvim
-  use {
-    "folke/which-key.nvim",
-    config = function()
-      require("which-key").setup {}
-    end
-  }
+  use { "nvim-telescope/telescope-file-browser.nvim" }
+  use { "folke/which-key.nvim" }
   -- naviagation
   use { 'AckslD/nvim-whichkey-setup.lua', requires = {'liuchengxu/vim-which-key'} }
   use 'christoomey/vim-tmux-navigator'
-  use 'justinmk/vim-sneak'
+  use 'ggandor/lightspeed.nvim'
 
   -- debugging
   use 'mfussenegger/nvim-dap'
   use 'mfussenegger/nvim-dap-python'
   use 'nvim-telescope/telescope-dap.nvim'
-  use 'theHamsta/nvim-dap-virtual-text'  
+  use 'theHamsta/nvim-dap-virtual-text'
   use 'rcarriga/nvim-dap-ui'
 
   -- other
@@ -123,7 +121,11 @@ return packer.startup(function(use)
   use 'farmergreg/vim-lastplace'
   use 'wellle/tmux-complete.vim'
   use 'b3nj5m1n/kommentary'
+
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use 'nvim-treesitter/playground'
+  use 'nvim-treesitter/nvim-treesitter-context'
+
   use "windwp/nvim-autopairs"
 
 --- END PLUGINS ---

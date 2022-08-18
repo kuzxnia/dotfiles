@@ -19,7 +19,9 @@ map('n', '<leader>fg', ':lua telescope_live_grep_git()<CR>')
 map('n', '<leader>fG', ':Telescope live_grep<CR>')
 map('n', '<leader>fo', ':Telescope file_browser<CR>')
 map('n', '<leader>ff', ':Telescope find_files<CR>')
-map('n', '<leader>fb', ':Telescope buffers<CR>')
+map('n', '<leader>fb', ':Telescope file_browser<CR>')
+map('n', '<leader>fs', ':Telescope lsp_document_symbols<CR>')
+
 -- for which-key display
 map('n', '<leader>b', ':Telescope buffers<CR>')
 map('n', '<leader>fs', ':Telescope lsp_document_symbols<CR>')
@@ -66,6 +68,9 @@ map('x', 'J', ':move \'>+1<CR>gv-gv', opts)
 map("n", "<leader>cc", "<Plug>kommentary_line_default", {})
 map("n", "<leader>c", "<Plug>kommentary_motion_default", {})
 map("x", "<leader>c", "<Plug>kommentary_visual_default", {})
+
+-- search and replace the word under cursor
+map("n", "<Leader>*", ":%s/<C-r><C-w>//<Left>", {})
 
 -- tree
 map("n", "<Leader>e", ":NvimTreeToggle<CR>", opts)

@@ -10,7 +10,7 @@ local code_actions = null_ls.builtins.code_actions
 null_ls.setup({
 	debug = false,
 	sources = {
-		formatting.black.with({ extra_args = { "--fast" } }),
+		formatting.black.with({ extra_args = { "--fast", "-l 120" } }),
         diagnostics.flake8,
 		formatting.isort,
 
