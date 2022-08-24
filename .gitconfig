@@ -79,8 +79,8 @@
 	local = yellow
 	remote = green
 [user]
-	email = kacper.kuzniarski@gmail.pl
-	name = Kacper Kuźniarski
+	email = kacper.kuzniarski@gmail.com
+	name = kuzxnia
 [hub]
 	protocol = https
 	host = github.com

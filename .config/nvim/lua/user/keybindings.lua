@@ -8,7 +8,6 @@ local function map(mode, lhs, rhs, lopts)
 end
 
 --- telescope ---
--- vim.api.nvim_set_keymap("n", "<C-f>", "<cmd>lua require('telescope').extensions.frecency.frecency()<CR>", {noremap = true, silent = true})
 map('n', '<leader><space>', ':lua telescope_files_or_git_files()<CR>')
 map('n', '<leader>fd', ':lua telescope_find_files_in_path()<CR>')
 map('n', '<leader>fD', ':lua telescope_live_grep_in_path()<CR>')
@@ -21,6 +20,19 @@ map('n', '<leader>fo', ':Telescope file_browser<CR>')
 map('n', '<leader>ff', ':Telescope find_files<CR>')
 map('n', '<leader>fb', ':Telescope file_browser<CR>')
 map('n', '<leader>fs', ':Telescope lsp_document_symbols<CR>')
+
+map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
+map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+map("n", "<leader>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+map("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
+map("n", "<C-Space>", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+map("n", "[d", '<cmd>lua vim.diagnostic.goto_prev({ border = "rounded" })<CR>', opts)
+map("n", "gl", '<cmd>lua vim.diagnostic.open_float({ border = "rounded" })<CR>', opts)
+map("n", "]d", '<cmd>lua vim.diagnostic.goto_next({ border = "rounded" })<CR>', opts)
+map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
 
 -- for which-key display
 map('n', '<leader>b', ':Telescope buffers<CR>')

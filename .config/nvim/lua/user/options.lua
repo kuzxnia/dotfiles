@@ -58,19 +58,10 @@ vim.g.tmux_navigator_no_mappings = 1
 -- kommentary
 vim.g.kommentary_create_default_mappings = false
 
--- sneak
--- vim.g['sneak#label'] = 1
--- vim.g['sneak#use_ic_scs'] = 1
--- vim.g['sneak#s_next'] = 1
--- vim.cmd[[highlight Sneak guifg=black guibg=#00C7DF ctermfg=black ctermbg=cyan]]
--- vim.cmd[[highlight SneakScope guifg=red guibg=yellow ctermfg=red ctermbg=yellow]]
--- vim.g['sneak#prompt'] = '🔎'
-
 -- autosave
 vim.g.auto_save = 1
 vim.g.auto_save_silent = 1
 vim.g.auto_save_events = {"InsertLeave", "TextChanged", "FocusLost"}
-
 
 --- GLOBALS ---
 vim.g.mapleader = ' '

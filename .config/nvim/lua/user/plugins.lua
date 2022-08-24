@@ -53,7 +53,6 @@ return packer.startup(function(use)
   use 'navarasu/onedark.nvim'
   use 'LunarVim/onedarker.nvim'
   use "lunarvim/darkplus.nvim"
-
   use 'folke/tokyonight.nvim'
   use 'ryanoasis/vim-devicons'
   use 'bryanmylee/vim-colorscheme-icons'
@@ -61,11 +60,12 @@ return packer.startup(function(use)
 
     -- cmp plugins
   use "hrsh7th/nvim-cmp" -- The completion plugin
+  use "hrsh7th/cmp-nvim-lsp" -- The completion plugin
+  use "hrsh7th/cmp-nvim-lsp-signature-help"
   use "hrsh7th/cmp-buffer" -- buffer completions
   use "hrsh7th/cmp-path" -- path completions
   use "hrsh7th/cmp-cmdline" -- cmdline completions
   use "saadparwaiz1/cmp_luasnip" -- snippet completions
-  use "hrsh7th/cmp-nvim-lsp" -- The completion plugin
 
   -- snippets
   use "L3MON4D3/LuaSnip" --snippet engine
@@ -99,9 +99,10 @@ return packer.startup(function(use)
 
   -- fuzzy, browse files
   use 'brooth/far.vim'
-  use 'nvim-telescope/telescope.nvim'
+  use {'nvim-telescope/telescope.nvim'}
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } -- might require make clean && make in ~/.local/share/nvim/site/pack/../start/telescope-fzf-native.nvim
   use { "nvim-telescope/telescope-file-browser.nvim" }
+  use {'nvim-telescope/telescope-ui-select.nvim' }
   use { "folke/which-key.nvim" }
   -- naviagation
   use { 'AckslD/nvim-whichkey-setup.lua', requires = {'liuchengxu/vim-which-key'} }
@@ -115,6 +116,15 @@ return packer.startup(function(use)
   use 'theHamsta/nvim-dap-virtual-text'
   use 'rcarriga/nvim-dap-ui'
 
+  -- dart & flutter
+  use {
+    'akinsho/flutter-tools.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    config = function()
+        require('flutter-tools').setup {}
+    end
+  }
+
   -- other
   use "goolord/alpha-nvim"
   use '907th/vim-auto-save'
@@ -122,11 +132,19 @@ return packer.startup(function(use)
   use 'wellle/tmux-complete.vim'
   use 'b3nj5m1n/kommentary'
 
+  -- syntax highlight
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
-  use 'nvim-treesitter/playground'
   use 'nvim-treesitter/nvim-treesitter-context'
+  use 'nvim-treesitter/playground'
 
   use "windwp/nvim-autopairs"
+  use({
+    "kylechui/nvim-surround",
+    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+        require("nvim-surround").setup({ })
+    end
+  })
 
 --- END PLUGINS ---
   -- Automatically set up your configuration after cloning packer.nvim

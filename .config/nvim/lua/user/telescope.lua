@@ -39,7 +39,8 @@ require('telescope').setup{
       find_command = {'rg', '--ignore', '--hidden', '--files', '--no-ignore-vcs'},
     },
     buffers = {
-      sort_lastused = true
+      sort_lastused = true,
+      ignore_current_buffer = true
     }
   }
 }
@@ -47,6 +48,8 @@ require('telescope').setup{
 require('telescope').load_extension('fzf')
 require('telescope').load_extension('dap')
 require("telescope").load_extension("file_browser")
+require("telescope").load_extension("ui-select")
+require("telescope").load_extension("flutter")
 
 
 _G.telescope_find_files_in_path = function(path)

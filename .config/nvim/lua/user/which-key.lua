@@ -4,21 +4,19 @@ wk.register({
   ["<leader>"] = {
     f = {
       name = "Find in files",
-      f = { "<cmd>Telescope find_files<cr>", "Find file" },
       -- d = { "<cmd>Telescope find_files<cr>", "Find file in directory" },
       g = { "<cmd>lua telescope_live_grep_git()<CR>", "Search in files git" },
       G = { "<cmd>Telescope live_grep<cr>", "Search in files" },
       e = { "<cmd>lua telescope_live_grep_in_path('venv')<CR>", "Search in files in virtual enviroment" },
       b = { "<cmd>Telescope file_browser<cr>", "File browser" },
       B = { "<cmd>Telescope git_branches<cr>", "Find branches" },
-      o = { "<cmd>Telescope file_browser<cr>", "File browser" },
-
     },
     l = {
       name = "LSP",
       f = { "<cmd>Format<cr>", "Format file" },
     },
     ["<space>"] = { "<cmd>lua telescope_files_or_git_files()<CR>", "Find file git" },
+    ["<C-space>"] = { "<cmd>Telescope find_files<CR>", "Find file" },
     ["*"] = { ":%s/<C-r><C-w>//<Left>", "Find and replace word under cursor"},
     ["w"] = { "<cmd>w!<CR>", "Save" },
     ["q"] = { "<cmd>q!<CR>", "Quit" },
@@ -65,6 +63,20 @@ wk.register({
       p = { "<cmd>MarkdownPreview<CR>", "Preview"},
       s = { "<cmd>MarkdownPreviewStop<CR>", "Preview stop"},
       t = { "<cmd>MarkdownPreviewToggle<CR>", "Preview toggle"},
+    },
+    t = {
+        name = "Tools",
+        f = {
+            name = "Flutter",
+            r = {"<cmd>FlutterRun<CR>", "Flutter run"},
+            ['<space>'] = {"<cmd>FlutterReload<CR>", "Flutter reload"},
+            ['<C-space>'] = {"<cmd>FlutterRestart<CR>", "Flutter restart"},
+            q = {"<cmd>FlutterQuit<CR>", "Flutter quit"},
+            d = {"<cmd>FlutterDevices<CR>", "Flutter devices"},
+            e = {"<cmd>FlutterEmulators<CR>", "Flutter emulators"},
+            o = {"<cmd>FlutterOutlineToggle<CR>", "Toggle outline window"},
+        }
+
     }
   },
 })
