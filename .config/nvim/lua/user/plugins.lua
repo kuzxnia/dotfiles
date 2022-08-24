@@ -1,5 +1,15 @@
 local fn = vim.fn
 
+function _G.is_directory(path)
+  local stat = vim.loop.fs_stat(path)
+  return stat and stat.type == "directory" or false
+end
+
+function _G.join_paths(...)
+  local result = table.concat({ ... }, '/')
+  return result
+end
+
 -- Automatically install packer
 local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
@@ -59,7 +69,10 @@ return packer.startup(function(use)
   use 'sunjon/shade.nvim'
 
     -- cmp plugins
-  use "hrsh7th/nvim-cmp" -- The completion plugin
+  use {
+    "hrsh7th/nvim-cmp", -- The completion plugin
+      requires = {"L3MON4D3/LuaSnip"},
+  }
   use "hrsh7th/cmp-nvim-lsp" -- The completion plugin
   use "hrsh7th/cmp-nvim-lsp-signature-help"
   use "hrsh7th/cmp-buffer" -- buffer completions
@@ -68,9 +81,23 @@ return packer.startup(function(use)
   use "saadparwaiz1/cmp_luasnip" -- snippet completions
 
   -- snippets
-  use "L3MON4D3/LuaSnip" --snippet engine
-  use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
-
+  use {
+    "rafamadriz/friendly-snippets", -- a bunch of snippets to use
+  }
+  use {
+    "L3MON4D3/LuaSnip", --snippet engine
+    config = function()
+      local paths = {}
+      if true then
+        paths[#paths + 1] = join_paths('~/.local/share/nvim/site/pack/packer/start/friendly-snippets')
+      end
+      require("luasnip.loaders.from_lua").lazy_load()
+      require("luasnip.loaders.from_vscode").lazy_load {
+        paths = paths,
+      }
+      require("luasnip.loaders.from_snipmate").lazy_load()
+    end,
+  }
   -- LSP
   use "neovim/nvim-lspconfig" -- enable LSP
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
@@ -120,9 +147,6 @@ return packer.startup(function(use)
   use {
     'akinsho/flutter-tools.nvim',
     requires = 'nvim-lua/plenary.nvim',
-    config = function()
-        require('flutter-tools').setup {}
-    end
   }
 
   -- other
