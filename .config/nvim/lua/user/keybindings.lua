@@ -37,7 +37,8 @@ map("n", "<leader>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
 -- for which-key display
 map('n', '<leader>b', ':Telescope buffers<CR>')
 map('n', '<leader>fs', ':Telescope lsp_document_symbols<CR>')
-map('n', '<leader>fbb', ':Telescope git_branches<CR>')
+map('n', '<leader>fb', ':Telescope file_browser<CR>')
+map('n', '<leader>fB', ':Telescope git_branches<CR>')
 map('n', '<leader>lr', ':Telescope lsp_references<CR>')
 map('n', '<leader>ld', ':Telescope lsp_definitions<CR>')
 map('n', '<leader>lw', ':Telescope lsp_workspace_symbols<CR>')
@@ -54,7 +55,7 @@ map('n', 'Q', ':Bdelete<CR>', opts)
 map('n', '<M-h>', ':TmuxNavigateLeft<CR>',  opts)
 map('n', '<M-j>', ':TmuxNavigateDown<CR>',  opts)
 map('n', '<M-k>', ':TmuxNavigateUp<CR>',    opts)
-map('n', '<M-l>', ':TmuxNavigateRight<CR>', opts)
+map('n', 'ł', ':TmuxNavigateRight<CR>', opts)
 
 -- Copy to clipboard
 map("v", "<leader>y", '"+y', expr_opts)

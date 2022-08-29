@@ -13,7 +13,7 @@ wk.register({
     },
     l = {
       name = "LSP",
-      f = { "<cmd>Format<cr>", "Format file" },
+      f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" },
     },
     ["<space>"] = { "<cmd>lua telescope_files_or_git_files()<CR>", "Find file git" },
     ["<C-space>"] = { "<cmd>Telescope find_files<CR>", "Find file" },
