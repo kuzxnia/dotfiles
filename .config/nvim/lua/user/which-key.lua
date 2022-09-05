@@ -8,8 +8,9 @@ wk.register({
       g = { "<cmd>lua telescope_live_grep_git()<CR>", "Search in files git" },
       G = { "<cmd>Telescope live_grep<cr>", "Search in files" },
       e = { "<cmd>lua telescope_live_grep_in_path('venv')<CR>", "Search in files in virtual enviroment" },
-      b = { "<cmd>Telescope file_browser<cr>", "File browser" },
-      B = { "<cmd>Telescope git_branches<cr>", "Find branches" },
+      f = { "<cmd>Telescope file_browser<cr>", "File browser" },
+      b = { "<cmd>Telescope git_branches<cr>", "Find branches" },
+      c = { "<cmd>Telescope git_status<cr>", "Open changed file" },
     },
     l = {
       name = "LSP",
@@ -30,7 +31,7 @@ wk.register({
       R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
       s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
       u = { "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
-      o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
+      f = { "<cmd>Telescope git_status<cr>", "Open changed file" },
       b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
       c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
       C = { "<cmd>Telescope git_bcommits<cr>", "Checkout commit(for current file)" },
@@ -54,10 +55,6 @@ wk.register({
       },
       t = { "<cmd>lua require 'dapui'.toggle()<CR>", "Toggle UI"},
     },
-    s = {
-      name = "Search",
-      c = { "<cmd>nohlsearch<CR>", "Clear search highlight" },
-    },
     m = {
       name = "Markdown",
       p = { "<cmd>MarkdownPreview<CR>", "Preview"},
@@ -65,18 +62,19 @@ wk.register({
       t = { "<cmd>MarkdownPreviewToggle<CR>", "Preview toggle"},
     },
     t = {
-        name = "Tools",
-        f = {
-            name = "Flutter",
-            r = {"<cmd>FlutterRun<CR>", "Flutter run"},
-            ['<space>'] = {"<cmd>FlutterReload<CR>", "Flutter reload"},
-            ['<C-space>'] = {"<cmd>FlutterRestart<CR>", "Flutter restart"},
-            q = {"<cmd>FlutterQuit<CR>", "Flutter quit"},
-            d = {"<cmd>FlutterDevices<CR>", "Flutter devices"},
-            e = {"<cmd>FlutterEmulators<CR>", "Flutter emulators"},
-            o = {"<cmd>FlutterOutlineToggle<CR>", "Toggle outline window"},
-        }
-
+      name = "Tools",
+      f = {
+          name = "Flutter",
+          r = {"<cmd>FlutterRun<CR>", "Flutter run"},
+          ['<space>'] = {"<cmd>FlutterReload<CR>", "Flutter reload"},
+          ['<C-space>'] = {"<cmd>FlutterRestart<CR>", "Flutter restart"},
+          q = {"<cmd>FlutterQuit<CR>", "Flutter quit"},
+          d = {"<cmd>FlutterDevices<CR>", "Flutter devices"},
+          e = {"<cmd>FlutterEmulators<CR>", "Flutter emulators"},
+          o = {"<cmd>FlutterOutlineToggle<CR>", "Toggle outline window"},
+      },
+      s = { "<cmd>nohlsearch<CR>", "Clear search highlight" },
+      w = { "<cmd>%s/\\s\\+$//e<CR>", "Trailing spaces removed"},
     }
   },
 })

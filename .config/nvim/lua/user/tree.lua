@@ -3,6 +3,7 @@ local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 -- nvim_tree_disable_netrw, nvim_tree_auto_close, nvim_tree_follow, nvim_tree_bindings, nvim_tree_hide_dotfiles, nvim_tree_ignore
 require('nvim-tree').setup({
   view = {
+    adaptive_size = true,
     mappings = {
       list = {
           -- mappings
@@ -36,8 +37,9 @@ require('nvim-tree').setup({
     }
   },
   filters = {
-    dotfiles = false, --0 by default, this option hides files and folders starting with a dot `.`
-    custom = { '.git', 'node_modules', '.cache', '.idea', 'venv', '__pycache__' } --empty by default
+    dotfiles = false,
+    custom = { '.git[/].*', '^.git$', 'node_modules', '.cache', '.idea', 'venv', '__pycache__' },
+    -- exclude = { '.github', '.gitlab-ci.yml', '.gitignore' }
   },
   update_focused_file = {
     enable = true
