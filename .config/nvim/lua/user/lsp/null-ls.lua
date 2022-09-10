@@ -10,13 +10,12 @@ local code_actions = null_ls.builtins.code_actions
 local autoflake = require("user.lsp.settings.autoflake")
 
 null_ls.setup({
-	debug = false,
+	debug = true,
 	sources = {
-    formatting.trim_whitespace.with({filetypes = { "python" }}),
-		formatting.black.with({ extra_args = { "--fast", "-l 120" } }),
     diagnostics.flake8,
     autoflake,
 		formatting.isort,
+		formatting.black.with({ extra_args = { "--fast", "-l 120" } }), -- should be at the end of python formatters
 
 		-- formatting.prettierd.with({filetypes = { "html", "json", "yaml", } }),
 		formatting.prettier,

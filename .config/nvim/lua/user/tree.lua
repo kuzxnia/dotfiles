@@ -39,7 +39,7 @@ require('nvim-tree').setup({
   filters = {
     dotfiles = false,
     custom = { '.git[/].*', '^.git$', 'node_modules', '.cache', '.idea', 'venv', '__pycache__' },
-    -- exclude = { '.github', '.gitlab-ci.yml', '.gitignore' }
+    exclude = { '.env' }
   },
   update_focused_file = {
     enable = true

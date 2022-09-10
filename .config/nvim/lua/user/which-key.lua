@@ -73,8 +73,9 @@ wk.register({
           e = {"<cmd>FlutterEmulators<CR>", "Flutter emulators"},
           o = {"<cmd>FlutterOutlineToggle<CR>", "Toggle outline window"},
       },
-      s = { "<cmd>nohlsearch<CR>", "Clear search highlight" },
+      h = { "<cmd>nohlsearch<CR>", "Clear search highlight" },
       w = { "<cmd>%s/\\s\\+$//e<CR>", "Trailing spaces removed"},
+      s = { "<cmd>source ~/.config/nvim/init.lua<CR>", "Source NeoVim config" },
     }
   },
 })
