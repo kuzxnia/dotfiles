@@ -39,7 +39,7 @@ require('nvim-tree').setup({
   filters = {
     dotfiles = false,
     custom = { '.git[/].*', '^.git$', 'node_modules', '.cache', '.idea', 'venv', '__pycache__' },
-    exclude = { '.env' }
+    exclude = { '[.]env', 'extensions.py' }
   },
   update_focused_file = {
     enable = true
@@ -87,3 +87,6 @@ vim.g.nvim_tree_icons = {
     error = "",
   }
 }
+
+
+

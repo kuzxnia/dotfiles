@@ -49,7 +49,8 @@ require('telescope').load_extension('fzf')
 require('telescope').load_extension('dap')
 require("telescope").load_extension("file_browser")
 require("telescope").load_extension("ui-select")
-require("telescope").load_extension("flutter")
+-- require("telescope").load_extension("flutter")
+-- require("telescope").load_extension("refactoring")
 
 
 _G.telescope_find_files_in_path = function(path)

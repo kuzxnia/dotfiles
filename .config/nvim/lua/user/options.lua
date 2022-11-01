@@ -82,7 +82,7 @@ vim.cmd[[set wildignore+=*.o,*.obj,*.exe,*.so,*.dll,*.pyc,.svn,.hg,.bzr,.git,.sa
 -- sounds
 vim.cmd[[set noerrorbells novisualbell]]
 -- mouse
-vim.cmd[[set mousehide complete=.,w,b,u,U foldmethod=indent foldlevel=99]]
+vim.cmd[[set mousehide mouse= complete=.,w,b,u,U foldmethod=indent foldlevel=99]]
 -- performance tweaks
 vim.cmd[[set nocursorcolumn scrolljump=5 lazyredraw redrawtime=10000 synmaxcol=180 re=0]]
 -- diff 

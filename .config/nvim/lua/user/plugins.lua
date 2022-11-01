@@ -64,10 +64,20 @@ return packer.startup(function(use)
   use 'LunarVim/onedarker.nvim'
   use "lunarvim/darkplus.nvim"
   use 'folke/tokyonight.nvim'
+  use {
+    'rebelot/kanagawa.nvim',
+    config = function ()
+      require('kanagawa').setup({dimInactive = true})
+    end
+  }
   use 'ryanoasis/vim-devicons'
   use 'bryanmylee/vim-colorscheme-icons'
-  use 'sunjon/shade.nvim'
-
+  use {
+    'sunjon/shade.nvim', -- messing lspinstaller up
+    config = function ()
+      require('shade').setup({ overlay_opacity = 50, opacity_step = 1 })
+    end
+  }
     -- cmp plugins
   use {
     "hrsh7th/nvim-cmp", -- The completion plugin
@@ -131,6 +141,19 @@ return packer.startup(function(use)
   use { "nvim-telescope/telescope-file-browser.nvim" }
   use {'nvim-telescope/telescope-ui-select.nvim' }
   use { "folke/which-key.nvim" }
+
+  -- refactor
+  use {
+    "ThePrimeagen/refactoring.nvim",
+    requires = {
+        {"nvim-lua/plenary.nvim"},
+        {"nvim-treesitter/nvim-treesitter"}
+    },
+    config = function ()
+      require('refactoring').setup({})
+    end
+  }
+
   -- naviagation
   use { 'AckslD/nvim-whichkey-setup.lua', requires = {'liuchengxu/vim-which-key'} }
   use 'christoomey/vim-tmux-navigator'
@@ -144,10 +167,10 @@ return packer.startup(function(use)
   use 'rcarriga/nvim-dap-ui'
 
   -- dart & flutter
-  use {
+  --[[ use {
     'akinsho/flutter-tools.nvim',
     requires = 'nvim-lua/plenary.nvim',
-  }
+  } ]]
 
   -- other
   use "goolord/alpha-nvim"

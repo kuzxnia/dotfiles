@@ -14,7 +14,7 @@ wk.register({
     },
     l = {
       name = "LSP",
-      f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format file" },
+      f = { "<cmd>lua vim.lsp.buf.format({async = true})<cr>", "Format file" },
     },
     ["<space>"] = { "<cmd>lua telescope_files_or_git_files()<CR>", "Find file git" },
     ["<C-space>"] = { "<cmd>Telescope find_files<CR>", "Find file" },
@@ -76,6 +76,7 @@ wk.register({
       h = { "<cmd>nohlsearch<CR>", "Clear search highlight" },
       w = { "<cmd>%s/\\s\\+$//e<CR>", "Trailing spaces removed"},
       s = { "<cmd>source ~/.config/nvim/init.lua<CR>", "Source NeoVim config" },
-    }
+    },
+    ["r"] = { "<cmd>lua require('telescope').extensions.refactoring.refactors()<CR>", "Refactor", mode="v" },
   },
 })
