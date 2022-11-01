@@ -178,9 +178,10 @@ return packer.startup(function(use)
   use 'farmergreg/vim-lastplace'
   use 'wellle/tmux-complete.vim'
   use 'b3nj5m1n/kommentary'
+  use 'mg979/vim-visual-multi'
 
   -- syntax highlight
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate', commit = 'aebc6cf6bd4675ac86629f516d612ad5288f7868' }
   use 'nvim-treesitter/nvim-treesitter-context'
   use 'nvim-treesitter/playground'
 
