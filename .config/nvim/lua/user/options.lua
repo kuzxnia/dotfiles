@@ -50,6 +50,7 @@ vim.cmd [[ nnoremap Y Y ]]
 vim.cmd[[colorscheme onedark]]
 vim.cmd[[highlight Comment cterm=italic gui=italic]]
 vim.cmd[[highlight Statement cterm=italic gui=italic]]
+vim.g.VM_theme = 'neon'
 
 -- tmux navigator
 vim.g.tmux_navigator_no_mappings = 1

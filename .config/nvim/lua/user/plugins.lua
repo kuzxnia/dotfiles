@@ -59,25 +59,25 @@ return packer.startup(function(use)
   use "lewis6991/impatient.nvim"
 
   -- Colorschemes
-  use 'Mofiqul/vscode.nvim'
-  use 'navarasu/onedark.nvim'
-  use 'LunarVim/onedarker.nvim'
-  use "lunarvim/darkplus.nvim"
-  use 'folke/tokyonight.nvim'
+  -- use 'Mofiqul/vscode.nvim'
   use {
-    'rebelot/kanagawa.nvim',
+    'navarasu/onedark.nvim',
     config = function ()
-      require('kanagawa').setup({dimInactive = true})
+      require('onedark').load()
     end
   }
+  use "olimorris/onedarkpro.nvim"
+  --[[ use 'LunarVim/onedarker.nvim'
+  use "lunarvim/darkplus.nvim"
+  use 'folke/tokyonight.nvim' ]]
   use 'ryanoasis/vim-devicons'
   use 'bryanmylee/vim-colorscheme-icons'
-  use {
+  --[[ use {
     'sunjon/shade.nvim', -- messing lspinstaller up
     config = function ()
       require('shade').setup({ overlay_opacity = 50, opacity_step = 1 })
     end
-  }
+  } ]]
     -- cmp plugins
   use {
     "hrsh7th/nvim-cmp", -- The completion plugin
