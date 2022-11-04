@@ -87,3 +87,6 @@ map("n", "<Leader>*", ":%s/<C-r><C-w>//<Left>", {})
 
 -- tree
 map("n", "<Leader>e", ":NvimTreeToggle<CR>", opts)
+
+-- fix coursor move to left after insert mode exit
+vim.api.nvim_set_keymap('i', '<esc>', '<esc>`^', {noremap = true, silent = true})

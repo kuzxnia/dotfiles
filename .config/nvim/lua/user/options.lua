@@ -47,6 +47,7 @@ vim.cmd [[ set formatoptions=crql ]]
 vim.cmd [[ nnoremap Y Y ]]
 
 -- colorscheme
+vim.cmd[[set guicursor=n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50,a:blinkon50]]
 vim.cmd[[colorscheme onedark]]
 vim.cmd[[highlight Comment cterm=italic gui=italic]]
 vim.cmd[[highlight Statement cterm=italic gui=italic]]
