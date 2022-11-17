@@ -172,6 +172,19 @@ return packer.startup(function(use)
     requires = 'nvim-lua/plenary.nvim',
   } ]]
 
+  -- notes
+  use {
+    "epwalsh/obsidian.nvim",
+    config = function ()
+      require("obsidian").setup({
+        dir = "~/Dropbox/obsidian",
+        completion = {
+          nvim_cmp = true,
+        }
+      })
+    end
+  }
+
   -- other
   use "goolord/alpha-nvim"
   use '907th/vim-auto-save'

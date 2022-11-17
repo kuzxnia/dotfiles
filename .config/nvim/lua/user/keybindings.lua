@@ -22,7 +22,19 @@ map('n', '<leader>fb', ':Telescope file_browser<CR>')
 map('n', '<leader>fs', ':Telescope lsp_document_symbols<CR>')
 
 map("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
+vim.keymap.set(
+  "n",
+  "gd",
+  function ()
+    print('in')
+    if require('obsidian').util.cursor_on_markdown_link() then
+      return "<cmd>ObsidianFollowLink<CR>"
+    else
+      return "<cmd>lua vim.lsp.buf.definition()<CR>"
+    end
+  end,
+  expr_opts
+)
 map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
 map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
