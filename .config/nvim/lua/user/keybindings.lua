@@ -35,6 +35,7 @@ vim.keymap.set(
   end,
   expr_opts
 )
+map("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
 map("n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
 map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
 map("n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)

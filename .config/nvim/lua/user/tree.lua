@@ -3,36 +3,15 @@ local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 -- nvim_tree_disable_netrw, nvim_tree_auto_close, nvim_tree_follow, nvim_tree_bindings, nvim_tree_hide_dotfiles, nvim_tree_ignore
 require('nvim-tree').setup({
   view = {
-    adaptive_size = true,
+    adaptive_size = false,
     mappings = {
       list = {
-          -- mappings
-          {key = {"<CR>", "l", "o", "e"}, cb = tree_cb("edit")},
-          -- {"<2-LeftMouse>"} = tree_cb("edit"),
-          -- {"<2-RightMouse>"} = tree_cb("cd"),
-          {key = {"<2-RightMouse>", "<C-]>"},    cb = tree_cb("cd") },
-          {key = {"v"}, cb = tree_cb("vsplit")},
-          {key = {"-"}, cb = tree_cb("split")},
-          {key = {"<C-t>"}, cb = tree_cb("tabnew")},
-          {key = {"I"}, cb = tree_cb("toggle_ignored")},
-          {key = {"H"}, cb = tree_cb("toggle_dotfiles")},
-          {key = {"R"}, cb = tree_cb("refresh")},
-          {key = {"x"}, cb = tree_cb("cut")},
-          {key = {"c"}, cb = tree_cb("copy")},
-          {key = {"p"}, cb = tree_cb("paste")},
-          {key = {"q"}, cb = tree_cb("close")},
-          {key = {"s"}, cb = tree_cb("system_open")},
-          --{"h"} = tree_cb("close_node"),
-          --{"<BS>"} = tree_cb("close_node"),
-          --{"<S-CR>"} = tree_cb("close_node"),
-          --{"<Tab>"} = tree_cb("preview"),
-          --{"a"} = tree_cb("create"),
-          --{"d"} = tree_cb("remove"),
-          --{"r"} = tree_cb("rename"),
-          --{"<C-r>"} = tree_cb("full_rename"),
-          --{"[c"} = tree_cb("prev_git_item"),
-          --{"]c"} = tree_cb("next_git_item"),
-          --{"-"} = tree_cb("dir_up"),
+          { key = { "l", "<CR>", "o" }, action = "edit", mode = "n" },
+          { key = "h", action = "close_node" },
+          { key = "v", action = "vsplit" },
+          { key = "C", action = "cd" },
+          { key = "v", action = "vsplit" },
+          { key = "-", action = "split" },
       }
     }
   },

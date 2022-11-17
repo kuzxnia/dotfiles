@@ -31,15 +31,16 @@ dap.configurations.python = {
     end;
   },
 }
-require('dap-python').setup(vim.loop.cwd() .. '/venv/bin/python')
+require('dap-python').setup(vim.loop.cwd() .. '/.venv/bin/python')
+require('dap-python').test_runner = 'pytest'
 
 require('nvim-dap-virtual-text').setup()
 
 require("dapui").setup()
 
-vim.fn.sign_define('DapBreakpoint', {text='🛑', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapBreakpointRejected', {text='🟦', texthl='', linehl='', numhl=''})
-vim.fn.sign_define('DapStopped', {text='⭐️', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapBreakpointRejected', {text='', texthl='', linehl='', numhl=''})
+vim.fn.sign_define('DapStopped', {text='', texthl='', linehl='', numhl=''})
 
 -- map('n', '<leader>dH', ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
 --[[ map('n', '<leader>di', ':lua require"dap.ui.variables".hover()<CR>')

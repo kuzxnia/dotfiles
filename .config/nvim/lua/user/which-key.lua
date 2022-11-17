@@ -55,6 +55,12 @@ wk.register({
       },
       t = { "<cmd>lua require 'dapui'.toggle()<CR>", "Toggle UI"},
     },
+    p = {
+      name = "Python",
+      t = { "<cmd>lua require('dap-python').test_method()<CR>", "Test method"},
+      c = { "<cmd>lua require('dap-python').test_class()<CR>", "Test class"},
+      d = { "<cmd>lua require('dap-python').debug_selection()<CR>", "Debug selection"},
+    },
     m = {
       name = "Markdown",
       p = { "<cmd>MarkdownPreview<CR>", "Preview"},
