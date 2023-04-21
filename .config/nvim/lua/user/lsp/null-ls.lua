@@ -12,13 +12,21 @@ local autoflake = require("user.lsp.settings.autoflake")
 null_ls.setup({
 	debug = true,
 	sources = {
+    -- python
     diagnostics.flake8,
+    diagnostics.mypy,
     autoflake,
 		formatting.isort,
 		formatting.black.with({ extra_args = { "--fast", "-l 120" } }), -- should be at the end of python formatters
+    -- diagnostics.ruff,
+    -- formatting.ruff,
 
-		-- formatting.prettierd.with({filetypes = { "html", "json", "yaml", } }),
+    formatting.rustfmt,
+
+
 		formatting.prettier,
+
+    -- code actions
 		code_actions.gitsigns,
 	},
 })

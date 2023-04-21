@@ -63,13 +63,12 @@ return packer.startup(function(use)
   use {
     'navarasu/onedark.nvim',
     config = function ()
+      require('onedark').setup({
+        style = 'dark'
+      })
       require('onedark').load()
     end
   }
-  use "olimorris/onedarkpro.nvim"
-  --[[ use 'LunarVim/onedarker.nvim'
-  use "lunarvim/darkplus.nvim"
-  use 'folke/tokyonight.nvim' ]]
   use 'ryanoasis/vim-devicons'
   use 'bryanmylee/vim-colorscheme-icons'
   --[[ use {
@@ -113,6 +112,22 @@ return packer.startup(function(use)
   use "williamboman/nvim-lsp-installer" -- simple to use language server installer
   use "jose-elias-alvarez/null-ls.nvim"
   use "RRethy/vim-illuminate"  -- highlights and allows moving between variable references
+
+  use {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({})
+    end,
+  }
+  use {
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua" },
+    config = function ()
+      require("copilot_cmp").setup()
+    end
+  }
 
   -- Git
   use 'tpope/vim-fugitive'
@@ -173,14 +188,30 @@ return packer.startup(function(use)
   } ]]
 
   -- notes
+  use 'preservim/vim-markdown'
   use {
     "epwalsh/obsidian.nvim",
     config = function ()
       require("obsidian").setup({
-        dir = "~/Dropbox/obsidian",
+        dir = "~/notes/obsidian",
         completion = {
           nvim_cmp = true,
-        }
+        },
+        note_id_func = function(title)
+          -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
+          local suffix = ""
+          if title ~= nil then
+            -- If title is given, transform it into valid file name.
+            suffix = title:gsub(" ", "_"):gsub("[^A-Za-z0-9-_]", ""):lower()
+            print(suffix)
+          else
+            -- If title is nil, just add 4 random uppercase letters to the suffix.
+            for _ = 1, 4 do
+              suffix = suffix .. string.char(math.random(65, 90))
+            end
+          end
+          return suffix
+        end
       })
     end
   }

@@ -15,4 +15,3 @@ require 'user.lualine'
 require 'user.dap'
 
 require('gitsigns').setup()
-require('shade').setup({ overlay_opacity = 50, opacity_step = 1 })

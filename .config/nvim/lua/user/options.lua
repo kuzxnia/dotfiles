@@ -40,18 +40,18 @@ for k, v in pairs(options) do
   vim.opt[k] = v
 end
 
-vim.cmd [[ set clipboard+=unnamedplus ]]
-vim.cmd [[ set whichwrap+=<,>,[,],h,l ]]
-vim.cmd [[ set iskeyword+=- ]]
-vim.cmd [[ set formatoptions=crql ]]
-vim.cmd [[ nnoremap Y Y ]]
+vim.cmd 'set clipboard+=unnamedplus'
+vim.cmd 'set whichwrap+=<,>,[,],h,l'
+vim.cmd 'set iskeyword+=-'
+vim.cmd 'set formatoptions=crql'
+vim.cmd 'nnoremap Y Y'
 
 -- colorscheme
-vim.cmd[[set guicursor=n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50,a:blinkon50]]
-vim.cmd[[colorscheme onedark]]
-vim.cmd[[highlight Comment cterm=italic gui=italic]]
-vim.cmd[[highlight Statement cterm=italic gui=italic]]
-vim.g.VM_theme = 'neon'
+vim.cmd 'set guicursor=n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor50,a:blinkon50'
+vim.cmd 'highlight Comment cterm=italic gui=italic'
+vim.cmd 'highlight Statement cterm=italic gui=italic'
+vim.cmd 'colorscheme onedark'
+
 
 -- tmux navigator
 vim.g.tmux_navigator_no_mappings = 1

@@ -1,6 +1,6 @@
 local status, lualine = pcall(require, "lualine")
 
-if (not status) then return end
+--if (not status) then return end
 lualine.setup {
   options = {
     icons_enabled = true,
@@ -8,7 +8,7 @@ lualine.setup {
     theme = 'onedark',
     section_separators = {'', ''},
     component_separators = {'', ''},
-    disabled_filetypes = {}
+    disabled_filetypes = { 'packer', 'NvimTree' }
   },
   sections = {
     lualine_a = {'mode'},
@@ -33,5 +33,5 @@ lualine.setup {
     lualine_z = {}
   },
   tabline = {},
-  extensions = {'fugitive'}
+  extensions = {'fugitive'},
 }

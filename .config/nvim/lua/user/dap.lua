@@ -2,7 +2,7 @@ local dap = require('dap')
 
 dap.adapters.python = {
   type = 'executable';
-  command = vim.loop.cwd() .. '/venv/bin/python';
+  command = vim.loop.cwd() .. '/.venv/bin/python';
   args = { '-m', 'debugpy.adapter' };
 }
 
@@ -31,8 +31,21 @@ dap.configurations.python = {
     end;
   },
 }
+
+local function prune_nil(items)
+  return vim.tbl_filter(function(x) return x end, items)
+end
+
+local test_runners = require('dap-python').test_runners
+test_runners.pytest_env = function(classname, methodname)
+  local path = vim.fn.expand('%:p')
+  local test_path = table.concat(prune_nil({path, classname, methodname}), '::')
+  -- -s "allow output to stdout of test"
+  local args = {'-s', test_path}
+  return 'APP_ENV=testsuite py.test', args
+end
 require('dap-python').setup(vim.loop.cwd() .. '/.venv/bin/python')
-require('dap-python').test_runner = 'pytest'
+require('dap-python').test_runner = 'pytest_env'
 
 require('nvim-dap-virtual-text').setup()
 

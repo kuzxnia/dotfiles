@@ -252,6 +252,7 @@ cmp.setup {
         luasnip = "[Snippet]",
         buffer = "[Buffer]",
         path = "[Path]",
+        copilot = "[Copilot]",
       })[entry.source.name]
       return vim_item
     end,
@@ -259,6 +260,7 @@ cmp.setup {
   sources = {
     { name = "nvim_lsp" },
     { name = 'nvim_lsp_signature_help' },
+    { name = "copilot" },
     { name = "luasnip" },
     { name = "buffer" },
     { name = "path" },
