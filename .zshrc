@@ -18,6 +18,7 @@ setopt no_beep             # No bells
 unsetopt autocd
 
 export PATH=$HOME/bin:$PATH
+export PATH="$HOME/.local/bin:$PATH"
 # export PATH="$HOME/.pyenv/bin:$PATH"
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 
