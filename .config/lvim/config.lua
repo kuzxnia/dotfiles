@@ -1,4 +1,4 @@
-vim.opt.mouse = "" -- allow the mouse to be used in neovim
+vim.opt.mouse = "n" -- allow the mouse to be used in neovim
 vim.g.tmux_navigator_no_mappings = 1
 
 -- general
@@ -26,15 +26,11 @@ lvim.builtin.which_key.mappings["c"] = {"<Plug>(comment_toggle_linewise_current)
 lvim.builtin.which_key.vmappings["c"] = {"<Plug>(comment_toggle_linewise_visual)", "Comment"}
 
 lvim.builtin.which_key.mappings["<space>"] = {
-  function()
-    require("lvim.core.telescope.custom-finders").find_project_files { }
-  end,
+  "<Cmd>Telescope find_files<CR>",
   "Find File",
 }
 lvim.builtin.which_key.mappings["f"] = {
-  function()
-    require("lvim.core.telescope.custom-finders").find_project_files { }
-  end,
+  "<Cmd>Telescope find_files<CR>",
   "Find File",
 }
 
@@ -136,6 +132,9 @@ vim.list_extend(
   }
 )
 lvim.lsp.diagnostics.virtual_text = false
+lvim.lsp.on_attach_callback = function(client, _)
+    client.server_capabilities.semanticTokensProvider = nil
+end
 
 -- -- make sure server will always be installed even if the server is in skipped_servers list
 -- lvim.lsp.installer.setup.ensure_installed = {
@@ -164,10 +163,10 @@ local opts = {
       venvPath = vim.loop.cwd() .. '/.venv/',
       analysis = {
         autoImportCompletion = true,
-        typeCheckingMode = "off",
+        -- typeCheckingMode = "off",
         autoSearchPaths = true,
         diagnosticMode = "workspace",
-        useLibraryCodeForTypes = true,
+        -- useLibraryCodeForTypes = true,
       },
     },
   },
@@ -191,38 +190,40 @@ require("lvim.lsp.manager").setup("pyright", opts)
 -- end
 
 -- -- set a formatter, this will override the language server formatting capabilities (if it exists)
--- local formatters = require "lvim.lsp.null-ls.formatters"
--- formatters.setup {
---   { command = "black", filetypes = { "python" } },
---   { command = "isort", filetypes = { "python" } },
---   {
---     -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "prettier",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--print-with", "100" },
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "typescript", "typescriptreact" },
---   },
--- }
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+  -- { command = "autoflake", filetypes = { "python" } },
+  { command = "black", filetypes = { "python" }, extra_args = { "--fast", "-l 120" } },
+  { command = "isort", filetypes = { "python" } },
+  -- {
+  --   -- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+  --   command = "prettier",
+  --   ---@usage arguments to pass to the formatter
+  --   -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+  --   extra_args = { "--print-with", "100" },
+  --   ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+  --   filetypes = { "typescript", "typescriptreact" },
+  -- },
+}
 
--- -- set additional linters
--- local linters = require "lvim.lsp.null-ls.linters"
--- linters.setup {
---   { command = "flake8", filetypes = { "python" } },
---   {
---     -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
---     command = "shellcheck",
---     ---@usage arguments to pass to the formatter
---     -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
---     extra_args = { "--severity", "warning" },
---   },
---   {
---     command = "codespell",
---     ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
---     filetypes = { "javascript", "python" },
---   },
--- }
+-- set additional linters
+local linters = require "lvim.lsp.null-ls.linters"
+linters.setup {
+  { command = "flake8", filetypes = { "python" }, args = { "--max-line-length=120" } },
+  { command = "mypy", filetypes = { "python" }, args = { "--ignore-missing-imports" } },
+  -- {
+  --   -- each linter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+  --   command = "shellcheck",
+  --   ---@usage arguments to pass to the formatter
+  --   -- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+  --   extra_args = { "--severity", "warning" },
+  -- },
+  -- {
+  --   command = "codespell",
+  --   ---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+  --   filetypes = { "javascript", "python" },
+  -- },
+}
 
 -- Additional Plugins
 lvim.plugins = {
