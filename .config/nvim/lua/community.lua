@@ -11,4 +11,6 @@ return {
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.completion.copilot-lua" },
   { import = "astrocommunity.completion.copilot-lua-cmp" },
+  { import = "astrocommunity.editing-support.refactoring-nvim" },
+  { import = "astrocommunity.colorscheme.kanagawa-nvim" },
 }

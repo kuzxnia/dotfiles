@@ -3,10 +3,12 @@
 
 ---@type LazySpec
 return {
-
-  -- == Examples of Adding Plugins ==
-
   "andweeb/presence.nvim",
+  {
+    "Pocco81/auto-save.nvim",
+    config = function() require("auto-save").setup() end,
+  },
+
   {
     "ray-x/lsp_signature.nvim",
     event = "BufRead",
@@ -50,7 +52,6 @@ return {
       luasnip.filetype_extend("javascript", { "javascriptreact" })
     end,
   },
-
   {
     "windwp/nvim-autopairs",
     config = function(plugin, opts)
@@ -78,6 +79,21 @@ return {
         -- disable for .vim files, but it work for another filetypes
         Rule("a", "a", "-vim")
       )
+    end,
+  },
+  {
+    "ggandor/leap.nvim",
+    config = function()
+      require("leap").create_default_mappings()
+      require("leap").opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
+      require("leap.user").set_repeat_keys("<enter>", "<backspace>")
+
+      vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" }) -- or some grey
+      vim.api.nvim_set_hl(0, "LeapMatch", {
+        fg = "black",
+        bold = true,
+        nocombine = true,
+      })
     end,
   },
 }

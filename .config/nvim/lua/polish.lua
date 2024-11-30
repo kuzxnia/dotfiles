@@ -23,6 +23,11 @@ vim.keymap.set("x", "<Leader>c", "gc", { desc = "Toggle comment", remap = true }
 -- fix coursor move to left after insert mode exit
 vim.keymap.set("i", "<esc>", "<esc>`^")
 
+-- toggle term
+vim.keymap.set("n", "<C-\\>", "<Cmd>ToggleTerm size=20 direction=horizontal<CR>", { desc = "ToggleTerm terminal" })
+vim.keymap.set("t", "<C-\\>", "<Cmd>ToggleTerm<CR>", { desc = "ToggleTerm terminal" })
+vim.keymap.set("i", "<C-\\>", "<Esc><Cmd>ToggleTerm<CR>", { desc = "ToggleTerm terminal" })
+
 -- telescope quickfix
 vim.keymap.set(
   "n",
